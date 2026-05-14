@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Surya Kumar – Driven by Logic</title>
+
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,400,700,500,600,100&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800;900&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    html.lenis,
+    html.lenis body {
+      height: auto;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+  </style>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-theme="black">
+
+  <!-- CIRCULAR NAV MENU -->
+  <div class="circular-menu-wrapper" id="menuContainer">
+    <div class="menu-inner">
+      <div class="menu-links">
+        <a href="#work" class="menu-link">WORKS</a>
+        <a href="#background" class="menu-link">BACKGROUND</a>
+        <a href="#quote" class="menu-link">PHILOSOPHY</a>
+        <a href="#contact" class="menu-link">CONTACT</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="logo">SURYA<span style="font-size: 0.5em; vertical-align: top;">®</span></div>
+    <div class="menu-btn-circle" id="menuBtn">
+      <span class="line1"></span>
+      <span class="line2"></span>
+      <span class="line3"></span>
+    </div>
+  </nav>
+
+  <div class="page-wrapper" id="pageWrapper">
+
+    <!-- 1. HERO (BLACK) -->
+    <section class="section hero theme-black-bg" data-theme="black">
+      <div class="hero-glow"></div>
+      <div class="vertical-text">DESIGN • DEVELOP • DISTRIBUTE • SCALE</div>
+      <div class="hero-content">
+        <h1 class="huge-text char-reveal">DRIVEN<br />BY LOGIC</h1>
+      </div>
+      <div class="hero-bottom-text fade-up">
+        <p>BUILDING ROBUST SOFTWARE, AUTOMATING THE COMPLEX AND FOCUSED ON TRANSFORMING STATIC SYSTEMS WITH INTELLIGENT
+          ONES.</p>
+      </div>
+      <div class="scroll-circle">
+        <div class="arrow-down">↓</div>
+      </div>
+    </section>
+
+    <!-- 2. ARCH TEXT (BLACK) -->
+    <section class="section arch-section theme-black-bg" data-theme="black">
+      <svg viewBox="0 0 1000 400" class="arch-svg">
+        <path id="archPath" d="M -100,400 A 600,600 0 0,1 1100,400" fill="none" />
+        <text>
+          <textPath href="#archPath" startOffset="50%" text-anchor="middle">ANALYZE • DESIGN • BUILD</textPath>
+        </text>
+      </svg>
+    </section>
+
+    <!-- 3. STACKING PROJECTS (BLACK) -->
+    <section class="section projects-stack theme-black-bg" id="work" data-theme="black">
+      <div class="cards-container">
+        <!-- Project 1 -->
+        <div class="stack-card proj-box">
+          <div class="proj-box-top">
+            <div class="proj-num">001</div>
+            <div class="proj-title">
+              <h4>GETINDEXED - SEO SAAS PLATFORM</h4>
+              <p>Next.js 14 | Supabase | Stripe</p>
+            </div>
+            <div class="proj-link"><a href="#work">LIVE PROJECT</a></div>
+          </div>
+          <div class="proj-box-body">
+            <div class="proj-image-container">
+              <div class="css-effect-box ui-mockup saas-mockup">
+                <div class="ui-header"><span class="dot red"></span><span class="dot yel"></span><span
+                    class="dot grn"></span></div>
+                <div class="ui-body">
+                  <div class="ui-sidebar"></div>
+                  <div class="ui-content">
+                    <div class="ui-chart"></div>
+                    <div class="ui-cards">
+                      <div class="ui-card"></div>
+                      <div class="ui-card"></div>
+                      <div class="ui-card"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="proj-desc">
+              <p>Co-developed and designed the full product architecture including an 8-table database schema, a 50-tool
+                free hub, and Stripe-integrated subscription billing.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="stack-card proj-box" style="margin-top: 5vh;">
+          <div class="proj-box-top">
+            <div class="proj-num">002</div>
+            <div class="proj-title">
+              <h4>SCREEN RECORDER - ANDROID APP</h4>
+              <p>Java | XML | Firebase | AdMob</p>
+            </div>
+            <div class="proj-link"><a href="#work">LIVE PROJECT</a></div>
+          </div>
+          <div class="proj-box-body">
+            <div class="proj-image-container">
+              <div class="css-effect-box ui-mockup mobile-mockup">
+                <div class="mobile-notch"></div>
+                <div class="mobile-screen">
+                  <div class="mobile-video"></div>
+                  <div class="mobile-record-btn"></div>
+                </div>
+              </div>
+            </div>
+            <div class="proj-desc">
+              <p>Built a screen recording utility published independently on Google Play. Reached 1,000+ organic
+                downloads with integrated AdMob monetisation and Firebase crash reporting.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="stack-card proj-box" style="margin-top: 5vh;">
+          <div class="proj-box-top">
+            <div class="proj-num">003</div>
+            <div class="proj-title">
+              <h4>GARUDA APPS - APP SUITE</h4>
+              <p>Java | XML | AdSense</p>
+            </div>
+            <div class="proj-link"><a href="#work">LIVE PROJECT</a></div>
+          </div>
+          <div class="proj-box-body">
+            <div class="proj-image-container">
+              <div class="css-effect-box ui-mockup game-mockup">
+                <div class="game-screen">
+                  <div class="game-title"></div>
+                  <div class="game-controls">
+                    <div class="d-pad"></div>
+                    <div class="action-btns">
+                      <div class="g-btn"></div>
+                      <div class="g-btn"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="proj-desc">
+              <p>Co-developed a suite of Android mini-games and fitness utilities. Reached 500+ organic downloads on
+                Google Play with Firebase data handling.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="stack-card proj-box" style="margin-top: 5vh;">
+          <div class="proj-box-top">
+            <div class="proj-num">004</div>
+            <div class="proj-title">
+              <h4>HACKERS NETWORK - CONTENT WEBSITE</h4>
+              <p>WordPress | Elementor | SEO</p>
+            </div>
+            <div class="proj-link"><a href="#work">LIVE PROJECT</a></div>
+          </div>
+          <div class="proj-box-body">
+            <div class="proj-image-container">
+              <div class="css-effect-box ui-mockup terminal-mockup">
+                <div class="ui-header"><span class="dot red"></span><span class="dot yel"></span><span
+                    class="dot grn"></span></div>
+                <div class="terminal-body">
+                  <div class="t-line w-long"></div>
+                  <div class="t-line w-med"></div>
+                  <div class="t-line w-short"></div>
+                  <div class="t-line w-blink"></div>
+                </div>
+              </div>
+            </div>
+            <div class="proj-desc">
+              <p>Designed and launched a content website applying on-page SEO principles and maintaining a highly
+                structured content publishing workflow from day one.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="stack-card proj-box" style="margin-top: 5vh;">
+          <div class="proj-box-top">
+            <div class="proj-num">005</div>
+            <div class="proj-title">
+              <h4>BOOK-SELLING E-COMMERCE SITE</h4>
+              <p>WordPress | Custom Scripting</p>
+            </div>
+            <div class="proj-link"><a href="#work">LIVE PROJECT</a></div>
+          </div>
+          <div class="proj-box-body">
+            <div class="proj-image-container">
+              <div class="css-effect-box ui-mockup store-mockup">
+                <div class="store-nav"></div>
+                <div class="store-hero"></div>
+                <div class="store-grid">
+                  <div class="store-item"></div>
+                  <div class="store-item"></div>
+                  <div class="store-item"></div>
+                  <div class="store-item"></div>
+                </div>
+              </div>
+            </div>
+            <div class="proj-desc">
+              <p>Built and deployed a fully functional e-commerce site. Used the project as a hands-on testbed for
+                extensive automation and workflow experiments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. BACKGROUND & DATA (WHITE) -->
+    <section class="section edu-skills theme-white-bg" id="background" data-theme="white">
+      <div class="edu-grid">
+        <div class="edu-left">
+          <h2 class="huge-text vertical-outline">DATA</h2>
+        </div>
+        <div class="edu-right hover-reveal-container">
+          <div class="edu-item fade-up" data-image="achievements.png">
+            <span class="edu-num">01 EDUCATION</span>
+            <h3>Asia Pacific University, Kuala Lumpur</h3>
+            <p>B.Sc (Hons) Computer Science & AI (2023-2027)</p>
+            <div class="edu-hover-img"><img src="achievements.png" alt="" /></div>
+          </div>
+          <div class="edu-item fade-up mt-8" data-image="project_getindexed.png">
+            <span class="edu-num">02 EXPERIENCE</span>
+            <h3>Indie Builder & Developer</h3>
+            <p>Shipped 5 Products (2021 - Present)</p>
+            <div class="edu-hover-img"><img src="project_getindexed.png" alt="" /></div>
+          </div>
+          <div class="edu-item fade-up mt-8" data-image="project_screenrec.png">
+            <span class="edu-num">03 SKILLS</span>
+            <h3>Full Stack Web Development</h3>
+            <p>Next.js, React, TypeScript, Python, Tailwind, Supabase</p>
+            <div class="edu-hover-img"><img src="project_screenrec.png" alt="" /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CIRCULAR REVEAL QUOTE (WHITE) -->
+    <section class="section quote-section theme-white-bg" id="quote" data-theme="white">
+      <div class="quote-circle-bg"></div>
+      <div class="quote-content">
+        <h2 class="huge-quote word-reveal">"THE FUNCTION OF GOOD SOFTWARE IS TO MAKE THE COMPLEX APPEAR TO BE SIMPLE."
+        </h2>
+        <p class="quote-author mt-8">— Grady Booch</p>
+
+        <!-- Bottom tech bar like screenshot 1 -->
+        <div class="tech-bar-bottom mt-8">
+          <div class="tech-item"><span class="tech-icon">JS</span> JAVASCRIPT</div>
+          <div class="tech-item"><span class="tech-icon">PY</span> PYTHON</div>
+          <div class="tech-item"><span class="tech-icon">RE</span> REACT</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. SKILLS MARQUEE (WHITE) -->
+    <section class="section marquee-section theme-white-bg" data-theme="white">
+      <div class="marquee-track">
+        <div class="marquee-text">REACT • NEXT.JS • TAILWIND • TYPESCRIPT • PYTHON • NODE • REACT • NEXT.JS • TAILWIND •
+          TYPESCRIPT • PYTHON • NODE</div>
+      </div>
+    </section>
+
+    <!-- 7. ACHIEVEMENTS (BLACK) -->
+    <section class="section achievements theme-black-bg" id="achievements" data-theme="black">
+      <div class="achievements-grid">
+        <div class="ach-box fade-up">
+          <h3>05+</h3>
+          <p>PROJECTS SHIPPED</p>
+        </div>
+        <div class="ach-box fade-up">
+          <h3>1K+</h3>
+          <p>DOWNLOADS</p>
+        </div>
+        <div class="ach-box fade-up">
+          <h3>96th</h3>
+          <p>PERCENTILE JEE</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. FOOTER (BLACK) -->
+    <section class="section footer theme-black-bg" id="contact" data-theme="black">
+      <div class="footer-top">
+        <p class="font-mono">AVAILABLE FOR WORK</p>
+        <div class="footer-links">
+          <a href="https://linkedin.com/in/surya-kumar-vaishya" target="_blank" class="white-text">LINKEDIN</a>
+          <a href="mailto:vaishyasuryakumar@gmail.com" class="white-text">EMAIL</a>
+        </div>
+      </div>
+
+      <div class="contact-box fade-up">
+        <h2>LET'S TALK.</h2>
+        <form id="contactForm">
+          <input type="text" placeholder="NAME" required />
+          <input type="email" placeholder="EMAIL" required />
+          <button type="submit">→</button>
+        </form>
+      </div>
+
+      <div class="footer-bottom">
+        <h1 class="giant-name">SURYA KUMAR</h1>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
