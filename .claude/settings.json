@@ -6,5 +6,8 @@
         "repo": "Yeachan-Heo/oh-my-claudecode"
       }
     }
+  },
+  "enabledPlugins": {
+    "oh-my-claudecode@omc": true
   }
 }
