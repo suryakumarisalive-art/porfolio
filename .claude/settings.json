@@ -5,9 +5,16 @@
         "source": "github",
         "repo": "Yeachan-Heo/oh-my-claudecode"
       }
+    },
+    "ecc": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/ECC"
+      }
     }
   },
   "enabledPlugins": {
-    "oh-my-claudecode@omc": true
+    "oh-my-claudecode@omc": true,
+    "ecc@ecc": true
   }
 }
