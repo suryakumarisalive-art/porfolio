@@ -14,7 +14,6 @@
     }
   },
   "enabledPlugins": {
-    "oh-my-claudecode@omc": true,
-    "ecc@ecc": true
+    "oh-my-claudecode@omc": true
   }
 }
