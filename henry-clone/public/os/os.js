@@ -16,6 +16,24 @@ const REGISTRY = [
     app: 'showcase', autoOpen: true,
   },
   {
+    key: 'trail', name: 'The Oregon Trail', glyph: '🐂',
+    bar: { title: 'The Oregon Trail', glyph: '🎮', color: '#240c00', status: 'Powered by JSDOS & DOSBox' },
+    size: () => ({ w: 760, h: 600 }), pos: { top: 32, left: 150 },
+    dos: 'games/oregon-trail.jsdos',
+  },
+  {
+    key: 'doom', name: 'Doom', glyph: '😈',
+    bar: { title: 'Doom', glyph: '🎮', color: '#1c1c1c', status: 'Powered by JSDOS & DOSBox' },
+    size: () => ({ w: 760, h: 600 }), pos: { top: 38, left: 170 },
+    dos: 'games/doom.jsdos',   // shareware Doom (freely redistributable)
+  },
+  {
+    key: 'scrabble', name: 'Scrabble', glyph: '🔤',
+    bar: { title: 'Scrabble', glyph: '🎮', color: '#941d13', status: 'Powered by JSDOS & DOSBox' },
+    size: () => ({ w: 760, h: 600 }), pos: { top: 44, left: 190 },
+    dos: 'games/scrabble.jsdos',
+  },
+  {
     key: 'henordle', name: 'Henordle', glyph: '🟩',
     bar: { title: 'Henordle', glyph: '🎮', color: '#1c6b3c', status: '© 2025 [Your Name]' },
     size: () => ({ w: 600, h: 760 }), pos: { top: 40, left: 120 },
@@ -111,9 +129,13 @@ function openApp(key) {
 
   // Render the app body
   const content = el.querySelector('.window-content')
-  const render = window.OSApps && window.OSApps[def.app]
-  if (render) render(content, { openUrl })
-  else content.textContent = 'App unavailable.'
+  if (def.dos) {
+    mountDosGame(content, def)
+  } else {
+    const render = window.OSApps && window.OSApps[def.app]
+    if (render) render(content, { openUrl })
+    else content.textContent = 'App unavailable.'
+  }
 
   focusWindow(key)
   notifyParent('app-open', { app: key })
@@ -162,6 +184,26 @@ function closeApp(key) {
   w.taskBtn.remove()
   openWindows.delete(key)
   if (activeKey === key) activeKey = null
+}
+
+/* ── DOS game host (js-dos v8) ── */
+function mountDosGame(content, def) {
+  content.classList.add('dos-content')
+  const host = document.createElement('div')
+  host.className = 'dos-host'
+  host.innerHTML = `<div class="dos-loading">Loading ${def.name}...<br>(first load can take a moment)</div>`
+  content.appendChild(host)
+
+  if (typeof window.Dos !== 'function') {
+    host.innerHTML = `<div class="dos-loading">DOS emulator failed to load.<br>Check your network connection.</div>`
+    return
+  }
+  try {
+    const ci = window.Dos(host, { url: def.dos, kiosk: true, autoStart: true, noCloud: true, backend: 'dosboxX' })
+    content._cleanup = () => { try { ci && ci.stop && ci.stop() } catch (e) {} }
+  } catch (e) {
+    host.innerHTML = `<div class="dos-loading">Could not start ${def.name}.</div>`
+  }
 }
 
 /* ── Dragging (whole title bar) ── */

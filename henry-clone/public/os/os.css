@@ -330,6 +330,15 @@ html, body {
 .credits .who  { font-family: 'Millennium', serif; font-size: 17px; }
 .credits .hint { font-family: 'Millennium', serif; font-size: 14px; opacity: .6; margin-top: 18px; }
 
+/* ── DOS game window (js-dos host) ── */
+.window-content.dos-content { padding: 0; background: #000; overflow: hidden; }
+.dos-host { width: 100%; height: 100%; position: relative; background: #000; }
+.dos-host .jsdos-rso, .dos-host canvas { width: 100% !important; height: 100% !important; }
+.dos-loading {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: #00d000; font-family: 'Terminal', monospace; font-size: 14px; text-align: center;
+}
+
 /* ── Shutdown screen ── */
 #shutdown {
   position: fixed; inset: 0; z-index: 99999; background: #1d2e2f;
