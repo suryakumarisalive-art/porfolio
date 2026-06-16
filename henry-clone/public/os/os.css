@@ -1,0 +1,239 @@
+/* ───────────────────────────────────────────────────────────
+   Retro desktop OS — Windows 9x styling
+   Loaded inside the 3D monitor via CSS3DRenderer iframe
+   ─────────────────────────────────────────────────────────── */
+
+@font-face { font-family: 'Terminal';    src: url('static/media/Terminal.6a1b7290048681921b2c.ttf'); }
+@font-face { font-family: 'MSSansSerif'; src: url('static/media/MSSansSerif.aa14e7b110864a3c2e08.ttf'); }
+@font-face { font-family: 'Millennium';  src: url('static/media/Millennium.e16d74a8e8e0567ce30e.ttf'); }
+@font-face { font-family: 'Millennium';  font-weight: 700; src: url('static/media/Millennium-Bold.cd5e3be832ebd008c852.ttf'); }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --os-bg:        #008080;
+  --win-bg:       #c0c0c0;
+  --win-title:    #000080;
+  --win-title-2:  #1084d0;
+  --win-title-text:#ffffff;
+  --win-blur:     #808080;
+  --border-dark:  #808080;
+  --border-darker:#000000;
+  --border-light: #ffffff;
+  --border-face:  #dfdfdf;
+  --text:         #000000;
+  --select:       #000080;
+  --taskbar-h:    30px;
+  --font:         'MSSansSerif', Tahoma, Arial, sans-serif;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--os-bg);
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--text);
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}
+
+/* ── Desktop ── */
+.desktop {
+  position: relative;
+  width: 100%;
+  height: calc(100% - var(--taskbar-h));
+  padding: 10px;
+}
+
+.icon {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center;
+  width: 76px; padding: 6px 4px; gap: 5px;
+  cursor: pointer; text-align: center;
+  border: 1px dotted transparent;
+}
+.icon:focus { outline: none; }
+.icon.selected { background: rgba(0,0,128,0.45); border: 1px dotted #fff; }
+.icon .glyph {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  font-size: 26px; line-height: 1;
+  filter: drop-shadow(1px 1px 0 rgba(0,0,0,.4));
+}
+.icon span {
+  font-size: 11px; color: #fff; text-shadow: 1px 1px #000; line-height: 1.25;
+  padding: 0 2px;
+}
+.icon.selected span { background: var(--select); text-shadow: none; }
+
+/* ── Window ── */
+.window {
+  position: absolute;
+  background: var(--win-bg);
+  border: 2px solid;
+  border-color: var(--border-light) var(--border-darker) var(--border-darker) var(--border-light);
+  box-shadow: 1px 1px 0 var(--border-dark);
+  display: flex; flex-direction: column;
+  min-width: 200px;
+}
+.window.minimized { display: none; }
+
+.window-title {
+  display: flex; align-items: center; gap: 4px;
+  height: 20px; padding: 0 2px 0 4px; margin: 2px;
+  background: linear-gradient(90deg, var(--win-title), var(--win-title-2));
+  color: var(--win-title-text);
+  font-weight: 700; cursor: move;
+}
+.window.blurred .window-title {
+  background: var(--win-blur);
+  color: #d6d3ce;
+}
+.window-title .ttl-glyph { font-size: 12px; }
+.window-title .ttl-text  { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+.window-btns { display: flex; gap: 2px; }
+.window-btn {
+  width: 16px; height: 14px;
+  background: var(--win-bg);
+  border: 1px solid;
+  border-color: var(--border-light) var(--border-darker) var(--border-darker) var(--border-light);
+  font-family: var(--font); font-size: 9px; font-weight: 700; line-height: 1;
+  display: grid; place-items: center; cursor: pointer; padding: 0;
+}
+.window-btn:active { border-color: var(--border-darker) var(--border-light) var(--border-light) var(--border-darker); }
+
+.window-menu {
+  display: flex; gap: 0; padding: 1px 2px;
+  border-bottom: 1px solid var(--border-dark);
+}
+.window-menu span { padding: 1px 6px; cursor: default; }
+.window-menu span:hover { background: var(--select); color: #fff; }
+
+.window-content {
+  flex: 1; overflow: auto; padding: 12px; line-height: 1.55;
+  background: var(--win-bg);
+}
+.window-content.inset {
+  margin: 4px; padding: 10px;
+  background: #fff;
+  border: 2px solid;
+  border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+}
+
+/* ── Content typography ── */
+.window-content h1 { font-size: 16px; margin-bottom: 8px; }
+.window-content h2 { font-size: 13px; margin: 10px 0 6px; }
+.window-content p  { margin-bottom: 8px; }
+.window-content a  { color: var(--win-title); text-decoration: underline; cursor: pointer; }
+.window-content a:hover { color: #1084d0; }
+.window-content ul { margin: 0 0 8px 18px; }
+.window-content hr { border: none; border-top: 1px solid var(--border-dark); margin: 8px 0; }
+.muted { opacity: .65; }
+
+.tag {
+  display: inline-block; padding: 1px 7px; margin: 0 4px 4px 0;
+  background: var(--win-bg);
+  border: 1px solid;
+  border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+  font-size: 11px;
+}
+
+/* ── Projects list (file-explorer style) ── */
+.proj { margin-bottom: 14px; }
+.proj-head { display: flex; align-items: baseline; gap: 8px; }
+.proj-head strong { font-size: 12px; }
+.proj-links { margin-top: 2px; }
+.proj-links a { margin-right: 12px; }
+
+/* ── Terminal ── */
+#win-terminal .window-content {
+  background: #000; color: #00d000;
+  font-family: 'Terminal', 'Courier New', monospace; font-size: 12px;
+  padding: 8px; line-height: 1.4;
+}
+.term-line { white-space: pre-wrap; word-break: break-word; }
+.term-input-row { display: flex; }
+.term-input-row .ps1 { color: #00d000; white-space: pre; }
+#term-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: #00d000; font-family: inherit; font-size: inherit; caret-color: #00d000;
+}
+
+/* ── Taskbar ── */
+.taskbar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: var(--taskbar-h);
+  display: flex; align-items: center; gap: 4px; padding: 2px 4px;
+  background: var(--win-bg);
+  border-top: 2px solid var(--border-light);
+}
+.start-btn {
+  height: 22px; padding: 0 9px 0 6px;
+  display: flex; align-items: center; gap: 5px;
+  background: var(--win-bg);
+  border: 2px solid;
+  border-color: var(--border-light) var(--border-darker) var(--border-darker) var(--border-light);
+  font-family: var(--font); font-weight: 700; font-size: 11px; cursor: pointer;
+}
+.start-btn.open,
+.start-btn:active {
+  border-color: var(--border-darker) var(--border-light) var(--border-light) var(--border-darker);
+  padding: 1px 8px 0 7px;
+}
+.start-logo { font-size: 14px; }
+
+.task-divider { width: 1px; height: 20px; background: var(--border-dark); border-right: 1px solid var(--border-light); margin: 0 2px; }
+
+.task-btns { display: flex; gap: 3px; flex: 1; overflow: hidden; }
+.task-btn {
+  height: 22px; max-width: 150px; min-width: 110px; padding: 0 8px;
+  display: flex; align-items: center; gap: 5px;
+  background: var(--win-bg);
+  border: 2px solid;
+  border-color: var(--border-light) var(--border-darker) var(--border-darker) var(--border-light);
+  font-family: var(--font); font-size: 11px; cursor: pointer;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.task-btn.active {
+  border-color: var(--border-darker) var(--border-light) var(--border-light) var(--border-darker);
+  background: #d6d3ce;
+  font-weight: 700;
+}
+.task-btn span { overflow: hidden; text-overflow: ellipsis; }
+
+.tray {
+  display: flex; align-items: center; gap: 6px;
+  padding: 2px 8px; margin-left: auto;
+  border: 1px solid;
+  border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark);
+  font-size: 11px;
+}
+.tray .vol { cursor: pointer; }
+
+/* ── Start menu ── */
+.start-menu {
+  position: fixed; left: 4px; bottom: var(--taskbar-h); width: 200px;
+  background: var(--win-bg);
+  border: 2px solid;
+  border-color: var(--border-light) var(--border-darker) var(--border-darker) var(--border-light);
+  box-shadow: 2px 2px 0 var(--border-dark);
+  display: flex; z-index: 9999;
+}
+.start-menu.hidden { display: none; }
+.start-rail {
+  width: 26px;
+  background: linear-gradient(0deg, var(--win-title), #1c1c8c);
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  color: #fff; font-family: 'Millennium', var(--font); font-weight: 700;
+  font-size: 18px; text-align: center; padding: 8px 0; letter-spacing: 1px;
+}
+.start-list { flex: 1; padding: 2px; }
+.start-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px; cursor: pointer; font-size: 12px;
+}
+.start-item .si-glyph { font-size: 18px; width: 22px; text-align: center; }
+.start-item:hover { background: var(--select); color: #fff; }
+.start-sep { height: 1px; margin: 3px 2px; background: var(--border-dark); border-bottom: 1px solid var(--border-light); }
+
+.hidden { display: none !important; }

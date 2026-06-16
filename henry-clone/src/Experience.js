@@ -36,7 +36,27 @@ export class Experience {
     })
 
     window.addEventListener('resize', () => this._onResize())
+    window.addEventListener('message', (e) => this._onOSMessage(e))
     this._tick()
+  }
+
+  // Messages from the in-monitor desktop iframe (os/os.js)
+  _onOSMessage(e) {
+    const msg = e.data
+    if (!msg || msg.source !== 'os') return
+    switch (msg.type) {
+      case 'keypress':
+        this.audio.playType()
+        break
+      case 'go-back':
+        this.world.hideMonitor()
+        this.camera.zoomOut()
+        break
+      case 'app-open':
+        this.audio.playMouseDown()
+        break
+      // 'open-url' is handled by the iframe itself via window.open
+    }
   }
 
   start() {

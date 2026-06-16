@@ -1,0 +1,10 @@
+# Playwright MCP test artifacts
+.playwright-mcp/
+
+# Build output
+dist/
+node_modules/
+
+# Local screenshots
+*.png
+!henry-clone/public/**/*.png
