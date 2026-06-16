@@ -13,7 +13,7 @@
 
   <!-- Start menu -->
   <div class="start-menu hidden" id="start-menu">
-    <div class="start-rail">Portfolio</div>
+    <div class="start-rail" id="start-rail">PortfolioOS</div>
     <div class="start-list" id="start-list"></div>
   </div>
 
@@ -28,6 +28,13 @@
     </div>
   </div>
 
+  <!-- Shutdown sequence overlay -->
+  <div id="shutdown" class="hidden"></div>
+
+  <!-- Apps register into window.OSApps before the core boots -->
+  <script src="apps/showcase.js"></script>
+  <script src="apps/henordle.js"></script>
+  <script src="apps/credits.js"></script>
   <script src="os.js"></script>
 </body>
 </html>

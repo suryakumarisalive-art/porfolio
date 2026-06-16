@@ -1,418 +1,313 @@
 /* ───────────────────────────────────────────────────────────
-   Retro desktop OS — window manager + apps
-   Runs inside the CSS3DRenderer iframe. Talks to the 3D scene
-   via postMessage (keyboard / click SFX, "go back" requests).
+   Desktop OS core — registry-driven window manager, taskbar,
+   start menu and shutdown sequence. Mirrors the reference:
+   one app registry drives both desktop icons and windows;
+   "My Showcase" auto-opens on boot.
    ─────────────────────────────────────────────────────────── */
 
-const APPS = {
-  about: {
-    title: 'About Me',
-    glyph: '👤',
-    width: 360, height: 280, x: 90, y: 50,
-    body: `
-      <div class="inset window-content" style="margin:0">
-        <h1>Hi, I'm [Your Name] 👋</h1>
-        <p>I'm a <strong>developer &amp; designer</strong> who builds fast,
-           tactile things for the web — 3D scenes, interactive UI, and the
-           occasional fake operating system.</p>
-        <hr>
-        <h2>What I work with</h2>
-        <p>
-          <span class="tag">Three.js</span><span class="tag">WebGL</span>
-          <span class="tag">React</span><span class="tag">TypeScript</span>
-          <span class="tag">Node.js</span><span class="tag">GSAP</span>
-          <span class="tag">UI / UX</span>
-        </p>
-        <p class="muted">Based in [Your City] — open to freelance &amp; full-time work.</p>
-      </div>`,
+const OS_NAME = 'PortfolioOS'   // reference rail reads "HeffernanOS"
+
+const REGISTRY = [
+  {
+    key: 'showcase', name: 'My Showcase', glyph: '🖥️',
+    bar: { title: '[Your Name] — Showcase', glyph: '🖥️', color: '#000080', status: '© 2025 [Your Name]' },
+    size: () => ({ w: Math.min(window.innerWidth - 100, 980), h: Math.min(window.innerHeight - 100, 720) }),
+    pos:  { top: 24, left: 56 },
+    app: 'showcase', autoOpen: true,
   },
-
-  projects: {
-    title: 'Projects',
-    glyph: '📁',
-    width: 420, height: 320, x: 130, y: 70,
-    menu: ['File', 'Edit', 'View', 'Help'],
-    body: `
-      <div class="inset window-content" style="margin:0">
-        <div class="proj">
-          <div class="proj-head"><span>📄</span><strong>Interactive 3D Portfolio</strong></div>
-          <p class="muted">A Three.js room you can orbit, with a clickable CRT that boots this desktop.</p>
-          <div class="proj-links">
-            <a data-ext="https://github.com/">GitHub ↗</a>
-            <a data-ext="https://example.com/">Live ↗</a>
-          </div>
-        </div>
-        <div class="proj">
-          <div class="proj-head"><span>📄</span><strong>[Project Two]</strong></div>
-          <p class="muted">One line on what it does and why it was hard.</p>
-          <div class="proj-links"><a data-ext="https://github.com/">GitHub ↗</a></div>
-        </div>
-        <div class="proj">
-          <div class="proj-head"><span>📄</span><strong>[Project Three]</strong></div>
-          <p class="muted">Another thing you're proud of.</p>
-          <div class="proj-links"><a data-ext="https://github.com/">GitHub ↗</a></div>
-        </div>
-      </div>`,
+  {
+    key: 'henordle', name: 'Henordle', glyph: '🟩',
+    bar: { title: 'Henordle', glyph: '🎮', color: '#1c6b3c', status: '© 2025 [Your Name]' },
+    size: () => ({ w: 600, h: 760 }), pos: { top: 40, left: 120 },
+    app: 'henordle',
   },
-
-  skills: {
-    title: 'Skills',
-    glyph: '🧰',
-    width: 320, height: 260, x: 170, y: 90,
-    body: `
-      <h2>Frontend</h2>
-      <p><span class="tag">React</span><span class="tag">Three.js</span><span class="tag">CSS</span><span class="tag">GSAP</span></p>
-      <h2>Backend</h2>
-      <p><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">PostgreSQL</span></p>
-      <h2>Tooling</h2>
-      <p><span class="tag">Vite</span><span class="tag">Git</span><span class="tag">Figma</span><span class="tag">Blender</span></p>`,
+  {
+    key: 'credits', name: 'Credits', glyph: '📜',
+    bar: { title: 'Credits', glyph: '📄', color: '#000080', status: 'A 3D portfolio' },
+    size: () => ({ w: 760, h: 560 }), pos: { top: 48, left: 80 },
+    app: 'credits',
   },
+]
 
-  contact: {
-    title: 'Contact',
-    glyph: '✉️',
-    width: 300, height: 210, x: 210, y: 110,
-    body: `
-      <h1>Get in touch</h1>
-      <p>📧 <a data-ext="mailto:you@example.com">you@example.com</a></p>
-      <p>💼 <a data-ext="https://linkedin.com/">LinkedIn ↗</a></p>
-      <p>🐙 <a data-ext="https://github.com/">GitHub ↗</a></p>
-      <p>🐦 <a data-ext="https://twitter.com/">Twitter / X ↗</a></p>`,
-  },
+const MIN_W = 520, MIN_H = 220, TASKBAR_H = 36
 
-  terminal: {
-    title: 'Terminal',
-    glyph: '🖥️',
-    width: 460, height: 300, x: 150, y: 60,
-    isTerminal: true,
-    body: `
-      <div id="term-output">
-        <div class="term-line">PortfolioOS [Version 1.0]</div>
-        <div class="term-line">(c) You. All rights reserved.</div>
-        <div class="term-line"> </div>
-        <div class="term-line">Type <b>help</b> for a list of commands.</div>
-        <div class="term-line"> </div>
-      </div>
-      <div class="term-input-row">
-        <span class="ps1">C:\\&gt;&nbsp;</span>
-        <input id="term-input" autocomplete="off" spellcheck="false" />
-      </div>`,
-  },
+let zCounter = 10
+let activeKey = null
+const openWindows = new Map() // key -> { el, taskBtn, def, prevRect }
 
-  credits: {
-    title: 'About This Site',
-    glyph: 'ℹ️',
-    width: 360, height: 240, x: 120, y: 80,
-    body: `
-      <h1>About this site</h1>
-      <p>A 3D portfolio inspired by the genre of interactive desk scenes.
-         The room is rendered in <strong>Three.js</strong>; this desktop is a
-         real DOM page mounted onto the monitor with <strong>CSS3DRenderer</strong>.</p>
-      <hr>
-      <p class="muted">Orbit with drag, scroll to zoom, click the monitor to dive in,
-         and use <strong>← Back</strong> to fly out.</p>`,
-  },
-};
-
-/* ── State ── */
-let zCounter = 10;
-let activeId = null;
-const openWindows = new Map(); // id -> { el, taskBtn }
-
-/* ── postMessage helpers (drive 3D scene SFX / navigation) ── */
+/* ── postMessage to the 3D host (SFX, navigation, external links) ── */
 function notifyParent(type, payload) {
-  try { parent.postMessage({ source: 'os', type, ...payload }, '*'); } catch {}
+  try { parent.postMessage({ source: 'os', type, ...(payload || {}) }, '*') } catch {}
+}
+function openUrl(url) {
+  if (!url || url.startsWith('#')) return
+  notifyParent('open-url', { url })
+  window.open(url, '_blank', 'noopener')
 }
 
 /* ── DOM refs ── */
-const desktop      = document.getElementById('desktop');
-const taskBtns     = document.getElementById('task-btns');
-const startBtn     = document.getElementById('start-btn');
-const startMenu    = document.getElementById('start-menu');
-const clockEl      = document.getElementById('clock');
+const desktop   = document.getElementById('desktop')
+const taskBtns  = document.getElementById('task-btns')
+const startBtn  = document.getElementById('start-btn')
+const startMenu = document.getElementById('start-menu')
+const clockEl   = document.getElementById('clock')
 
 /* ─────────────────────────  Window manager  ───────────────────────── */
-function openApp(id) {
-  closeStartMenu();
-  const app = APPS[id];
-  if (!app) return;
+function openApp(key) {
+  closeStartMenu()
+  const def = REGISTRY.find(a => a.key === key)
+  if (!def) return
 
-  if (openWindows.has(id)) {
-    const w = openWindows.get(id);
-    w.el.classList.remove('minimized');
-    focusWindow(id);
-    return;
+  if (openWindows.has(key)) {
+    const w = openWindows.get(key)
+    w.el.classList.remove('minimized')
+    focusWindow(key)
+    return
   }
 
-  const el = document.createElement('div');
-  el.className = 'window';
-  el.id = 'win-' + id;
-  el.style.width  = app.width  + 'px';
-  el.style.height = app.height + 'px';
-  el.style.left   = app.x + 'px';
-  el.style.top    = app.y + 'px';
-
-  const menuBar = app.menu
-    ? `<div class="window-menu">${app.menu.map(m => `<span>${m}</span>`).join('')}</div>`
-    : '';
-  const contentClass = app.isTerminal ? 'window-content' : 'window-content';
+  const size = def.size()
+  const el = document.createElement('div')
+  el.className = 'window'
+  el.id = 'win-' + key
+  el.style.width  = size.w + 'px'
+  el.style.height = size.h + 'px'
+  el.style.left   = (def.pos?.left ?? 80) + 'px'
+  el.style.top    = (def.pos?.top  ?? 40) + 'px'
 
   el.innerHTML = `
-    <div class="window-title">
-      <span class="ttl-glyph">${app.glyph}</span>
-      <span class="ttl-text">${app.title}</span>
+    <div class="window-title" style="background:linear-gradient(90deg, ${def.bar.color}, #1084d0)">
+      <span class="ttl-glyph">${def.bar.glyph}</span>
+      <span class="ttl-text">${def.bar.title}</span>
       <div class="window-btns">
-        <button class="window-btn" data-act="min" title="Minimize">_</button>
+        <button class="window-btn" data-act="min"  title="Minimize">_</button>
+        <button class="window-btn" data-act="max"  title="Maximize">□</button>
         <button class="window-btn" data-act="close" title="Close">✕</button>
       </div>
     </div>
-    ${menuBar}
-    <div class="${contentClass}">${app.body}</div>`;
+    <div class="window-content"></div>
+    <div class="window-resize" title="Resize"></div>`
 
-  desktop.appendChild(el);
+  desktop.appendChild(el)
 
-  // Title-bar buttons
-  el.querySelector('[data-act="close"]').addEventListener('click', e => { e.stopPropagation(); closeApp(id); });
-  el.querySelector('[data-act="min"]').addEventListener('click',  e => { e.stopPropagation(); minimizeApp(id); });
+  el.querySelector('[data-act="close"]').addEventListener('click', e => { e.stopPropagation(); closeApp(key) })
+  el.querySelector('[data-act="min"]').addEventListener('click',   e => { e.stopPropagation(); minimizeApp(key) })
+  el.querySelector('[data-act="max"]').addEventListener('click',   e => { e.stopPropagation(); toggleMaximize(key) })
+  el.addEventListener('mousedown', () => focusWindow(key))
 
-  // Focus on any interaction
-  el.addEventListener('mousedown', () => focusWindow(id));
-
-  // External links → ask the host page to open them (iframe is sandboxed)
-  el.querySelectorAll('[data-ext]').forEach(a => {
-    a.addEventListener('click', ev => {
-      ev.preventDefault();
-      notifyParent('open-url', { url: a.getAttribute('data-ext') });
-      window.open(a.getAttribute('data-ext'), '_blank', 'noopener');
-    });
-  });
-
-  makeDraggable(el, el.querySelector('.window-title'));
+  makeDraggable(el, el.querySelector('.window-title'))
+  makeResizable(el, el.querySelector('.window-resize'))
 
   // Taskbar button
-  const taskBtn = document.createElement('button');
-  taskBtn.className = 'task-btn';
-  taskBtn.innerHTML = `<span class="ttl-glyph">${app.glyph}</span><span>${app.title}</span>`;
+  const taskBtn = document.createElement('button')
+  taskBtn.className = 'task-btn'
+  taskBtn.innerHTML = `<span class="ttl-glyph">${def.bar.glyph}</span><span>${def.bar.title}</span>`
   taskBtn.addEventListener('click', () => {
-    if (activeId === id && !el.classList.contains('minimized')) {
-      minimizeApp(id);
-    } else {
-      el.classList.remove('minimized');
-      focusWindow(id);
-    }
-  });
-  taskBtns.appendChild(taskBtn);
+    if (activeKey === key && !el.classList.contains('minimized')) minimizeApp(key)
+    else { el.classList.remove('minimized'); focusWindow(key) }
+  })
+  taskBtns.appendChild(taskBtn)
 
-  openWindows.set(id, { el, taskBtn });
+  openWindows.set(key, { el, taskBtn, def, prevRect: null })
 
-  if (app.isTerminal) initTerminal(el);
+  // Render the app body
+  const content = el.querySelector('.window-content')
+  const render = window.OSApps && window.OSApps[def.app]
+  if (render) render(content, { openUrl })
+  else content.textContent = 'App unavailable.'
 
-  focusWindow(id);
-  notifyParent('app-open', { app: id });
+  focusWindow(key)
+  notifyParent('app-open', { app: key })
 }
 
-function focusWindow(id) {
-  activeId = id;
-  for (const [wid, w] of openWindows) {
-    const isActive = wid === id;
-    w.el.classList.toggle('blurred', !isActive);
-    w.taskBtn.classList.toggle('active', isActive && !w.el.classList.contains('minimized'));
+function focusWindow(key) {
+  activeKey = key
+  for (const [k, w] of openWindows) {
+    const active = k === key
+    w.el.classList.toggle('blurred', !active)
+    w.taskBtn.classList.toggle('active', active && !w.el.classList.contains('minimized'))
   }
-  const w = openWindows.get(id);
-  if (w) w.el.style.zIndex = String(++zCounter);
+  const w = openWindows.get(key)
+  if (w) w.el.style.zIndex = String(++zCounter)
 }
 
-function minimizeApp(id) {
-  const w = openWindows.get(id);
-  if (!w) return;
-  w.el.classList.add('minimized');
-  w.taskBtn.classList.remove('active');
-  if (activeId === id) activeId = null;
+function minimizeApp(key) {
+  const w = openWindows.get(key)
+  if (!w) return
+  w.el.classList.add('minimized')
+  w.taskBtn.classList.remove('active')
+  if (activeKey === key) activeKey = null
 }
 
-function closeApp(id) {
-  const w = openWindows.get(id);
-  if (!w) return;
-  w.el.remove();
-  w.taskBtn.remove();
-  openWindows.delete(id);
-  if (activeId === id) activeId = null;
+function toggleMaximize(key) {
+  const w = openWindows.get(key)
+  if (!w) return
+  if (w.prevRect) {
+    Object.assign(w.el.style, w.prevRect)
+    w.prevRect = null
+  } else {
+    w.prevRect = { width: w.el.style.width, height: w.el.style.height, top: w.el.style.top, left: w.el.style.left }
+    w.el.style.left = '0px'; w.el.style.top = '0px'
+    w.el.style.width = window.innerWidth + 'px'
+    w.el.style.height = (window.innerHeight - TASKBAR_H) + 'px'
+  }
+  focusWindow(key)
 }
 
-/* ── Dragging (clamped to desktop) ── */
+function closeApp(key) {
+  const w = openWindows.get(key)
+  if (!w) return
+  const content = w.el.querySelector('.window-content')
+  if (content && content._cleanup) content._cleanup()
+  w.el.remove()
+  w.taskBtn.remove()
+  openWindows.delete(key)
+  if (activeKey === key) activeKey = null
+}
+
+/* ── Dragging (whole title bar) ── */
 function makeDraggable(win, handle) {
-  let dx = 0, dy = 0, dragging = false;
+  let dx = 0, dy = 0, dragging = false
   handle.addEventListener('mousedown', e => {
-    if (e.target.closest('.window-btn')) return;
-    dragging = true;
-    dx = e.clientX - win.offsetLeft;
-    dy = e.clientY - win.offsetTop;
-    e.preventDefault();
-  });
+    if (e.target.closest('.window-btn')) return
+    dragging = true; dx = e.clientX - win.offsetLeft; dy = e.clientY - win.offsetTop
+    e.preventDefault()
+  })
   document.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    const maxX = window.innerWidth  - 40;
-    const maxY = window.innerHeight - 30 - 30; // taskbar
-    const nx = Math.min(Math.max(e.clientX - dx, -win.offsetWidth + 80), maxX);
-    const ny = Math.min(Math.max(e.clientY - dy, 0), maxY);
-    win.style.left = nx + 'px';
-    win.style.top  = ny + 'px';
-  });
-  document.addEventListener('mouseup', () => { dragging = false; });
+    if (!dragging) return
+    const nx = Math.min(Math.max(e.clientX - dx, -win.offsetWidth + 80), window.innerWidth - 40)
+    const ny = Math.min(Math.max(e.clientY - dy, 0), window.innerHeight - TASKBAR_H - 24)
+    win.style.left = nx + 'px'; win.style.top = ny + 'px'
+  })
+  document.addEventListener('mouseup', () => { dragging = false })
 }
 
-/* ─────────────────────────  Terminal app  ───────────────────────── */
-function initTerminal(win) {
-  const output = win.querySelector('#term-output');
-  const input  = win.querySelector('#term-input');
-  const print = (txt) => {
-    const line = document.createElement('div');
-    line.className = 'term-line';
-    line.innerHTML = txt;
-    output.appendChild(line);
-  };
-
-  const commands = {
-    help: () => print(
-      'Available commands:<br>' +
-      '&nbsp;&nbsp;help &nbsp;&nbsp;&nbsp;- show this list<br>' +
-      '&nbsp;&nbsp;about &nbsp;&nbsp;- open About Me<br>' +
-      '&nbsp;&nbsp;projects - open Projects<br>' +
-      '&nbsp;&nbsp;contact &nbsp;- open Contact<br>' +
-      '&nbsp;&nbsp;skills &nbsp;- list skills<br>' +
-      '&nbsp;&nbsp;whoami &nbsp;- who am I<br>' +
-      '&nbsp;&nbsp;date &nbsp;&nbsp;&nbsp;- current date/time<br>' +
-      '&nbsp;&nbsp;exit &nbsp;&nbsp;&nbsp;- fly back out to the room<br>' +
-      '&nbsp;&nbsp;cls &nbsp;&nbsp;&nbsp;&nbsp;- clear the screen'
-    ),
-    about:    () => { openApp('about');    print('Opening About Me...'); },
-    projects: () => { openApp('projects'); print('Opening Projects...'); },
-    contact:  () => { openApp('contact');  print('Opening Contact...'); },
-    skills:   () => print('React, Three.js, TypeScript, Node.js, GSAP, Blender.'),
-    whoami:   () => print('[Your Name] — developer &amp; designer.'),
-    date:     () => print(new Date().toString()),
-    exit:     () => { print('Goodbye.'); notifyParent('go-back', {}); },
-    cls:      () => { output.innerHTML = ''; },
-    clear:    () => { output.innerHTML = ''; },
-  };
-
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      const raw = input.value.trim();
-      print(`<span class="ps1">C:\\&gt;&nbsp;</span>${escapeHtml(raw)}`);
-      const cmd = raw.toLowerCase().split(/\s+/)[0];
-      if (cmd === '') { /* noop */ }
-      else if (commands[cmd]) commands[cmd]();
-      else print(`'${escapeHtml(cmd)}' is not recognized. Type <b>help</b>.`);
-      input.value = '';
-      win.querySelector('.window-content').scrollTop = 1e9;
-    }
-  });
-  setTimeout(() => input.focus(), 50);
-}
-
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+/* ── Resizing (bottom-right handle, min 520x220) ── */
+function makeResizable(win, handle) {
+  let resizing = false, sx = 0, sy = 0, sw = 0, sh = 0
+  handle.addEventListener('mousedown', e => {
+    resizing = true; sx = e.clientX; sy = e.clientY
+    sw = win.offsetWidth; sh = win.offsetHeight
+    e.preventDefault(); e.stopPropagation()
+  })
+  document.addEventListener('mousemove', e => {
+    if (!resizing) return
+    win.style.width  = Math.max(MIN_W, sw + (e.clientX - sx)) + 'px'
+    win.style.height = Math.max(MIN_H, sh + (e.clientY - sy)) + 'px'
+  })
+  document.addEventListener('mouseup', () => { resizing = false })
 }
 
 /* ─────────────────────────  Desktop icons  ───────────────────────── */
 function buildDesktopIcons() {
-  const list = [
-    { id: 'about',    label: 'About Me',  color: '#000080' },
-    { id: 'projects', label: 'Projects',  color: '#808000' },
-    { id: 'skills',   label: 'Skills',    color: '#008000' },
-    { id: 'contact',  label: 'Contact',   color: '#800000' },
-    { id: 'terminal', label: 'Terminal',  color: '#101010' },
-    { id: 'credits',  label: 'Read Me',   color: '#404080' },
-  ];
-  list.forEach((item, i) => {
-    const el = document.createElement('div');
-    el.className = 'icon';
-    el.tabIndex = 0;
-    el.style.top  = (14 + i * 80) + 'px';
-    el.style.left = '14px';
-    el.innerHTML = `<div class="glyph" style="background:${item.color};border-radius:4px">${APPS[item.id].glyph}</div><span>${item.label}</span>`;
+  REGISTRY.forEach((def, i) => {
+    const el = document.createElement('div')
+    el.className = 'icon'
+    el.tabIndex = 0
+    el.style.top  = (16 + i * 92) + 'px'
+    el.style.left = '16px'
+    el.innerHTML = `<div class="glyph">${def.glyph}</div><span>${def.name}</span>`
     el.addEventListener('click', () => {
-      document.querySelectorAll('.icon').forEach(n => n.classList.remove('selected'));
-      el.classList.add('selected');
-    });
-    el.addEventListener('dblclick', () => openApp(item.id));
-    desktop.appendChild(el);
-  });
-  // Click empty desktop clears selection
+      document.querySelectorAll('.icon').forEach(n => n.classList.remove('selected'))
+      el.classList.add('selected')
+    })
+    el.addEventListener('dblclick', () => openApp(def.key))
+    desktop.appendChild(el)
+  })
   desktop.addEventListener('mousedown', e => {
-    if (e.target === desktop) document.querySelectorAll('.icon').forEach(n => n.classList.remove('selected'));
-  });
+    if (e.target === desktop) document.querySelectorAll('.icon').forEach(n => n.classList.remove('selected'))
+  })
 }
 
 /* ─────────────────────────  Start menu  ───────────────────────── */
 function buildStartMenu() {
-  const items = [
-    { id: 'about',    label: 'About Me' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'skills',   label: 'Skills' },
-    { id: 'contact',  label: 'Contact' },
-    { id: 'terminal', label: 'Terminal' },
-    { id: 'credits',  label: 'Read Me' },
-  ];
-  const listEl = document.getElementById('start-list');
-  items.forEach(it => {
-    const row = document.createElement('div');
-    row.className = 'start-item';
-    row.innerHTML = `<span class="si-glyph">${APPS[it.id].glyph}</span><span>${it.label}</span>`;
-    row.addEventListener('click', () => openApp(it.id));
-    listEl.appendChild(row);
-  });
-  const sep = document.createElement('div');
-  sep.className = 'start-sep';
-  listEl.appendChild(sep);
-  const back = document.createElement('div');
-  back.className = 'start-item';
-  back.innerHTML = `<span class="si-glyph">⏏️</span><span>Exit to Room</span>`;
-  back.addEventListener('click', () => { closeStartMenu(); notifyParent('go-back', {}); });
-  listEl.appendChild(back);
+  document.getElementById('start-rail').textContent = OS_NAME
+  const list = document.getElementById('start-list')
+  REGISTRY.forEach(def => {
+    const row = document.createElement('div')
+    row.className = 'start-item'
+    row.innerHTML = `<span class="si-glyph">${def.glyph}</span><span>${def.name}</span>`
+    row.addEventListener('click', () => openApp(def.key))
+    list.appendChild(row)
+  })
+  const sep = document.createElement('div'); sep.className = 'start-sep'; list.appendChild(sep)
+  const shut = document.createElement('div')
+  shut.className = 'start-item'
+  shut.innerHTML = `<span class="si-glyph">🖥️</span><span>Sh<u>u</u>t down...</span>`
+  shut.addEventListener('click', () => { closeStartMenu(); runShutdown() })
+  list.appendChild(sep)
+  list.appendChild(shut)
 }
-
 function toggleStartMenu() {
-  const open = startMenu.classList.toggle('hidden') === false;
-  startBtn.classList.toggle('open', open);
+  const open = startMenu.classList.toggle('hidden') === false
+  startBtn.classList.toggle('open', open)
 }
 function closeStartMenu() {
-  startMenu.classList.add('hidden');
-  startBtn.classList.remove('open');
+  startMenu.classList.add('hidden')
+  startBtn.classList.remove('open')
 }
 
-/* ─────────────────────────  Clock  ───────────────────────── */
+/* ─────────────────────────  Shutdown easter egg  ───────────────────────── */
+let shutdownCount = 0
+const SNARK = [
+  'Did you not read the last message?',
+  '...all you wanna do is shut the computer down.',
+  'Goodbye!',
+  'Goodbye Again!',
+  'Really...',
+  '7th shutdown... lucky number 7!',
+  'Your commitment is admirable, but the answer is still no.',
+]
+function runShutdown() {
+  const el = document.getElementById('shutdown')
+  el.classList.remove('hidden')
+  el.textContent = ''
+  const lines = shutdownCount === 0 ? [
+    'Beginning Pre-Shutdown Sequence...',
+    `Connecting to ${OS_NAME}01/13:2000...`,
+    `Established connection, attempting data transfer.`,
+    '[DEP_ANALYTICS_SERVER] InvalidFormatting',
+    '[SOCKET_FAILED_TO_RESPOND] Connection Refused: Reconnecting...',
+    'Transfer Failed.',
+    'Aborting shutdown. Rebooting...',
+  ] : [
+    SNARK[Math.min(shutdownCount - 1, SNARK.length - 1)],
+    'Rebooting...',
+  ]
+  shutdownCount++
+  let i = 0
+  const tick = () => {
+    if (i < lines.length) { el.textContent += (i ? '\n' : '') + lines[i]; i++; setTimeout(tick, 600) }
+    else setTimeout(() => el.classList.add('hidden'), 1100)
+  }
+  tick()
+}
+
+/* ─────────────────────────  Clock + SFX + boot  ───────────────────────── */
 function tickClock() {
-  const d = new Date();
-  let h = d.getHours();
-  const m = d.getMinutes().toString().padStart(2, '0');
-  const ap = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  clockEl.textContent = `${h}:${m} ${ap}`;
+  const d = new Date()
+  let h = d.getHours()
+  const m = String(d.getMinutes()).padStart(2, '0')
+  const ap = h >= 12 ? 'PM' : 'AM'
+  h = h % 12 || 12
+  clockEl.textContent = `${h}:${m} ${ap}`
 }
+function wireKeyboardSfx() { document.addEventListener('keydown', () => notifyParent('keypress'), true) }
 
-/* ─────────────────────────  Global keyboard SFX  ───────────────────────── */
-function wireKeyboardSfx() {
-  document.addEventListener('keydown', () => notifyParent('keypress', {}), true);
-}
-
-/* ─────────────────────────  Boot  ───────────────────────── */
 function boot() {
-  buildDesktopIcons();
-  buildStartMenu();
-  wireKeyboardSfx();
+  buildDesktopIcons()
+  buildStartMenu()
+  wireKeyboardSfx()
 
-  startBtn.addEventListener('click', e => { e.stopPropagation(); toggleStartMenu(); });
+  startBtn.addEventListener('click', e => { e.stopPropagation(); toggleStartMenu() })
   document.addEventListener('mousedown', e => {
-    if (!startMenu.contains(e.target) && e.target !== startBtn && !startBtn.contains(e.target)) closeStartMenu();
-  });
+    if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) closeStartMenu()
+  })
 
-  tickClock();
-  setInterval(tickClock, 1000 * 15);
+  tickClock(); setInterval(tickClock, 5000)
 
-  // Open a welcome window so the desktop never feels empty
-  openApp('about');
+  // Auto-open the showcase, like the reference
+  const auto = REGISTRY.find(a => a.autoOpen)
+  if (auto) openApp(auto.key)
 }
 
-boot();
+boot()
