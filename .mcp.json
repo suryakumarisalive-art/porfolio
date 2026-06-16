@@ -2,7 +2,12 @@
   "mcpServers": {
     "playwright": {
       "command": "playwright-mcp",
-      "args": ["--browser", "chromium", "--headless"],
+      "args": [
+        "--browser",
+        "chromium",
+        "--headless",
+        "--ignore-https-errors"
+      ],
       "env": {
         "PLAYWRIGHT_BROWSERS_PATH": "/tmp/pw-browsers"
       },

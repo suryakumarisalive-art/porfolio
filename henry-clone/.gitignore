@@ -1,0 +1,4 @@
+# Henry Heffernan's copyrighted assets — local reference only, never commit/publish
+reference/
+node_modules/
+dist/

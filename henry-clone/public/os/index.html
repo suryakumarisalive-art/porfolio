@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio OS</title>
+  <style>
+    @font-face { font-family: 'Terminal'; src: url('static/media/Terminal.6a1b7290048681921b2c.ttf'); }
+    @font-face { font-family: 'MSSansSerif'; src: url('static/media/MSSansSerif.aa14e7b110864a3c2e08.ttf'); }
+    @font-face { font-family: 'Millennium'; src: url('static/media/Millennium.e16d74a8e8e0567ce30e.ttf'); }
+    @font-face { font-family: 'Millennium'; font-weight: 700; src: url('static/media/Millennium-Bold.cd5e3be832ebd008c852.ttf'); }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --os-bg: #008080;
+      --win-bg: #c0c0c0;
+      --win-title: #000080;
+      --win-title-text: #fff;
+      --border-dark: #808080;
+      --border-light: #fff;
+      --text: #000;
+      --font: 'MSSansSerif', Arial, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--os-bg);
+      font-family: var(--font);
+      font-size: 11px;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── Desktop icons ── */
+    .desktop { position: relative; width: 100%; height: calc(100% - 28px); padding: 8px; }
+
+    .icon {
+      display: inline-flex; flex-direction: column; align-items: center;
+      width: 72px; padding: 4px; cursor: pointer; color: #fff;
+      text-align: center; gap: 4px;
+      position: absolute;
+    }
+    .icon:hover { background: rgba(0,0,128,0.4); }
+    .icon img { width: 32px; height: 32px; image-rendering: pixelated; }
+    .icon span { font-size: 11px; color: #fff; text-shadow: 1px 1px #000; line-height: 1.2; }
+
+    /* ── Taskbar ── */
+    .taskbar {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 28px;
+      background: var(--win-bg);
+      border-top: 2px solid var(--border-light);
+      display: flex; align-items: center; gap: 4px; padding: 0 4px;
+    }
+    .start-btn {
+      height: 22px; padding: 0 8px;
+      background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+      font-family: var(--font); font-weight: 700; font-size: 11px;
+      cursor: pointer; display: flex; align-items: center; gap: 4px;
+    }
+    .start-btn:active { border-color: var(--border-dark) var(--border-light) var(--border-light) var(--border-dark); }
+    .clock { margin-left: auto; padding: 2px 8px; border: 1px solid var(--border-dark); font-size: 11px; }
+
+    /* ── Window ── */
+    .window {
+      position: absolute; background: var(--win-bg);
+      border: 2px solid;
+      border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+      box-shadow: 2px 2px 0 #000;
+      min-width: 280px;
+    }
+    .window-title {
+      background: var(--win-title); color: var(--win-title-text);
+      padding: 3px 6px; font-weight: 700; font-size: 11px;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: move;
+    }
+    .window-btns { display: flex; gap: 2px; }
+    .window-btn {
+      width: 16px; height: 14px; background: var(--win-bg);
+      border: 1px solid; border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+      font-size: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .window-content { padding: 12px; font-size: 11px; line-height: 1.6; }
+
+    /* ── About window content ── */
+    .about-section h2 { font-size: 13px; margin-bottom: 8px; }
+    .about-section p  { margin-bottom: 6px; }
+    .about-section a  { color: var(--win-title); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="desktop" id="desktop">
+  <!-- Icons -->
+  <div class="icon" style="top:16px;left:16px" onclick="openWindow('about')">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000080'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="" />
+    <span>About Me</span>
+  </div>
+  <div class="icon" style="top:100px;left:16px" onclick="openWindow('projects')">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23808000'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white'%3E📁%3C/text%3E%3C/svg%3E" alt="" />
+    <span>Projects</span>
+  </div>
+  <div class="icon" style="top:184px;left:16px" onclick="openWindow('contact')">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23800000'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='white'%3E✉️%3C/text%3E%3C/svg%3E" alt="" />
+    <span>Contact</span>
+  </div>
+</div>
+
+<!-- Windows -->
+<div class="window hidden" id="win-about" style="top:60px;left:120px;width:340px">
+  <div class="window-title" onmousedown="startDrag(event,'win-about')">
+    About Me — Notepad
+    <div class="window-btns">
+      <button class="window-btn" onclick="closeWindow('about')">✕</button>
+    </div>
+  </div>
+  <div class="window-content about-section">
+    <h2>Hello, I'm [Your Name]</h2>
+    <p>I'm a <strong>developer &amp; designer</strong> who builds fast, beautiful things for the web.</p>
+    <p>Skills: Three.js · React · Node.js · WebGL · UI/UX</p>
+    <p>Based in [Your City]. Open to freelance &amp; full-time roles.</p>
+    <p><a href="mailto:you@example.com">you@example.com</a></p>
+  </div>
+</div>
+
+<div class="window hidden" id="win-projects" style="top:80px;left:160px;width:380px">
+  <div class="window-title" onmousedown="startDrag(event,'win-projects')">
+    Projects — File Explorer
+    <div class="window-btns">
+      <button class="window-btn" onclick="closeWindow('projects')">✕</button>
+    </div>
+  </div>
+  <div class="window-content">
+    <p><strong>📄 Project 1</strong> — Description of your coolest project.</p>
+    <p><strong>📄 Project 2</strong> — Another great thing you built.</p>
+    <p><strong>📄 Project 3</strong> — Something you're proud of.</p>
+    <p style="margin-top:10px;opacity:.7">Double-click a project to view details.</p>
+  </div>
+</div>
+
+<div class="window hidden" id="win-contact" style="top:100px;left:200px;width:300px">
+  <div class="window-title" onmousedown="startDrag(event,'win-contact')">
+    Contact
+    <div class="window-btns">
+      <button class="window-btn" onclick="closeWindow('contact')">✕</button>
+    </div>
+  </div>
+  <div class="window-content">
+    <p>📧 <a href="mailto:you@example.com">you@example.com</a></p>
+    <p>💼 <a href="#">LinkedIn</a></p>
+    <p>🐙 <a href="#">GitHub</a></p>
+  </div>
+</div>
+
+<!-- Taskbar -->
+<div class="taskbar">
+  <button class="start-btn">⊞ Start</button>
+  <div class="clock" id="clock">00:00</div>
+</div>
+
+<script>
+  // Clock
+  function tick() {
+    const d = new Date()
+    document.getElementById('clock').textContent =
+      d.getHours().toString().padStart(2,'0') + ':' +
+      d.getMinutes().toString().padStart(2,'0')
+  }
+  tick(); setInterval(tick, 10000)
+
+  // Window management
+  function openWindow(id) {
+    document.getElementById('win-' + id).classList.remove('hidden')
+  }
+  function closeWindow(id) {
+    document.getElementById('win-' + id).classList.add('hidden')
+  }
+
+  // Drag
+  let _drag = null
+  function startDrag(e, id) {
+    const el = document.getElementById(id)
+    const startX = e.clientX - el.offsetLeft
+    const startY = e.clientY - el.offsetTop
+    _drag = { el, startX, startY }
+  }
+  document.addEventListener('mousemove', e => {
+    if (!_drag) return
+    _drag.el.style.left = (e.clientX - _drag.startX) + 'px'
+    _drag.el.style.top  = (e.clientY - _drag.startY) + 'px'
+  })
+  document.addEventListener('mouseup', () => _drag = null)
+</script>
+</body>
+</html>

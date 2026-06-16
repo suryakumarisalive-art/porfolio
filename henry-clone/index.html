@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — 3D Showcase</title>
+  <meta name="description" content="Interactive 3D portfolio — step inside." />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Splash / intro overlay -->
+  <div id="splash">
+    <div class="splash-box">
+      <p class="splash-title">Portfolio Showcase 2025<span class="cursor">_</span></p>
+      <p class="splash-sub">Click start to begin</p>
+      <button id="start-btn" class="start-btn">START</button>
+    </div>
+  </div>
+
+  <!-- Loading bar shown while GLBs stream in -->
+  <div id="loading" class="hidden">
+    <div class="loading-bar"><div id="loading-fill"></div></div>
+    <p id="loading-text">Loading scene…</p>
+  </div>
+
+  <!-- Three.js renders here -->
+  <canvas id="webgl"></canvas>
+
+  <!-- OS desktop — embedded in the monitor via Three.js texture / iframe trick -->
+  <iframe
+    id="os-frame"
+    src="os/index.html"
+    class="hidden"
+    tabindex="-1"
+    title="Desktop OS"
+    sandbox="allow-scripts allow-same-origin"
+  ></iframe>
+
+  <!-- Mobile fallback: shown instead of canvas on small screens -->
+  <div id="mobile-fallback" class="hidden">
+    <div class="mobile-card">
+      <h1>Portfolio</h1>
+      <p>The 3D experience works best on a desktop browser.<br/>Tap the links below to explore.</p>
+      <nav class="mobile-nav">
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

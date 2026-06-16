@@ -1,0 +1,131 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --mono: "Courier New", Courier, monospace;
+}
+
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--black); }
+
+/* ── Utilities ── */
+.hidden { display: none !important; }
+
+/* ── Splash screen (exact Henry style) ── */
+#splash {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--black);
+}
+
+.splash-box {
+  border: 4px solid var(--white);
+  padding: 2.5rem 3.5rem;
+  text-align: center;
+  font-family: var(--mono);
+  color: var(--white);
+  max-width: 520px; width: 90%;
+}
+
+.splash-title {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+}
+
+.splash-sub {
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  margin-bottom: 2rem;
+  opacity: 0.85;
+}
+
+.cursor {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.start-btn {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--black);
+  background: var(--white);
+  border: 2px solid var(--white);
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  transition: background 120ms, color 120ms;
+}
+.start-btn:hover { background: var(--black); color: var(--white); }
+
+/* ── Loading bar ── */
+#loading {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--black);
+  font-family: var(--mono); color: var(--white);
+  gap: 1rem;
+}
+
+.loading-bar {
+  width: min(320px, 70vw); height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px; overflow: hidden;
+}
+#loading-fill {
+  height: 100%; width: 0%;
+  background: var(--white);
+  transition: width 200ms ease-out;
+}
+#loading-text { font-size: 0.8rem; opacity: 0.6; }
+
+/* ── WebGL canvas ── */
+#webgl {
+  position: fixed; inset: 0;
+  width: 100% !important; height: 100% !important;
+  display: block; outline: none;
+}
+
+/* ── OS iframe (rendered onto monitor via drawImage) ── */
+#os-frame {
+  position: fixed;
+  /* Offscreen but still rendered so we can capture its pixels */
+  left: -9999px; top: 0;
+  width: 1024px; height: 768px;
+  border: none; background: var(--black);
+  pointer-events: none;
+}
+
+/* ── Mobile fallback (< 640px or no WebGL) ── */
+#mobile-fallback {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--black);
+  padding: 2rem;
+}
+
+.mobile-card {
+  font-family: var(--mono); color: var(--white);
+  border: 3px solid var(--white);
+  padding: 2rem; max-width: 420px; width: 100%;
+  text-align: center;
+}
+.mobile-card h1 { font-size: 1.8rem; margin-bottom: 1rem; letter-spacing: 0.08em; }
+.mobile-card p  { font-size: 0.9rem; line-height: 1.7; opacity: 0.8; margin-bottom: 2rem; }
+
+.mobile-nav { display: flex; flex-direction: column; gap: 0.75rem; }
+.mobile-nav a {
+  font-family: var(--mono); color: var(--black);
+  background: var(--white); padding: 0.6rem 1rem;
+  text-decoration: none; letter-spacing: 0.1em;
+  font-size: 0.9rem; transition: background 120ms, color 120ms;
+}
+.mobile-nav a:hover { background: var(--black); color: var(--white); border: 1px solid var(--white); }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
