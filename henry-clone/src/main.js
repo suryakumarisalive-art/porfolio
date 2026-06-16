@@ -12,29 +12,23 @@ function supportsWebGL() {
 
 if (isMobile()) {
   document.getElementById('mobile-fallback').classList.remove('hidden')
-  document.getElementById('splash').classList.add('hidden')
+  document.getElementById('ui-app').classList.add('hidden')
 } else {
   const startBtn = document.getElementById('start-btn')
-  startBtn.addEventListener('click', startExperience, { once: true })
-  startBtn.focus()
-}
-
-function startExperience() {
-  const splash   = document.getElementById('splash')
-  const loading  = document.getElementById('loading')
-
-  splash.style.opacity = '0'
-  splash.style.transition = 'opacity 400ms'
-  setTimeout(() => {
-    splash.classList.add('hidden')
-    loading.classList.remove('hidden')
-  }, 400)
-
-  new Experience({
-    canvas:      document.getElementById('webgl'),
-    osFrame:     document.getElementById('os-frame'),
-    loadingFill: document.getElementById('loading-fill'),
-    loadingText: document.getElementById('loading-text'),
-    loadingEl:   loading,
+  const exp = new Experience({
+    canvas:       document.getElementById('webgl'),
+    cssContainer: document.getElementById('css'),
   })
+
+  // START button click
+  const handleStart = () => {
+    startBtn.removeEventListener('click', handleStart)
+    startBtn.removeEventListener('keydown', handleStartKey)
+    exp.start()
+  }
+  const handleStartKey = (e) => { if (e.key === 'Enter' || e.key === ' ') handleStart() }
+
+  startBtn.addEventListener('click', handleStart)
+  startBtn.addEventListener('keydown', handleStartKey)
+  startBtn.focus()
 }

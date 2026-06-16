@@ -4,48 +4,67 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portfolio — 3D Showcase</title>
-  <meta name="description" content="Interactive 3D portfolio — step inside." />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
-  <!-- Splash / intro overlay -->
-  <div id="splash">
-    <div class="splash-box">
-      <p class="splash-title">Portfolio Showcase 2025<span class="cursor">_</span></p>
-      <p class="splash-sub">Click start to begin</p>
-      <button id="start-btn" class="start-btn">START</button>
+
+  <!-- WebGL canvas (pointer-events: none — UI layer handles mouse) -->
+  <canvas id="webgl" class="webgl"></canvas>
+
+  <!-- CSS3DRenderer container — iframe lives here in 3D space -->
+  <div id="css"></div>
+
+  <!-- Hidden video elements used as monitor texture source -->
+  <div id="monitor-videos">
+    <video id="monitor-video" loop muted playsinline crossorigin="anonymous"></video>
+  </div>
+
+  <!-- UI layer — centred flex, handles all mouse events -->
+  <div id="ui-app">
+    <div id="ui">
+
+      <!-- BIOS-style loading screen -->
+      <div id="loading-screen">
+        <div class="loading-screen-header jitter">
+          <p>Portfolio Showcase 2025 &nbsp;<span class="blinking-cursor"></span></p>
+        </div>
+
+        <div class="loading-screen-body">
+          <p id="loading-line-1">Initialising scene<span class="loading"></span></p>
+          <p id="loading-line-2"></p>
+          <p id="loading-line-3"></p>
+          <br />
+          <div class="bios-start-button" id="start-btn" tabindex="0" role="button" aria-label="Start">
+            <p>START</p>
+          </div>
+        </div>
+
+        <div class="loading-screen-footer jitter">
+          <p>&nbsp;<span class="blinking-cursor"></span></p>
+        </div>
+      </div>
+
+      <!-- Top-left controls (mute etc) — shown after loading -->
+      <div id="ui-interactive" class="hidden">
+        <button id="mute-btn" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+        </button>
+      </div>
+
     </div>
   </div>
 
-  <!-- Loading bar shown while GLBs stream in -->
-  <div id="loading" class="hidden">
-    <div class="loading-bar"><div id="loading-fill"></div></div>
-    <p id="loading-text">Loading scene…</p>
-  </div>
-
-  <!-- Three.js renders here -->
-  <canvas id="webgl"></canvas>
-
-  <!-- OS desktop — embedded in the monitor via Three.js texture / iframe trick -->
-  <iframe
-    id="os-frame"
-    src="os/index.html"
-    class="hidden"
-    tabindex="-1"
-    title="Desktop OS"
-    sandbox="allow-scripts allow-same-origin"
-  ></iframe>
-
-  <!-- Mobile fallback: shown instead of canvas on small screens -->
+  <!-- Mobile fallback -->
   <div id="mobile-fallback" class="hidden">
-    <div class="mobile-card">
-      <h1>Portfolio</h1>
-      <p>The 3D experience works best on a desktop browser.<br/>Tap the links below to explore.</p>
-      <nav class="mobile-nav">
-        <a href="#projects">Projects</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
+    <div class="loading-screen-body" style="max-width:480px">
+      <p>Portfolio Showcase 2025 <span class="blinking-cursor"></span></p>
+      <br/>
+      <p>The 3D experience works best on desktop.</p>
+      <br/>
+      <p>Visit on a larger screen for the full room.</p>
     </div>
   </div>
 

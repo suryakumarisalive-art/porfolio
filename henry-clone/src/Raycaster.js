@@ -7,10 +7,12 @@ export class RaycasterManager {
     this._mouse    = new THREE.Vector2(-9, -9)
     this._hovering = false
 
-    window.addEventListener('mousemove', e => this._onMove(e))
-    window.addEventListener('click',     e => this._onClick(e))
-    window.addEventListener('mousedown', () => exp.audio.playMouseDown())
-    window.addEventListener('mouseup',   () => exp.audio.playMouseUp())
+    // Listen on the CSS container so events pass through both WebGL and CSS3D layers
+    const el = exp.cssContainer
+    el.addEventListener('mousemove', e => this._onMove(e))
+    el.addEventListener('click',     e => this._onClick(e))
+    el.addEventListener('mousedown', () => exp.audio.playMouseDown())
+    el.addEventListener('mouseup',   () => exp.audio.playMouseUp())
   }
 
   _onMove(e) {
@@ -22,23 +24,22 @@ export class RaycasterManager {
     const wasHovering = this._hovering
     this._hovering = hits.length > 0
     if (this._hovering !== wasHovering) {
-      document.body.style.cursor = this._hovering ? 'pointer' : 'default'
+      this.exp.cssContainer.style.cursor = this._hovering ? 'pointer' : ''
     }
   }
 
   _onClick(e) {
+    if (this.exp.world._monitorOpen) return   // in monitor mode — clicks go to iframe
+
     this._rc.setFromCamera(this._mouse, this.exp.camera.instance)
     const hits = this._rc.intersectObjects(this.exp.world.clickTargets, false)
     if (!hits.length) return
 
-    const obj = hits[0].object
-    if (obj.userData.action === 'openMonitor') {
+    const action = hits[0].object.userData.action
+    if (action === 'openMonitor') {
       this.exp.camera.zoomIntoMonitor(() => {
         this.exp.world.showMonitor()
       })
-    } else if (obj.userData.action === 'back') {
-      this.exp.camera.zoomOut()
-      this.exp.world.hideMonitor()
     }
   }
 }

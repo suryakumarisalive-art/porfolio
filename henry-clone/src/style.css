@@ -1,131 +1,205 @@
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --black: #000;
-  --white: #fff;
-  --mono: "Courier New", Courier, monospace;
+html, body { overflow: hidden; background: #000; }
+
+h1, h2, h3, h4, h5, p {
+  font-family: monospace;
+  font-weight: 400;
+  font-style: normal;
+  color: white;
+  font-size: 16px;
+}
+@media only screen and (max-width: 768px) {
+  h1, h2, h3, h4, h5, p { font-size: 10px; }
 }
 
-html, body { width: 100%; height: 100%; overflow: hidden; background: var(--black); }
+br { padding-top: 8px; padding-bottom: 8px; height: 16px; }
 
-/* ── Utilities ── */
+/* ── Utility ── */
 .hidden { display: none !important; }
 
-/* ── Splash screen (exact Henry style) ── */
-#splash {
-  position: fixed; inset: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--black);
-}
-
-.splash-box {
-  border: 4px solid var(--white);
-  padding: 2.5rem 3.5rem;
-  text-align: center;
-  font-family: var(--mono);
-  color: var(--white);
-  max-width: 520px; width: 90%;
-}
-
-.splash-title {
-  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-  letter-spacing: 0.04em;
-  margin-bottom: 0.4rem;
-  white-space: nowrap;
-}
-
-.splash-sub {
-  font-size: clamp(0.8rem, 2vw, 0.95rem);
-  margin-bottom: 2rem;
-  opacity: 0.85;
-}
-
-.cursor {
-  display: inline-block;
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink { 50% { opacity: 0; } }
-
-.start-btn {
-  font-family: var(--mono);
-  font-size: 1rem;
-  color: var(--black);
-  background: var(--white);
-  border: 2px solid var(--white);
-  padding: 0.5rem 2rem;
-  cursor: pointer;
-  letter-spacing: 0.15em;
-  transition: background 120ms, color 120ms;
-}
-.start-btn:hover { background: var(--black); color: var(--white); }
-
-/* ── Loading bar ── */
-#loading {
-  position: fixed; inset: 0; z-index: 90;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: var(--black);
-  font-family: var(--mono); color: var(--white);
-  gap: 1rem;
-}
-
-.loading-bar {
-  width: min(320px, 70vw); height: 3px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 2px; overflow: hidden;
-}
-#loading-fill {
-  height: 100%; width: 0%;
-  background: var(--white);
-  transition: width 200ms ease-out;
-}
-#loading-text { font-size: 0.8rem; opacity: 0.6; }
-
 /* ── WebGL canvas ── */
-#webgl {
-  position: fixed; inset: 0;
-  width: 100% !important; height: 100% !important;
-  display: block; outline: none;
+.webgl {
+  position: fixed; top: 0; left: 0;
+  outline: none;
+  pointer-events: none; /* UI layer handles mouse */
 }
 
-/* ── OS iframe (rendered onto monitor via drawImage) ── */
-#os-frame {
-  position: fixed;
-  /* Offscreen but still rendered so we can capture its pixels */
-  left: -9999px; top: 0;
-  width: 1024px; height: 768px;
-  border: none; background: var(--black);
+/* ── CSS3DRenderer (iframe on monitor) ── */
+#css {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; /* enabled only when zoomed into monitor */
+}
+#css.interactive { pointer-events: auto; cursor: pointer; }
+
+/* ── Hidden video elements ── */
+#monitor-videos {
   pointer-events: none;
+  opacity: 0;
+  width: 0; height: 0;
+  top: 0; left: 0;
 }
 
-/* ── Mobile fallback (< 640px or no WebGL) ── */
+/* ── UI overlay (full screen, centred) ── */
+#ui-app {
+  width: 100%; height: 100%;
+  position: fixed; top: 0; left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+#ui {
+  position: absolute;
+  overflow: hidden;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* ── Top-left controls ── */
+#ui-interactive {
+  position: absolute;
+  top: 64px; left: 64px;
+  width: 256px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media only screen and (max-width: 768px) {
+  #ui-interactive { top: 24px; left: 24px; }
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 150ms;
+  display: flex; align-items: center;
+}
+.icon-btn:hover { opacity: 1; }
+.icon-btn.muted { text-decoration: line-through; opacity: 0.4; }
+
+/* ── BIOS loading screen ── */
+#loading-screen {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 10;
+}
+
+.loading-screen-header {
+  padding: 48px;
+}
+.loading-screen-body {
+  padding-left: 48px;
+  padding-right: 48px;
+}
+.loading-screen-footer {
+  padding: 48px 48px 64px;
+}
+
+@media only screen and (max-width: 768px) {
+  .loading-screen-header { padding: 16px; }
+  .loading-screen-body   { padding-left: 16px; padding-right: 16px; }
+  .loading-screen-footer { padding: 16px 16px 32px; }
+}
+
+/* ── Jitter (CRT noise on header/footer) ── */
+.jitter {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: jittery;
+  z-index: -10;
+}
+@keyframes jittery {
+  10%  { transform: translate(-0.1px, -0.15px) scale(1, 1); }
+  20%  { transform: translate(0.15px, 0.1px)   scale(1, 1); }
+  30%  { transform: translate(-0.2px, -0.25px) scale(1, 1); }
+  40%  { transform: translate(0.05px, 0.1px)   scale(1, 1); }
+  50%  { transform: translate(-0.025px,-0.05px)scale(1, 1); }
+  60%  { transform: translate(0px, 0.075px)    scale(1, 1); }
+  70%  { transform: translate(-0.075px,-0.1px) scale(1, 1); }
+  80%  { transform: translate(0.075px, 0.125px)scale(1, 1); }
+  90%  { transform: translate(-0.125px,-0.075px)scale(1,1); }
+  100% { transform: translate(0.075px, 0.025px)scale(1, 1); }
+}
+
+/* ── Blinking block cursor ── */
+.blinking-cursor {
+  display: inline-block;
+  background-color: #fff;
+  width: 0.8em;
+  height: 0.15em;
+  animation: blink 0.65s step-end infinite;
+}
+@media only screen and (max-width: 768px) {
+  .blinking-cursor { width: 0.4em; height: 0.08em; }
+}
+@keyframes blink {
+  0%, 100% { background-color: transparent; }
+  50%       { background-color: white; }
+}
+
+/* ── Dotty loading ellipsis ── */
+.loading::after {
+  display: inline-block;
+  animation: dotty 1s steps(1) infinite;
+  content: "";
+}
+@keyframes dotty {
+  0%   { content: "   "; }
+  25%  { content: ".  "; }
+  50%  { content: ".. "; }
+  75%  { content: "..."; }
+  100% { content: "   "; }
+}
+
+/* ── START button (BIOS style) ── */
+.bios-start-button {
+  display: inline-block;
+  background-color: #000;
+  border-style: solid;
+  border-color: #fff;
+  border-width: 4px 3px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+.bios-start-button p {
+  box-sizing: border-box;
+  padding: 8px;
+}
+.bios-start-button:hover p {
+  background-color: #fff;
+  color: #000;
+}
+.bios-start-button:focus { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ── Mobile fallback ── */
 #mobile-fallback {
   position: fixed; inset: 0; z-index: 200;
   display: flex; align-items: center; justify-content: center;
-  background: var(--black);
+  background: #000;
   padding: 2rem;
 }
 
-.mobile-card {
-  font-family: var(--mono); color: var(--white);
-  border: 3px solid var(--white);
-  padding: 2rem; max-width: 420px; width: 100%;
-  text-align: center;
-}
-.mobile-card h1 { font-size: 1.8rem; margin-bottom: 1rem; letter-spacing: 0.08em; }
-.mobile-card p  { font-size: 0.9rem; line-height: 1.7; opacity: 0.8; margin-bottom: 2rem; }
-
-.mobile-nav { display: flex; flex-direction: column; gap: 0.75rem; }
-.mobile-nav a {
-  font-family: var(--mono); color: var(--black);
-  background: var(--white); padding: 0.6rem 1rem;
-  text-decoration: none; letter-spacing: 0.1em;
-  font-size: 0.9rem; transition: background 120ms, color 120ms;
-}
-.mobile-nav a:hover { background: var(--black); color: var(--white); border: 1px solid var(--white); }
-
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
