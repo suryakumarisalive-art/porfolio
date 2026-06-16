@@ -5,6 +5,7 @@ import { Camera } from './Camera.js'
 import { AudioManager } from './Audio.js'
 import { RaycasterManager } from './Raycaster.js'
 import { LoadingScreen } from './LoadingScreen.js'
+import { Overlay } from './Overlay.js'
 
 export class Experience {
   constructor({ canvas, cssContainer }) {
@@ -20,6 +21,9 @@ export class Experience {
 
     // CSS3DRenderer — lives inside cssContainer, pointer-events ALWAYS on
     this.cssRenderer = this._makeCSSRenderer()
+
+    // Film-grain overlay (second WebGL pass, soft-light blend)
+    this.overlay = new Overlay(document.getElementById('overlay'))
 
     this.scene     = new THREE.Scene()
     this.camera    = new Camera(this)
@@ -137,6 +141,7 @@ export class Experience {
     this.renderer.setSize(this.sizes.width, this.sizes.height)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.cssRenderer.setSize(this.sizes.width, this.sizes.height)
+    this.overlay.resize()
     this.camera.controls?.update()
   }
 
@@ -144,6 +149,7 @@ export class Experience {
     this.camera.update()
     this.renderer.render(this.scene, this.camera.instance)
     this.cssRenderer.render(this.scene, this.camera.instance)
+    this.overlay.update(performance.now())
     requestAnimationFrame(() => this._tick())
   }
 }
