@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "playwright-mcp",
+      "args": ["--browser", "chromium", "--headless"],
+      "env": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/tmp/pw-browsers"
+      },
+      "type": "stdio",
+      "timeout": 60
+    }
+  }
+}
