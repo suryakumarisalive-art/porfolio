@@ -2,8 +2,8 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 const POS = {
-  initial:  { pos: new THREE.Vector3(0, 3,  9),   target: new THREE.Vector3(0, 0.5, 0) },
-  overview: { pos: new THREE.Vector3(3.2, 2.2, 4.8), target: new THREE.Vector3(0, 0.8, 0) },
+  initial:  { pos: new THREE.Vector3(0, 3, 9),       target: new THREE.Vector3(0, 0.5, 0) },
+  overview: { pos: new THREE.Vector3(3.2, 2.2, 4.8),  target: new THREE.Vector3(0, 0.8, 0) },
   monitor:  { pos: new THREE.Vector3(0.55, 1.18, 1.45), target: new THREE.Vector3(0.55, 1.08, 0) },
 }
 
@@ -19,24 +19,22 @@ export class Camera {
     this.instance.position.copy(POS.initial.pos)
     exp.scene.add(this.instance)
 
-    this._anim     = null
-    this._target   = new THREE.Vector3().copy(POS.initial.target)
+    this._anim   = null
+    this._target = POS.initial.target.clone()
 
-    this._setupControls()
-  }
-
-  _setupControls() {
-    // OrbitControls on the CSS container div so mouse events work over both layers
-    this.controls = new OrbitControls(this.instance, this.exp.cssContainer)
+    // Attach OrbitControls to CSS3DRenderer domElement — it has pointer-events: auto
+    this.controls = new OrbitControls(this.instance, exp.cssRenderer.domElement)
     this.controls.target.copy(POS.initial.target)
     this.controls.enableDamping   = true
-    this.controls.dampingFactor   = 0.05
+    this.controls.dampingFactor   = 0.04
     this.controls.enablePan       = false
-    this.controls.minDistance     = 2
-    this.controls.maxDistance     = 12
-    this.controls.minPolarAngle   = Math.PI * 0.1  // can't go below floor
-    this.controls.maxPolarAngle   = Math.PI * 0.65
-    this.controls.enabled         = false           // enabled after load
+    this.controls.rotateSpeed     = 0.6
+    this.controls.zoomSpeed       = 0.8
+    this.controls.minDistance     = 1.8
+    this.controls.maxDistance     = 11
+    this.controls.minPolarAngle   = Math.PI * 0.08
+    this.controls.maxPolarAngle   = Math.PI * 0.62
+    this.controls.enabled         = false  // enabled after scene loads
   }
 
   animateIn() {
@@ -59,7 +57,6 @@ export class Camera {
   }
 
   _moveTo(toPos, toTarget, duration, onComplete) {
-    this.controls.enabled = false
     this._anim = {
       fromPos:    this.instance.position.clone(),
       fromTarget: this._target.clone(),
