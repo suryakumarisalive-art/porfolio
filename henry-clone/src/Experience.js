@@ -4,18 +4,15 @@ import { World } from './World.js'
 import { Camera } from './Camera.js'
 import { AudioManager } from './Audio.js'
 import { RaycasterManager } from './Raycaster.js'
+import { LoadingScreen } from './LoadingScreen.js'
 
 export class Experience {
   constructor({ canvas, cssContainer }) {
     this.canvas       = canvas
     this.cssContainer = cssContainer
     this.sizes        = { width: window.innerWidth, height: window.innerHeight }
+    this._started     = false
 
-    // Loading UI refs
-    this.loadingLine1  = document.getElementById('loading-line-1')
-    this.loadingLine2  = document.getElementById('loading-line-2')
-    this.loadingLine3  = document.getElementById('loading-line-3')
-    this.loadingScreen = document.getElementById('loading-screen')
     this.uiInteractive = document.getElementById('ui-interactive')
 
     // WebGL renderer — high quality settings
@@ -30,6 +27,11 @@ export class Experience {
     this.audio     = new AudioManager()
     this.raycaster = new RaycasterManager(this)
 
+    // BIOS loading/start screen — drives the boot sequence
+    this.loading = new LoadingScreen(document.getElementById('loading-screen'), {
+      onStart: () => this.enterScene(),
+    })
+
     document.getElementById('mute-btn')?.addEventListener('click', () => {
       this.audio.toggle()
       document.getElementById('mute-btn').classList.toggle('muted')
@@ -37,7 +39,23 @@ export class Experience {
 
     window.addEventListener('resize', () => this._onResize())
     window.addEventListener('message', (e) => this._onOSMessage(e))
+
+    // Begin loading immediately — the BIOS screen shows live progress
+    this.world.loadModels()
     this._tick()
+  }
+
+  // Click START → reveal the room, kick off audio + camera intro
+  enterScene() {
+    if (this._started) return
+    this._started = true
+    this.loading.hide()
+    this.uiInteractive.classList.remove('hidden')
+    this.audio.init().then(() => {
+      this.audio.playStartup()
+      setTimeout(() => this.audio.startAmbience(), 1500)
+    })
+    this.camera.animateIn()
   }
 
   // Messages from the in-monitor desktop iframe (os/os.js)
@@ -59,25 +77,18 @@ export class Experience {
     }
   }
 
-  start() {
-    document.getElementById('start-btn').style.display = 'none'
-    if (this.loadingLine1) this.loadingLine1.textContent = 'Loading scene...'
-    this.world.loadModels()
-    this.audio.init()
-  }
-
   _makeWebGLRenderer() {
     const r = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: true,
-      alpha: false,
+      alpha: true,
       powerPreference: 'high-performance',
     })
     r.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     r.setSize(this.sizes.width, this.sizes.height)
-    r.outputColorSpace  = THREE.SRGBColorSpace
-    r.toneMapping       = THREE.ACESFilmicToneMapping
-    r.toneMappingExposure = 1.0
+    r.outputColorSpace = THREE.SRGBColorSpace
+    // Reference uses no tone mapping (NoToneMapping) and a transparent clear
+    r.setClearColor(0x000000, 0)
     r.shadowMap.enabled = false
     return r
   }
@@ -94,23 +105,16 @@ export class Experience {
     return r
   }
 
+  onLoadItem(label) {
+    this.loading.addItem(label)
+  }
+
   onLoadProgress(loaded, total) {
-    const pct = Math.round((loaded / total) * 100)
-    if (this.loadingLine1) this.loadingLine1.textContent = `Loading scene... ${pct}%`
-    if (pct > 30 && this.loadingLine2) this.loadingLine2.textContent = 'Parsing geometry...'
-    if (pct > 70 && this.loadingLine3) this.loadingLine3.textContent = 'Uploading textures...'
+    this.loading.setProgress(loaded, total)
   }
 
   onLoadComplete() {
-    this.loadingScreen.style.transition = 'opacity 800ms'
-    this.loadingScreen.style.opacity    = '0'
-    setTimeout(() => {
-      this.loadingScreen.classList.add('hidden')
-      this.uiInteractive.classList.remove('hidden')
-    }, 850)
-    this.audio.playStartup()
-    setTimeout(() => this.audio.startAmbience(), 1500)
-    this.camera.animateIn()
+    this.loading.finish()
   }
 
   // When zoomed into monitor, let the iframe receive clicks

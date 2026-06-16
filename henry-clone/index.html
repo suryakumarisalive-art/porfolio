@@ -23,26 +23,8 @@
   <div id="ui-app">
     <div id="ui">
 
-      <!-- BIOS-style loading screen -->
-      <div id="loading-screen">
-        <div class="loading-screen-header jitter">
-          <p>Portfolio Showcase 2025 &nbsp;<span class="blinking-cursor"></span></p>
-        </div>
-
-        <div class="loading-screen-body">
-          <p id="loading-line-1">Initialising scene<span class="loading"></span></p>
-          <p id="loading-line-2"></p>
-          <p id="loading-line-3"></p>
-          <br />
-          <div class="bios-start-button" id="start-btn" tabindex="0" role="button" aria-label="Start">
-            <p>START</p>
-          </div>
-        </div>
-
-        <div class="loading-screen-footer jitter">
-          <p>&nbsp;<span class="blinking-cursor"></span></p>
-        </div>
-      </div>
+      <!-- BIOS-style loading + start screen (rendered by LoadingScreen.js) -->
+      <div id="loading-screen"></div>
 
       <!-- Top-left controls (mute etc) — shown after loading -->
       <div id="ui-interactive" class="hidden">
@@ -60,7 +42,7 @@
   <!-- Mobile fallback -->
   <div id="mobile-fallback" class="hidden">
     <div class="loading-screen-body" style="max-width:480px">
-      <p>Portfolio Showcase 2025 <span class="blinking-cursor"></span></p>
+      <p>Portfolio Showcase <span class="blinking-cursor"></span></p>
       <br/>
       <p>The 3D experience works best on desktop.</p>
       <br/>

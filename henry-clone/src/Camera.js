@@ -1,68 +1,77 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-const POS = {
-  initial:  { pos: new THREE.Vector3(0, 3, 9),       target: new THREE.Vector3(0, 0.5, 0) },
-  overview: { pos: new THREE.Vector3(3.2, 2.2, 4.8),  target: new THREE.Vector3(0, 0.8, 0) },
-  monitor:  { pos: new THREE.Vector3(0.55, 1.18, 1.45), target: new THREE.Vector3(0.55, 1.08, 0) },
+/* Exact camera keyframes from the reference experience.
+   The whole scene lives in a ~900x coordinate space (models scaled 900),
+   so all positions are in the tens-of-thousands range. */
+const KEY = {
+  loading:            { pos: new THREE.Vector3(-35000, 35000, 35000), focal: new THREE.Vector3(0, -5000, 0) },
+  idle:               { pos: new THREE.Vector3(-20000, 12000, 20000), focal: new THREE.Vector3(0, -1000, 0) },
+  desk:               { pos: new THREE.Vector3(0, 1800, 5500),        focal: new THREE.Vector3(0, 500, 0) },
+  monitor:            { pos: new THREE.Vector3(0, 950, 2000),         focal: new THREE.Vector3(0, 950, 0) },
+  orbitControlsStart: { pos: new THREE.Vector3(-15000, 10000, 15000), focal: new THREE.Vector3(-100, 350, 0) },
 }
 
 export class Camera {
   constructor(exp) {
     this.exp = exp
+
+    // fov 35, near 10, far 900000 — matches the reference
     this.instance = new THREE.PerspectiveCamera(
-      45,
+      35,
       exp.sizes.width / exp.sizes.height,
-      0.1,
-      100
+      10,
+      900000
     )
-    this.instance.position.copy(POS.initial.pos)
+    this.instance.position.copy(KEY.loading.pos)
+    this.instance.lookAt(KEY.loading.focal)
     exp.scene.add(this.instance)
 
-    this._anim   = null
-    this._target = POS.initial.target.clone()
+    this._anim  = null
+    this._focal = KEY.loading.focal.clone()
 
-    // Attach OrbitControls to CSS3DRenderer domElement — it has pointer-events: auto
+    // OrbitControls attached to the CSS3DRenderer element (pointer-events: auto)
     this.controls = new OrbitControls(this.instance, exp.cssRenderer.domElement)
-    this.controls.target.copy(POS.initial.target)
-    this.controls.enableDamping   = true
-    this.controls.dampingFactor   = 0.04
-    this.controls.enablePan       = false
-    this.controls.rotateSpeed     = 0.6
-    this.controls.zoomSpeed       = 0.8
-    this.controls.minDistance     = 1.8
-    this.controls.maxDistance     = 11
-    this.controls.minPolarAngle   = Math.PI * 0.08
-    this.controls.maxPolarAngle   = Math.PI * 0.62
-    this.controls.enabled         = false  // enabled after scene loads
+    this.controls.target.copy(KEY.orbitControlsStart.focal)
+    this.controls.enablePan     = false
+    this.controls.enableDamping = true
+    this.controls.dampingFactor = 0.05
+    this.controls.maxPolarAngle = Math.PI / 2
+    this.controls.minDistance   = 4000
+    this.controls.maxDistance   = 29000
+    this.controls.enabled       = false   // enabled after the intro tween
   }
 
+  // Click START → ease from the loading view into free-orbit
   animateIn() {
-    this._moveTo(POS.overview.pos, POS.overview.target, 2200, () => {
-      this.controls.target.copy(POS.overview.target)
+    this._moveTo(KEY.orbitControlsStart.pos, KEY.orbitControlsStart.focal, 2500, _easeOutExpo, () => {
+      this.controls.target.copy(KEY.orbitControlsStart.focal)
       this.controls.enabled = true
     })
   }
 
+  // Click the monitor → fly in (2000ms, reference bezier .13,.99,0,1)
   zoomIntoMonitor(onComplete) {
     this.controls.enabled = false
-    this._moveTo(POS.monitor.pos, POS.monitor.target, 1800, onComplete)
+    this._moveTo(KEY.monitor.pos, KEY.monitor.focal, 2000, _bezier13, onComplete)
   }
 
+  // Back out of the monitor → return to free-orbit
   zoomOut() {
-    this._moveTo(POS.overview.pos, POS.overview.target, 1600, () => {
-      this.controls.target.copy(POS.overview.target)
+    this._moveTo(KEY.orbitControlsStart.pos, KEY.orbitControlsStart.focal, 1200, _bezier13, () => {
+      this.controls.target.copy(KEY.orbitControlsStart.focal)
       this.controls.enabled = true
     })
   }
 
-  _moveTo(toPos, toTarget, duration, onComplete) {
+  _moveTo(toPos, toFocal, duration, ease, onComplete) {
     this._anim = {
       fromPos:    this.instance.position.clone(),
-      fromTarget: this._target.clone(),
+      fromFocal:  this._focal.clone(),
       toPos:      toPos.clone(),
-      toTarget:   toTarget.clone(),
+      toFocal:    toFocal.clone(),
       duration,
+      ease:       ease || _easeInOutQuint,
       startTime:  performance.now(),
       onComplete: onComplete || null,
     }
@@ -70,25 +79,42 @@ export class Camera {
 
   update() {
     if (this._anim) {
-      const { fromPos, fromTarget, toPos, toTarget, duration, startTime, onComplete } = this._anim
-      const raw = Math.min((performance.now() - startTime) / duration, 1)
-      const t   = _easeInOutQuart(raw)
-
-      this.instance.position.lerpVectors(fromPos, toPos, t)
-      this._target.lerpVectors(fromTarget, toTarget, t)
-      this.instance.lookAt(this._target)
-
+      const a   = this._anim
+      const raw = Math.min((performance.now() - a.startTime) / a.duration, 1)
+      const t   = a.ease(raw)
+      this.instance.position.lerpVectors(a.fromPos, a.toPos, t)
+      this._focal.lerpVectors(a.fromFocal, a.toFocal, t)
+      this.instance.lookAt(this._focal)
       if (raw >= 1) {
         this._anim = null
-        if (onComplete) onComplete()
+        if (a.onComplete) a.onComplete()
       }
     } else if (this.controls.enabled) {
       this.controls.update()
-      this._target.copy(this.controls.target)
+      this._focal.copy(this.controls.target)
     }
   }
 }
 
-function _easeInOutQuart(x) {
-  return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2
+/* Easing — matches the reference tween choices */
+function _easeInOutQuint(x) {
+  return x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2
+}
+function _easeOutExpo(x) {
+  return x === 1 ? 1 : 1 - Math.pow(2, -10 * x)
+}
+// cubic-bezier(.13,.99,0,1) used for monitor enter/leave
+function _bezier13(x) {
+  const cx = 3 * 0.13, bx = 3 * (0 - 0.13) - cx, ax = 1 - cx - bx
+  const cy = 3 * 0.99, by = 3 * (1 - 0.99) - cy, ay = 1 - cy - by
+  const sampleX = (t) => ((ax * t + bx) * t + cx) * t
+  const sampleY = (t) => ((ay * t + by) * t + cy) * t
+  let t = x
+  for (let i = 0; i < 5; i++) {
+    const dx = sampleX(t) - x
+    const d  = (3 * ax * t + 2 * bx) * t + cx
+    if (Math.abs(d) < 1e-6) break
+    t -= dx / d
+  }
+  return sampleY(t)
 }

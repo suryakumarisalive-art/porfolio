@@ -14,21 +14,10 @@ if (isMobile()) {
   document.getElementById('mobile-fallback').classList.remove('hidden')
   document.getElementById('ui-app').classList.add('hidden')
 } else {
-  const startBtn = document.getElementById('start-btn')
-  const exp = new Experience({
+  // Experience boots itself: loads assets, shows the BIOS screen, and
+  // wires its own START button (handled inside LoadingScreen).
+  new Experience({
     canvas:       document.getElementById('webgl'),
     cssContainer: document.getElementById('css'),
   })
-
-  // START button click
-  const handleStart = () => {
-    startBtn.removeEventListener('click', handleStart)
-    startBtn.removeEventListener('keydown', handleStartKey)
-    exp.start()
-  }
-  const handleStartKey = (e) => { if (e.key === 'Enter' || e.key === ' ') handleStart() }
-
-  startBtn.addEventListener('click', handleStart)
-  startBtn.addEventListener('keydown', handleStartKey)
-  startBtn.focus()
 }
