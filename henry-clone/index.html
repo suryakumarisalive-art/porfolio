@@ -29,8 +29,13 @@
       <!-- BIOS-style loading + start screen (rendered by LoadingScreen.js) -->
       <div id="loading-screen"></div>
 
-      <!-- Top-left controls (mute etc) — shown after loading -->
+      <!-- Top-left controls (info + mute) — shown after loading -->
       <div id="ui-interactive" class="hidden">
+        <div id="info-overlay">
+          <p id="info-name">[Your Name]</p>
+          <p id="info-role">Software Engineer</p>
+          <p id="info-clock"><span id="clock-box">--:--:-- --</span></p>
+        </div>
         <button id="mute-btn" class="icon-btn" title="Toggle sound" aria-label="Toggle sound">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>

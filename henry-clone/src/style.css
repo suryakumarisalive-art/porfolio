@@ -88,6 +88,26 @@ br { padding-top: 8px; padding-bottom: 8px; height: 16px; }
   #ui-interactive { top: 24px; left: 24px; }
 }
 
+/* Top-left identity overlay (name / role / clock), mirrors the reference */
+#info-overlay { margin-bottom: 14px; }
+#info-overlay #info-name {
+  font-family: monospace; color: #fff; font-size: 16px; font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6); line-height: 1.3;
+}
+#info-overlay #info-role {
+  font-family: monospace; color: #fff; font-size: 13px; opacity: .85;
+  text-shadow: 0 1px 2px rgba(0,0,0,.6); margin-bottom: 6px;
+}
+#info-overlay #clock-box {
+  font-family: monospace; color: #fff; font-size: 12px;
+  border: 1px solid rgba(255,255,255,.7); padding: 2px 8px; display: inline-block;
+}
+@media only screen and (max-width: 768px) {
+  #info-overlay #info-name { font-size: 11px; }
+  #info-overlay #info-role { font-size: 9px; }
+  #info-overlay #clock-box { font-size: 9px; }
+}
+
 .icon-btn {
   background: none;
   border: none;

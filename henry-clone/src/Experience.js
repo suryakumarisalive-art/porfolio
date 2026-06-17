@@ -60,6 +60,23 @@ export class Experience {
       setTimeout(() => this.audio.startAmbience(), 1500)
     })
     this.camera.animateIn()
+    this._startClock()
+  }
+
+  _startClock() {
+    const box = document.getElementById('clock-box')
+    if (!box) return
+    const tick = () => {
+      const d = new Date()
+      let h = d.getHours()
+      const ap = h >= 12 ? 'PM' : 'AM'
+      h = h % 12 || 12
+      const m = String(d.getMinutes()).padStart(2, '0')
+      const s = String(d.getSeconds()).padStart(2, '0')
+      box.textContent = `${h}:${m}:${s} ${ap}`
+    }
+    tick()
+    setInterval(tick, 1000)
   }
 
   // Messages from the in-monitor desktop iframe (os/os.js)
