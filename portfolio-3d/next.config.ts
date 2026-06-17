@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
             // blob: and worker-src blob: required for Draco WASM decoder workers
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval'",   // Next.js HMR requires unsafe-eval in dev
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",   // Next.js requires both for hydration + HMR
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob:",
               "font-src 'self'",

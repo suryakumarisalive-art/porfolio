@@ -8,6 +8,7 @@ import { AboutOverlay }     from './overlays/AboutOverlay'
 import { SkillsOverlay }    from './overlays/SkillsOverlay'
 import { ContactOverlay }   from './overlays/ContactOverlay'
 import { useCustomPointer } from '@/hooks/useCustomPointer'
+import { CanvasLoader }     from '@/components/loaders/CanvasLoader'
 
 /**
  * Fixed-position DOM layer above the canvas.
@@ -32,6 +33,9 @@ export function UILayer() {
         pointerEvents: 'none',
       }}
     >
+      {/* Loading overlay — manages its own visibility via lifecycle state */}
+      <CanvasLoader />
+
       {/* Taskbar — always visible, opts in to pointer events */}
       <div style={{ pointerEvents: 'auto' }}>
         <Taskbar />

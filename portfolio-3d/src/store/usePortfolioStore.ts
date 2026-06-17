@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { useShallow } from 'zustand/react/shallow'
 import { subscribeWithSelector } from 'zustand/middleware'
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
@@ -158,9 +159,9 @@ export const useLifecycle       = () => usePortfolioStore((s) => s.lifecycle)
 export const useIsReducedMotion = () => usePortfolioStore((s) => s.isReducedMotion)
 export const useWebglHealthy    = () => usePortfolioStore((s) => s.webglHealthy)
 
-// Actions selector — stable reference, never causes re-renders
+// Actions selector — useShallow prevents new-object re-renders on every call
 export const usePortfolioActions = () =>
-  usePortfolioStore((s) => ({
+  usePortfolioStore(useShallow((s) => ({
     setHovered:       s.setHovered,
     openOverlay:      s.openOverlay,
     closeOverlay:     s.closeOverlay,
@@ -171,7 +172,7 @@ export const usePortfolioActions = () =>
     setLifecycle:     s.setLifecycle,
     setReducedMotion: s.setReducedMotion,
     setWebglHealthy:  s.setWebglHealthy,
-  }))
+  })))
 
 // ─── Internal helpers ─────────────────────────────────────────────────────────
 
