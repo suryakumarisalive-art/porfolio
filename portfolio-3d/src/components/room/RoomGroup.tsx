@@ -1,5 +1,6 @@
 import { RoomShell } from './RoomShell'
 import { Monitor } from './Monitor'
+import { MonitorScreen } from './MonitorScreen'
 import { Laptop } from './Laptop'
 import { Desk } from './Desk'
 import { BookShelf } from './BookShelf'
@@ -20,6 +21,7 @@ export function RoomGroup() {
       <RoomShell />
       <Desk />
       <Monitor />
+      <MonitorScreen />
       <Laptop />
       <BookShelf />
       <Phone />
