@@ -27,25 +27,37 @@ export class World {
   }
 
   _createMonitorCSS3D() {
-    const iframe = document.createElement('iframe')
-    iframe.src    = 'os/index.html'
-    iframe.id     = 'computer-screen'
-    iframe.style.width     = MONITOR.width + 'px'
-    iframe.style.height    = MONITOR.height + 'px'
-    iframe.style.padding   = '32px'
-    iframe.style.boxSizing = 'border-box'
-    iframe.style.border    = 'none'
-    iframe.style.background = '#1d2e2f'
-    iframe.style.pointerEvents = 'none'   // enabled only when zoomed in
-    iframe.sandbox = 'allow-scripts allow-same-origin allow-popups'
-    iframe.title   = 'Desktop OS'
-    iframe.className = 'jitter'
+    // Wrapper is the CSS3DObject element (gets the clean 3D transform).
+    // The jitter CRT animation lives on the inner iframe so it never fights
+    // the renderer's inline transform on the wrapper.
+    const wrapper = document.createElement('div')
+    wrapper.style.width      = MONITOR.width + 'px'
+    wrapper.style.height     = MONITOR.height + 'px'
+    wrapper.style.background = '#1d2e2f'
+    wrapper.style.overflow   = 'hidden'
 
-    const cssObj = new CSS3DObject(iframe)
+    const iframe = document.createElement('iframe')
+    iframe.src      = 'os/index.html'
+    iframe.id       = 'computer-screen'
+    iframe.title    = 'Desktop OS'
+    iframe.className = 'jitter'
+    iframe.sandbox  = 'allow-scripts allow-same-origin allow-popups'
+    iframe.style.width      = MONITOR.width + 'px'
+    iframe.style.height     = MONITOR.height + 'px'
+    iframe.style.padding    = '32px'
+    iframe.style.boxSizing  = 'border-box'
+    iframe.style.border     = 'none'
+    iframe.style.display    = 'block'
+    iframe.style.background  = '#1d2e2f'
+    iframe.style.pointerEvents = 'none'   // enabled only when zoomed in
+    wrapper.appendChild(iframe)
+
+    const cssObj = new CSS3DObject(wrapper)
     cssObj.position.copy(MONITOR.position)
     cssObj.rotation.copy(MONITOR.rotation)
-    // scale 1 — the iframe's px dimensions are world units in the 900x scene
+    // scale 1 — the wrapper's px dimensions are world units in the 900x scene
     this._cssObject = cssObj
+    this._iframe    = iframe
     this.exp.scene.add(cssObj)
   }
 

@@ -9,7 +9,8 @@ const KEY = {
   idle:               { pos: new THREE.Vector3(-20000, 12000, 20000), focal: new THREE.Vector3(0, -1000, 0) },
   desk:               { pos: new THREE.Vector3(0, 1800, 5500),        focal: new THREE.Vector3(0, 500, 0) },
   monitor:            { pos: new THREE.Vector3(0, 950, 2000),         focal: new THREE.Vector3(0, 950, 0) },
-  orbitControlsStart: { pos: new THREE.Vector3(-15000, 10000, 15000), focal: new THREE.Vector3(-100, 350, 0) },
+  // Free-orbit home — framed close on the desk so the computer + screen read well
+  orbitControlsStart: { pos: new THREE.Vector3(0, 1500, 4600),        focal: new THREE.Vector3(0, 800, 0) },
 }
 
 export class Camera {
@@ -37,8 +38,8 @@ export class Camera {
     this.controls.enableDamping = true
     this.controls.dampingFactor = 0.05
     this.controls.maxPolarAngle = Math.PI / 2
-    this.controls.minDistance   = 4000
-    this.controls.maxDistance   = 29000
+    this.controls.minDistance   = 2200    // stay outside the screen
+    this.controls.maxDistance   = 9000    // keep the desk framed (no flying into empty space)
     this.controls.enabled       = false   // enabled after the intro tween
   }
 

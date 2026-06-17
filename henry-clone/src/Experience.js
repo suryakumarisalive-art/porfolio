@@ -123,14 +123,10 @@ export class Experience {
 
   // When zoomed into monitor, let the iframe receive clicks
   enableCSSInteraction()  {
-    if (this.world._cssObject) {
-      this.world._cssObject.element.style.pointerEvents = 'auto'
-    }
+    if (this.world._iframe) this.world._iframe.style.pointerEvents = 'auto'
   }
   disableCSSInteraction() {
-    if (this.world._cssObject) {
-      this.world._cssObject.element.style.pointerEvents = 'none'
-    }
+    if (this.world._iframe) this.world._iframe.style.pointerEvents = 'none'
   }
 
   _onResize() {
