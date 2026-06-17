@@ -43,6 +43,7 @@
 
   /* ── Z-index scale ── */
   --z-canvas:   0;
+  --z-grain:    5;
   --z-ui:       10;
   --z-overlay:  20;
   --z-loader:   30;

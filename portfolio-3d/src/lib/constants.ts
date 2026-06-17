@@ -5,8 +5,16 @@
 export const CAMERA_FOV              = 35        // matches henry-clone reference
 export const CAMERA_NEAR             = 10        // min distance before clipping
 export const CAMERA_FAR              = 900_000   // far clip for 900-unit world
-export const CAMERA_INITIAL_POSITION = [-20000, 12000, 20000] as const
-export const CAMERA_LOOK_AT          = [0, -1000, 0]          as const
+
+// Intro vantage — camera spawns here and sweeps in (henry "loading" keyframe)
+export const CAMERA_INITIAL_POSITION = [-35000, 35000, 35000] as const
+export const CAMERA_INTRO_LOOKAT     = [0, -5000, 0]          as const
+
+// Home framing — where the intro lands + OrbitControls target (henry "orbitControlsStart")
+export const CAMERA_LOOK_AT          = [0, 500, 0] as const
+
+// Intro sweep duration (ms) — cinematic ease, matches henry's 2.5s animateIn
+export const CAMERA_INTRO_DURATION   = 2500
 
 // ─── OrbitControls ───────────────────────────────────────────────────────────
 export const ORBIT_DAMPING    = 0.05
@@ -17,7 +25,7 @@ export const ORBIT_MAX_POLAR  = Math.PI / 2   // no below-floor orbit
 
 // ─── Exponential-decay lerp factors (per second; delta is in seconds) ─────────
 // Formula: factor = 1 - e^(-decay * delta)
-export const LERP_DECAY_CAMERA = 4   // camera position / lookAt
+export const LERP_DECAY_CAMERA = 3   // camera position / lookAt — cinematic ease-out glide
 export const LERP_DECAY_HOVER  = 10  // hover scale snap speed
 
 // ─── Settle epsilon — stop calling invalidate when camera is this close ────────

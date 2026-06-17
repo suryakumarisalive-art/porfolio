@@ -22,8 +22,9 @@ export interface CameraTarget {
 // All positions are in the henry-clone 900-unit world coordinate space.
 export const CAMERA_PRESETS = {
   default: {
-    position: [-20000, 12000, 20000] as const,
-    lookAt:   [0, -1000, 0]          as const,
+    // Home framing — monitor centred, keyboard foreground (henry orbitControlsStart)
+    position: [0, 1800, 5500] as const,
+    lookAt:   [0, 500,  0]    as const,
   },
   monitor: {
     // Fly in to screen — exact from henry-clone Camera.js
@@ -91,7 +92,8 @@ export const usePortfolioStore = create<PortfolioState>()(
     focusTargetId:   null,
     activeOverlay:   null,
     isOverlayOpen:   false,
-    cameraMode:      'idle',
+    // Start in 'reset' so the camera glides from the intro vantage to home
+    cameraMode:      'reset',
     cameraTarget:    CAMERA_PRESETS.default,
     lifecycle:       'booting',
     isReducedMotion: false,

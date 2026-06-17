@@ -12,6 +12,7 @@ import {
   ORBIT_MIN_POLAR,
   ORBIT_MAX_POLAR,
   CAMERA_LOOK_AT,
+  CAMERA_INTRO_LOOKAT,
   LERP_DECAY_CAMERA,
   CAMERA_SETTLE_EPSILON,
 } from '@/lib/constants'
@@ -37,15 +38,26 @@ export function CameraRig() {
   const cameraMode    = usePortfolioStore((s) => s.cameraMode)
   const cameraTarget  = usePortfolioStore((s) => s.cameraTarget)
   const setCameraMode = usePortfolioStore((s) => s.setCameraMode)
+  const lifecycle     = usePortfolioStore((s) => s.lifecycle)
 
-  // Live lookAt that the camera actually follows (mutable ref — not React state)
+  // Live lookAt that the camera actually follows (mutable ref — not React state).
+  // Starts at the intro focal so the opening sweep tilts up from below, like henry.
   const lookAtRef = useRef(
-    new THREE.Vector3(CAMERA_LOOK_AT[0], CAMERA_LOOK_AT[1], CAMERA_LOOK_AT[2])
+    new THREE.Vector3(CAMERA_INTRO_LOOKAT[0], CAMERA_INTRO_LOOKAT[1], CAMERA_INTRO_LOOKAT[2])
   )
 
   useFrame((_state, delta) => {
     const controls = orbitRef.current
     if (!controls) return
+
+    // ── Boot/loading: hold the intro vantage until the scene is ready ────────
+    // Keeps OrbitControls from snapping the far-away camera to maxDistance and
+    // preserves the dramatic opening sweep for when the loader fades out.
+    if (lifecycle !== 'ready') {
+      controls.enabled = false
+      camera.lookAt(lookAtRef.current)
+      return
+    }
 
     // ── Idle: OrbitControls is authoritative ─────────────────────────────────
     if (cameraMode === 'idle') {

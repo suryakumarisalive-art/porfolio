@@ -7,15 +7,16 @@ import { SceneRoot } from './SceneRoot'
 
 /**
  * The WebGL Canvas — client-only, never SSR.
- * `frameloop="demand"` means the render loop sleeps until `invalidate()` is called.
- * Every interactive code path MUST call invalidate() to produce a new frame.
+ * `frameloop="always"` renders every frame so OrbitControls damping, the camera
+ * intro sweep, and hover lerps all stay buttery-smooth — matching the henry-clone
+ * feel. Lingering invalidate() calls elsewhere are harmless no-ops in this mode.
  */
 export function CanvasScene() {
   const { onCreated } = useWebGLContext()
 
   return (
     <Canvas
-      frameloop="demand"
+      frameloop="always"
       dpr={[1, 2]}
       gl={{
         antialias: true,
