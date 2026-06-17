@@ -3,10 +3,10 @@
    reference app. Answer is a 5-letter word the owner can change.
    ─────────────────────────────────────────────────────────── */
 (function () {
-  const ANSWER = 'HELLO'   // [swap for your own 5-letter word]
   const ROWS = 6, COLS = 5
 
   function render(root) {
+    const ANSWER = (((window.OSConfig || {}).henordleWord) || 'HELLO').toUpperCase().slice(0, 5)
     const wrap = document.createElement('div')
     wrap.className = 'henordle'
     wrap.innerHTML = `

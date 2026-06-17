@@ -5,12 +5,14 @@
    "My Showcase" auto-opens on boot.
    ─────────────────────────────────────────────────────────── */
 
+const OWNER = ((window.OSConfig || {}).owner) || {}
+const OWNER_NAME = OWNER.name || '[Your Name]'
 const OS_NAME = 'PortfolioOS'   // reference rail reads "HeffernanOS"
 
 const REGISTRY = [
   {
     key: 'showcase', name: 'My Showcase', glyph: '🖥️',
-    bar: { title: '[Your Name] — Showcase', glyph: '🖥️', color: '#000080', status: '© 2025 [Your Name]' },
+    bar: { title: OWNER_NAME + ' — Showcase', glyph: '🖥️', color: '#000080', status: '© 2025 ' + OWNER_NAME },
     size: () => ({ w: Math.min(window.innerWidth - 100, 980), h: Math.min(window.innerHeight - 100, 720) }),
     pos:  { top: 24, left: 56 },
     app: 'showcase', autoOpen: true,

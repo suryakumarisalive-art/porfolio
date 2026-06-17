@@ -4,15 +4,14 @@
    original interactive-desk genre this portfolio is built on.
    ─────────────────────────────────────────────────────────── */
 (function () {
-  const SLIDES = [
+  const FALLBACK = [
     { role: 'Engineering & Design', who: ['[Your Name] (All)'] },
-    { role: 'Modeling & Texturing', who: ['[Your Name]', 'Mickael Boitte (Computer Model)', 'Sean Nicolas (Environment Models)'] },
-    { role: 'Sound Design',         who: ['[Your Name]', 'Sound Cassette (Office Ambience)', 'Windows 95 Startup Sound (Microsoft)'] },
-    { role: 'Built With',           who: ['Three.js', 'CSS3DRenderer', 'Vite'] },
+    { role: 'Built With',           who: ['Three.js', 'CSS3DRenderer', 'js-dos', 'Vite'] },
     { role: 'Inspiration',          who: ['Henry Heffernan', 'Bruno Simon', 'Jesse Zhou'] },
   ]
 
   function render(root) {
+    const SLIDES = (((window.OSConfig || {}).credits) || FALLBACK)
     const el = document.createElement('div')
     el.className = 'credits'
     root.appendChild(el)
