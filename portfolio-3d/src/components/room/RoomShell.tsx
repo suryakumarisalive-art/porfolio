@@ -1,64 +1,64 @@
-import * as THREE from 'three'
+'use client'
 
-// File-scope geometry instances — shared, never disposed (static room geometry)
-const floorGeo = new THREE.PlaneGeometry(20, 20)
-const wallGeo  = new THREE.PlaneGeometry(20, 10)
+import { useGLTF } from '@react-three/drei'
+import { useLoader } from '@react-three/fiber'
+import { TextureLoader, SRGBColorSpace, MeshBasicMaterial } from 'three'
+import * as THREE from 'three'
+import { useMemo } from 'react'
+
+// ─── Baked model sources ──────────────────────────────────────────────────────
+// Each entry pairs a Draco-compressed GLB with its baked lightmap texture.
+const SOURCES = [
+  { glb: '/models/World/environment.glb',       tex: '/models/World/baked_environment.jpg' },
+  { glb: '/models/Computer/computer_setup.glb', tex: '/models/Computer/baked_computer.jpg' },
+  { glb: '/models/Decor/decor.glb',             tex: '/models/Decor/baked_decor_modified.jpg' },
+] as const
+
+// Preload all three GLBs so they start fetching immediately when the module loads.
+SOURCES.forEach(({ glb }) => useGLTF.preload(glb))
+
+// ─── Single baked model ───────────────────────────────────────────────────────
+
+interface BakedModelProps {
+  glb: string
+  tex: string
+}
+
+function BakedModel({ glb, tex }: BakedModelProps) {
+  const { scene } = useGLTF(glb)
+  const texture   = useLoader(TextureLoader, tex)
+
+  // Apply the baked texture as MeshBasicMaterial on every mesh — runs once per pair
+  useMemo(() => {
+    texture.flipY      = false
+    texture.colorSpace = SRGBColorSpace
+
+    const mat = new MeshBasicMaterial({ map: texture })
+
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        (child as THREE.Mesh).material = mat
+      }
+    })
+  }, [scene, texture])
+
+  // Scale matches henry-clone: models are in 1-unit GLB space → 900-unit world
+  return <primitive object={scene} scale={900} />
+}
+
+// ─── Room shell ───────────────────────────────────────────────────────────────
 
 /**
- * Static room enclosure — floor, back wall, left wall.
- * No interaction; establishes the [0,1,0] focal origin.
- * Replace with a GLTF model by dropping a .glb in /public/models/ and
- * swapping this component to use useGLTFLoader.
+ * Loads and renders the three henry-clone baked GLBs as the static room visual.
+ * All interactive behaviour lives in the sibling hotspot components (Monitor,
+ * Laptop, Desk, BookShelf, Phone) which overlay invisible click planes.
  */
 export function RoomShell() {
   return (
     <group>
-      {/* Floor */}
-      <mesh
-        geometry={floorGeo}
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0, 0]}
-        receiveShadow
-      >
-        <meshStandardMaterial
-          color="#1a1a24"
-          roughness={0.8}
-          metalness={0.1}
-        />
-      </mesh>
-
-      {/* Back wall */}
-      <mesh
-        geometry={wallGeo}
-        position={[0, 5, -5]}
-        receiveShadow
-      >
-        <meshStandardMaterial
-          color="#12121a"
-          roughness={0.9}
-          metalness={0.05}
-        />
-      </mesh>
-
-      {/* Left wall */}
-      <mesh
-        geometry={wallGeo}
-        position={[-5, 5, 0]}
-        rotation={[0, Math.PI / 2, 0]}
-        receiveShadow
-      >
-        <meshStandardMaterial
-          color="#111118"
-          roughness={0.9}
-          metalness={0.05}
-        />
-      </mesh>
-
-      {/* Subtle floor grid for depth cue */}
-      <gridHelper
-        args={[20, 20, '#1e1e2e', '#1e1e2e']}
-        position={[0, 0.001, 0]}
-      />
+      {SOURCES.map(({ glb, tex }) => (
+        <BakedModel key={glb} glb={glb} tex={tex} />
+      ))}
     </group>
   )
 }

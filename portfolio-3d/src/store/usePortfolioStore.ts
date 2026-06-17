@@ -19,30 +19,33 @@ export interface CameraTarget {
 
 // ─── Camera presets (single source of truth) ──────────────────────────────────
 
+// All positions are in the henry-clone 900-unit world coordinate space.
 export const CAMERA_PRESETS = {
   default: {
-    position: [8, 6, 8] as const,
-    lookAt:   [0, 1, 0] as const,
+    position: [-20000, 12000, 20000] as const,
+    lookAt:   [0, -1000, 0]          as const,
   },
   monitor: {
-    position: [0.2, 1.8, 2.8] as const,
-    lookAt:   [0, 1.4, 0]     as const,
+    // Fly in to screen — exact from henry-clone Camera.js
+    position: [0, 950, 2000] as const,
+    lookAt:   [0, 950, 0]    as const,
   },
   laptop: {
-    position: [-2.5, 2.5, 3.5] as const,
-    lookAt:   [-1,   1,   0]   as const,
+    position: [-500, 800, 2500] as const,
+    lookAt:   [-200, 500, 0]    as const,
   },
   desk: {
-    position: [0, 4.5, 5.5] as const,
-    lookAt:   [0, 0,   0]   as const,
+    // Desk framing — exact from henry-clone Camera.js orbitControlsStart
+    position: [0, 1800, 5500] as const,
+    lookAt:   [0, 500,  0]    as const,
   },
   bookshelf: {
-    position: [4.5, 3.5, 2.5] as const,
-    lookAt:   [2.5, 2,   0]   as const,
+    position: [-3000, 2000, 4000] as const,
+    lookAt:   [-1500, 1000, 0]    as const,
   },
   phone: {
-    position: [1.8, 2.8, 4.5] as const,
-    lookAt:   [0.8, 1,   0]   as const,
+    position: [1500, 1000, 2800] as const,
+    lookAt:   [600,  600,  0]    as const,
   },
 } satisfies Record<string, CameraTarget>
 

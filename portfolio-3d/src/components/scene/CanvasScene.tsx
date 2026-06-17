@@ -17,7 +17,6 @@ export function CanvasScene() {
     <Canvas
       frameloop="demand"
       dpr={[1, 2]}
-      shadows
       gl={{
         antialias: true,
         powerPreference: 'high-performance',
