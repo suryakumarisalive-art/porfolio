@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>PROXIMA OS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ╔══════════════════════════════════════════════╗
+       ║  PROXIMA OS — Retro Workstation Desktop UI  ║
+       ╚══════════════════════════════════════════════╝ -->
+
+  <!-- ── Desktop ─────────────────────────────────── -->
+  <div id="desktop" role="main" aria-label="Desktop">
+
+    <!-- Desktop icon dock -->
+    <div id="icon-container" role="list" aria-label="Desktop icons">
+
+      <!-- About icon -->
+      <div class="desktop-icon"
+           role="listitem"
+           tabindex="0"
+           data-app="about"
+           aria-label="About — double-click to open">
+        <svg class="icon-graphic" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+          <!-- Monitor body -->
+          <rect x="4" y="6" width="32" height="22" rx="1" fill="#2e6068" stroke="#1a3840" stroke-width="1.5"/>
+          <rect x="6" y="8" width="28" height="18" fill="#0d1e24"/>
+          <!-- Screen glow lines -->
+          <rect x="8" y="12" width="12" height="1.5" fill="#40e0a0" opacity="0.8"/>
+          <rect x="8" y="15.5" width="20" height="1.5" fill="#40e0a0" opacity="0.5"/>
+          <rect x="8" y="19" width="16" height="1.5" fill="#40e0a0" opacity="0.5"/>
+          <!-- Stand -->
+          <rect x="15" y="28" width="10" height="3" fill="#2e6068" stroke="#1a3840" stroke-width="1"/>
+          <rect x="12" y="31" width="16" height="2" rx="1" fill="#1a3840"/>
+          <!-- Person silhouette in screen -->
+          <circle cx="24" cy="12" r="2.5" fill="#40e0a0" opacity="0.7"/>
+          <path d="M20 20 Q24 16 28 20" stroke="#40e0a0" stroke-width="1.5" fill="none" opacity="0.7"/>
+        </svg>
+        <span class="icon-label">About</span>
+      </div>
+
+      <!-- Projects icon -->
+      <div class="desktop-icon"
+           role="listitem"
+           tabindex="0"
+           data-app="projects"
+           aria-label="Projects — double-click to open">
+        <svg class="icon-graphic" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+          <!-- Folder base -->
+          <rect x="4" y="14" width="32" height="20" rx="1" fill="#d4a843" stroke="#a07820" stroke-width="1.5"/>
+          <!-- Folder tab -->
+          <rect x="4" y="10" width="14" height="6" rx="1" fill="#f0c860" stroke="#a07820" stroke-width="1.5"/>
+          <!-- File pages -->
+          <rect x="8" y="18" width="8" height="11" fill="#e8e0d0" stroke="#9e9890" stroke-width="1"/>
+          <rect x="11" y="18" width="8" height="11" fill="#f0ece4" stroke="#9e9890" stroke-width="1"/>
+          <rect x="14" y="18" width="8" height="11" fill="#fff" stroke="#9e9890" stroke-width="1"/>
+          <!-- Lines on front page -->
+          <rect x="15" y="21" width="5" height="1" fill="#9e9890"/>
+          <rect x="15" y="23.5" width="5" height="1" fill="#9e9890"/>
+          <rect x="15" y="26" width="3" height="1" fill="#9e9890"/>
+        </svg>
+        <span class="icon-label">Projects</span>
+      </div>
+
+      <!-- Contact icon -->
+      <div class="desktop-icon"
+           role="listitem"
+           tabindex="0"
+           data-app="contact"
+           aria-label="Contact — double-click to open">
+        <svg class="icon-graphic" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+          <!-- Envelope body -->
+          <rect x="4" y="10" width="32" height="22" rx="1" fill="#bdb8ae" stroke="#6e6860" stroke-width="1.5"/>
+          <!-- Flap -->
+          <path d="M4 10 L20 22 L36 10" stroke="#6e6860" stroke-width="1.5" fill="none"/>
+          <!-- Left fold -->
+          <path d="M4 32 L15 21" stroke="#9e9890" stroke-width="1.2"/>
+          <!-- Right fold -->
+          <path d="M36 32 L25 21" stroke="#9e9890" stroke-width="1.2"/>
+          <!-- Stamp area -->
+          <rect x="26" y="13" width="7" height="6" fill="#2e6068" stroke="#1a3840" stroke-width="1"/>
+          <rect x="27" y="14" width="5" height="4" fill="#40e0a0" opacity="0.5"/>
+        </svg>
+        <span class="icon-label">Contact</span>
+      </div>
+
+      <!-- Resume icon -->
+      <div class="desktop-icon"
+           role="listitem"
+           tabindex="0"
+           data-app="resume"
+           aria-label="Resume — double-click to open">
+        <svg class="icon-graphic" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+          <!-- Document -->
+          <rect x="8" y="4" width="22" height="28" rx="1" fill="#f0ece4" stroke="#9e9890" stroke-width="1.5"/>
+          <!-- Folded corner -->
+          <path d="M24 4 L30 10 L24 10 Z" fill="#bdb8ae" stroke="#9e9890" stroke-width="1"/>
+          <!-- Text lines -->
+          <rect x="11" y="14" width="14" height="1.5" fill="#2e6068"/>
+          <rect x="11" y="17.5" width="16" height="1" fill="#9e9890"/>
+          <rect x="11" y="20" width="14" height="1" fill="#9e9890"/>
+          <rect x="11" y="22.5" width="10" height="1" fill="#9e9890"/>
+          <rect x="11" y="25" width="12" height="1" fill="#9e9890"/>
+          <!-- Person circle at top -->
+          <circle cx="16" cy="10" r="3.5" fill="#2e6068"/>
+          <circle cx="16" cy="9" r="1.5" fill="#40e0a0" opacity="0.7"/>
+          <!-- Download arrow at bottom right -->
+          <rect x="26" y="28" width="8" height="8" rx="1" fill="#d4a843" stroke="#a07820" stroke-width="1"/>
+          <path d="M30 30 L30 33.5 M28.5 32 L30 34 L31.5 32" stroke="#1a1610" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="icon-label">Resume</span>
+      </div>
+
+    </div><!-- /#icon-container -->
+
+    <!-- ── Windows rendered here by JS ──────────── -->
+
+  </div><!-- /#desktop -->
+
+  <!-- ── Start Menu ──────────────────────────────── -->
+  <nav id="start-menu" aria-label="Application menu" aria-hidden="true">
+    <div class="start-menu-header">PROXIMA <span>OS</span></div>
+
+    <button class="start-menu-item" data-app="about">
+      <!-- About icon mini -->
+      <svg viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+        <rect x="1" y="2" width="16" height="11" rx="0.5" fill="#2e6068"/>
+        <rect x="2" y="3" width="14" height="9" fill="#0d1e24"/>
+        <circle cx="11" cy="6" r="1.5" fill="#40e0a0" opacity="0.8"/>
+        <rect x="3" y="6" width="6" height="1" fill="#40e0a0" opacity="0.6"/>
+        <rect x="3" y="8" width="10" height="1" fill="#40e0a0" opacity="0.4"/>
+        <rect x="7" y="13" width="4" height="2" fill="#2e6068"/>
+        <rect x="5" y="15" width="8" height="1" rx="0.5" fill="#1a3840"/>
+      </svg>
+      About
+    </button>
+
+    <button class="start-menu-item" data-app="projects">
+      <svg viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+        <rect x="1" y="6" width="16" height="11" rx="0.5" fill="#d4a843"/>
+        <rect x="1" y="4" width="7" height="4" rx="0.5" fill="#f0c860"/>
+        <rect x="4" y="8" width="4" height="6" fill="#fff" stroke="#9e9890" stroke-width="0.5"/>
+        <rect x="5" y="10" width="2" height="0.8" fill="#9e9890"/>
+        <rect x="5" y="11.5" width="2" height="0.8" fill="#9e9890"/>
+      </svg>
+      Projects
+    </button>
+
+    <button class="start-menu-item" data-app="contact">
+      <svg viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+        <rect x="1" y="4" width="16" height="11" rx="0.5" fill="#bdb8ae"/>
+        <path d="M1 4 L9 10 L17 4" stroke="#6e6860" stroke-width="1" fill="none"/>
+        <path d="M1 15 L6.5 9.5" stroke="#9e9890" stroke-width="0.8"/>
+        <path d="M17 15 L11.5 9.5" stroke="#9e9890" stroke-width="0.8"/>
+      </svg>
+      Contact
+    </button>
+
+    <button class="start-menu-item" data-app="resume">
+      <svg viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+        <rect x="3" y="1" width="11" height="14" rx="0.5" fill="#f0ece4" stroke="#9e9890" stroke-width="0.8"/>
+        <rect x="5" y="6" width="7" height="0.8" fill="#2e6068"/>
+        <rect x="5" y="8" width="8" height="0.6" fill="#9e9890"/>
+        <rect x="5" y="9.5" width="6" height="0.6" fill="#9e9890"/>
+        <rect x="5" y="11" width="5" height="0.6" fill="#9e9890"/>
+        <circle cx="8" cy="4" r="1.8" fill="#2e6068"/>
+      </svg>
+      Resume
+    </button>
+
+    <div class="start-menu-divider" role="separator"></div>
+
+    <button class="start-menu-item" id="menu-shutdown" aria-label="Close start menu">
+      <svg viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+        <circle cx="9" cy="9" r="6" stroke="#8b1010" stroke-width="1.5"/>
+        <path d="M9 5 L9 9" stroke="#8b1010" stroke-width="2" stroke-linecap="round"/>
+        <path d="M6 6.5 A4.5 4.5 0 1 0 12 6.5" stroke="#8b1010" stroke-width="1.5" fill="none"/>
+      </svg>
+      Close Menu
+    </button>
+  </nav>
+
+  <!-- ── Taskbar ──────────────────────────────────── -->
+  <footer id="taskbar" role="toolbar" aria-label="Taskbar">
+
+    <button id="start-btn" aria-haspopup="true" aria-controls="start-menu" aria-expanded="false">
+      <!-- Proxima logo mark -->
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" focusable="false">
+        <polygon points="7,1 13,4 13,10 7,13 1,10 1,4" fill="#2e6068" stroke="#40e0a0" stroke-width="0.8"/>
+        <polygon points="7,3.5 11,6 11,9.5 7,12 3,9.5 3,6" fill="#0d1e24"/>
+        <circle cx="7" cy="7.5" r="1.5" fill="#d4a843"/>
+      </svg>
+      START
+    </button>
+
+    <div class="taskbar-divider" role="separator"></div>
+
+    <div id="taskbar-windows" role="group" aria-label="Open windows">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="taskbar-divider" role="separator"></div>
+
+    <div id="taskbar-clock" role="timer" aria-live="off" aria-label="Current time">
+      00:00
+    </div>
+
+  </footer>
+
+  <!-- ────────────────────────────────────────────── -->
+  <!-- Window templates (hidden; cloned by JS)        -->
+  <!-- ────────────────────────────────────────────── -->
+
+  <!-- About Window Content -->
+  <template id="tpl-about">
+    <div class="app-content" id="app-about">
+      <h2>About Me</h2>
+      <div class="about-layout">
+        <div class="portrait-box" aria-label="Portrait placeholder">
+          <!-- Portrait silhouette -->
+          <svg width="40" height="48" viewBox="0 0 40 48" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="20" cy="14" r="10" fill="#2e6068" opacity="0.5"/>
+            <path d="M4 42 Q4 28 20 28 Q36 28 36 42" fill="#2e6068" opacity="0.5"/>
+          </svg>
+          <!-- TODO: replace with owner photo -->
+          <span class="todo-placeholder">Photo</span>
+        </div>
+
+        <div class="bio-text">
+          <!-- TODO: replace with owner bio -->
+          <p>
+            Hello! I'm <strong>Your Name</strong><!-- TODO: replace with owner name -->,
+            a developer and designer passionate about building thoughtful,
+            well-crafted digital experiences.
+          </p>
+          <p>
+            I specialize in <!-- TODO: fill in specialities -->
+            front-end engineering, creative coding, and interactive 3D on the web.
+          </p>
+          <p class="todo-placeholder">
+            <!-- TODO: expand bio with 2–3 sentences about background and interests -->
+            [Add your personal background here]
+          </p>
+        </div>
+      </div>
+
+      <hr class="app-rule">
+
+      <dl class="about-meta">
+        <div class="meta-row">
+          <dt>Location:</dt>
+          <dd><!-- TODO: your city --> City, Country</dd>
+        </div>
+        <div class="meta-row">
+          <dt>Availability:</dt>
+          <dd><!-- TODO: open to work? --> Open to opportunities</dd>
+        </div>
+        <div class="meta-row">
+          <dt>Stack:</dt>
+          <dd><!-- TODO: your tech stack --> TypeScript · Three.js · React · Node</dd>
+        </div>
+      </dl>
+    </div>
+  </template>
+
+  <!-- Projects Window Content -->
+  <template id="tpl-projects">
+    <div class="app-content" id="app-projects">
+      <h2>Projects</h2>
+      <div class="project-list">
+
+        <!-- Project 1 -->
+        <!-- TODO: replace with real project 1 -->
+        <article class="project-card">
+          <div class="project-card-header">
+            <h3>Project Alpha</h3><!-- TODO: real project name -->
+            <span class="project-tag">Web</span><!-- TODO: real tag -->
+          </div>
+          <p class="project-desc">
+            <!-- TODO: one-line project description -->
+            A real-time data visualization platform built with WebGL and TypeScript.
+          </p>
+          <a href="#" class="btn-link" aria-label="View Project Alpha">[ VIEW ]</a>
+          <!-- TODO: replace href with real project URL -->
+        </article>
+
+        <!-- Project 2 -->
+        <!-- TODO: replace with real project 2 -->
+        <article class="project-card">
+          <div class="project-card-header">
+            <h3>Project Beta</h3><!-- TODO: real project name -->
+            <span class="project-tag">Tool</span><!-- TODO: real tag -->
+          </div>
+          <p class="project-desc">
+            <!-- TODO: one-line project description -->
+            An open-source CLI tool for scaffolding component libraries with zero config.
+          </p>
+          <a href="#" class="btn-link" aria-label="View Project Beta">[ VIEW ]</a>
+          <!-- TODO: replace href with real project URL -->
+        </article>
+
+        <!-- Project 3 -->
+        <!-- TODO: replace with real project 3 -->
+        <article class="project-card">
+          <div class="project-card-header">
+            <h3>Project Gamma</h3><!-- TODO: real project name -->
+            <span class="project-tag">3D</span><!-- TODO: real tag -->
+          </div>
+          <p class="project-desc">
+            <!-- TODO: one-line project description -->
+            An immersive browser-based 3D environment showcasing procedural terrain generation.
+          </p>
+          <a href="#" class="btn-link" aria-label="View Project Gamma">[ VIEW ]</a>
+          <!-- TODO: replace href with real project URL -->
+        </article>
+
+      </div>
+    </div>
+  </template>
+
+  <!-- Contact Window Content -->
+  <template id="tpl-contact">
+    <div class="app-content" id="app-contact">
+      <h2>Contact</h2>
+      <div class="contact-layout">
+
+        <div class="contact-form-col">
+          <form id="contact-form" novalidate>
+            <div class="form-group">
+              <label for="cf-name">Name</label>
+              <input type="text" id="cf-name" name="name"
+                     placeholder="Your name"
+                     autocomplete="name"
+                     required>
+            </div>
+            <div class="form-group">
+              <label for="cf-email">Email</label>
+              <input type="email" id="cf-email" name="email"
+                     placeholder="your@email.com"
+                     autocomplete="email"
+                     required>
+            </div>
+            <div class="form-group">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message"
+                        rows="5"
+                        placeholder="Your message…"
+                        required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">[ SEND MESSAGE ]</button>
+            <!-- TODO: wire form to real backend or Formspree/Netlify -->
+            <p class="form-status" role="status" id="form-status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="contact-info-col">
+          <div class="contact-info-box">
+            <h3>Direct</h3>
+            <!-- TODO: replace with real email -->
+            <a href="mailto:hello@example.com" class="contact-link">hello@example.com</a>
+          </div>
+          <div class="contact-info-box">
+            <h3>Online</h3>
+            <!-- TODO: replace with real profile URLs -->
+            <a href="#" class="contact-link" target="_blank" rel="noopener">GitHub</a>
+            <a href="#" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="#" class="contact-link" target="_blank" rel="noopener">Twitter / X</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </template>
+
+  <!-- Resume Window Content -->
+  <template id="tpl-resume">
+    <div class="app-content" id="app-resume">
+      <div class="resume-header">
+        <div>
+          <h2>Resume</h2>
+          <!-- TODO: replace with owner name -->
+          <p style="margin-bottom:0; font-size:12px; color: var(--text-muted);">Your Name<!-- TODO: replace with owner name --></p>
+        </div>
+        <!-- TODO: replace href with real resume PDF URL -->
+        <a href="#" class="btn-primary" download aria-label="Download resume as PDF">[ DOWNLOAD PDF ]</a>
+      </div>
+
+      <div class="resume-section">
+        <h3>Experience</h3>
+        <!-- TODO: replace with real experience entries -->
+        <div class="resume-entry">
+          <div class="resume-entry-main">
+            <strong>Senior Developer</strong> — Company Name<!-- TODO: real company -->
+          </div>
+          <span class="resume-entry-date">2022 – Present</span><!-- TODO: real date -->
+        </div>
+        <p class="resume-bullet"><!-- TODO: bullet --> Led development of core product features.</p>
+        <p class="resume-bullet"><!-- TODO: bullet --> Mentored junior engineers and led code reviews.</p>
+
+        <div class="resume-entry" style="margin-top: 8px;">
+          <div class="resume-entry-main">
+            <strong>Developer</strong> — Previous Company<!-- TODO: real company -->
+          </div>
+          <span class="resume-entry-date">2019 – 2022</span><!-- TODO: real date -->
+        </div>
+        <p class="resume-bullet"><!-- TODO: bullet --> Built scalable front-end architecture.</p>
+      </div>
+
+      <div class="resume-section">
+        <h3>Education</h3>
+        <!-- TODO: replace with real education -->
+        <div class="resume-entry">
+          <div class="resume-entry-main">
+            <strong>BSc Computer Science</strong> — University Name<!-- TODO: real school -->
+          </div>
+          <span class="resume-entry-date">2015 – 2019</span><!-- TODO: real date -->
+        </div>
+      </div>
+
+      <div class="resume-section">
+        <h3>Skills</h3>
+        <!-- TODO: replace with real skills -->
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.7;">
+          TypeScript &nbsp;·&nbsp; JavaScript &nbsp;·&nbsp; Three.js &nbsp;·&nbsp;
+          React &nbsp;·&nbsp; Node.js &nbsp;·&nbsp; WebGL &nbsp;·&nbsp;
+          CSS &nbsp;·&nbsp; Git &nbsp;·&nbsp; Figma
+          <!-- TODO: expand with real skill set -->
+        </p>
+      </div>
+
+    </div>
+  </template>
+
+  <!-- ────────────────────────────────────────────── -->
+  <script src="os.js"></script>
+</body>
+</html>

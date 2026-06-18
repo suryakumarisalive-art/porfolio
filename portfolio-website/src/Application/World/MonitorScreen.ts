@@ -183,14 +183,12 @@ export default class MonitorScreen extends EventEmitter {
         };
 
         // Set iframe attributes
-        // PROD
-        iframe.src = 'https://os.henryheffernan.com/';
+        // The on-screen OS is an original, self-contained static app served
+        // from /os/ (copied from static/os by copy-webpack-plugin). It loads
+        // identically in dev and prod, with no separate server required.
+        iframe.src = '/os/index.html';
         /**
-         * Use dev server is query params are present
-         *
-         * Warning: This will not work unless the dev server is running on localhost:3000
-         * Also running the dev server causes browsers to freak out over unsecure connections
-         * in the iframe, so it will flag a ton of issues.
+         * Optionally point at a standalone OS dev server with ?dev in the URL.
          */
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('dev')) {

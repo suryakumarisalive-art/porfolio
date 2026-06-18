@@ -1,0 +1,920 @@
+/* ============================================================
+   PROXIMA OS — Retro Workstation UI
+   Palette: Deep slate-teal desktop, warm-grey window chrome,
+   amber accents, phosphor-green status. All monospace fonts.
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Desktop & shell */
+  --desktop-bg-1:    #0d1e24;
+  --desktop-bg-2:    #122830;
+  --desktop-bg-3:    #0a1920;
+  --scanline-color:  rgba(0, 255, 160, 0.025);
+
+  /* Window chrome */
+  --chrome-face:     #bdb8ae;
+  --chrome-light:    #d8d2c6;
+  --chrome-mid:      #9e9890;
+  --chrome-dark:     #6e6860;
+  --chrome-shadow:   #3a3630;
+
+  /* Title bar active */
+  --titlebar-bg:     #2e6068;
+  --titlebar-text:   #e8e0d0;
+  --titlebar-inactive: #4a4840;
+  --titlebar-inactive-text: #888078;
+
+  /* Accent */
+  --amber:           #d4a843;
+  --amber-dark:      #a07820;
+  --amber-light:     #f0c860;
+
+  /* Phosphor green */
+  --phosphor:        #40e0a0;
+  --phosphor-dim:    #1a8060;
+
+  /* Text */
+  --text-primary:    #1a1610;
+  --text-secondary:  #4a4438;
+  --text-on-dark:    #d8d0c0;
+  --text-muted:      #807870;
+
+  /* UI accents */
+  --border-outer:    #3a3630;
+  --border-inner:    #d0c8bc;
+  --focus-ring:      #2e8090;
+
+  /* Taskbar */
+  --taskbar-bg:      #1a1610;
+  --taskbar-height:  36px;
+
+  /* Font */
+  --font-mono:       "Courier New", "Lucida Console", monospace;
+  --font-system:     "Courier New", monospace;
+
+  /* Bevel sizes */
+  --bevel-sm:        1px;
+  --bevel-md:        2px;
+
+  /* Z-index layers */
+  --z-desktop:       1;
+  --z-window:        10;
+  --z-window-active: 100;
+  --z-taskbar:       500;
+  --z-menu:          600;
+}
+
+/* ── Body ───────────────────────────────────────────────────── */
+html, body {
+  width: 1280px;
+  height: 1024px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--desktop-bg-1);
+  color: var(--text-primary);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+/* ── Desktop ────────────────────────────────────────────────── */
+#desktop {
+  position: absolute;
+  inset: 0;
+  bottom: var(--taskbar-height);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      var(--scanline-color) 0px,
+      var(--scanline-color) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse 70% 60% at 30% 40%, #122e3a 0%, #0d1e24 55%, #060f14 100%);
+  overflow: hidden;
+}
+
+/* Subtle dot-grid texture */
+#desktop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(64,224,160,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Desktop Icons ──────────────────────────────────────────── */
+#icon-container {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: var(--z-desktop);
+}
+
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 72px;
+  padding: 6px 4px 5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+
+.desktop-icon:hover,
+.desktop-icon:focus {
+  background: rgba(46,96,104,0.45);
+  border-color: rgba(212,168,67,0.6);
+  outline: none;
+}
+
+.desktop-icon:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.desktop-icon.selected {
+  background: rgba(46,96,104,0.6);
+  border-color: var(--amber);
+}
+
+.icon-graphic {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+
+.icon-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-on-dark);
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.9), -1px -1px 2px rgba(0,0,0,0.7);
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+/* ── Bevel Utilities ────────────────────────────────────────── */
+.bevel-raised {
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+}
+
+.bevel-sunken {
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+}
+
+/* ── Window Chrome ──────────────────────────────────────────── */
+.window {
+  position: absolute;
+  min-width: 320px;
+  min-height: 200px;
+  background: var(--chrome-face);
+  border: 2px solid var(--chrome-shadow);
+  border-top-color: var(--chrome-light);
+  border-left-color: var(--chrome-light);
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    4px 4px 0 var(--chrome-shadow),
+    inset 1px 1px 0 var(--chrome-light),
+    inset -1px -1px 0 var(--chrome-dark);
+  z-index: var(--z-window);
+}
+
+.window.active {
+  z-index: var(--z-window-active);
+  box-shadow:
+    6px 6px 0 rgba(0,0,0,0.5),
+    inset 1px 1px 0 var(--chrome-light),
+    inset -1px -1px 0 var(--chrome-dark);
+}
+
+/* Title bar */
+.window-titlebar {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 4px;
+  background: var(--titlebar-inactive);
+  cursor: grab;
+  flex-shrink: 0;
+  gap: 6px;
+  border-bottom: 1px solid var(--chrome-shadow);
+}
+
+.window.active .window-titlebar {
+  background: var(--titlebar-bg);
+  /* Amber gradient stripe */
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 14px,
+    rgba(212,168,67,0.15) 14px,
+    rgba(212,168,67,0.15) 15px
+  );
+}
+
+.window-titlebar:active {
+  cursor: grabbing;
+}
+
+.window-title {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--titlebar-inactive-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.5px;
+}
+
+.window.active .window-title {
+  color: var(--titlebar-text);
+}
+
+/* Window control buttons */
+.window-controls {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.win-btn {
+  width: 16px;
+  height: 14px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  background: var(--chrome-face);
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+  color: var(--text-primary);
+}
+
+.win-btn:hover {
+  background: var(--chrome-light);
+}
+
+.win-btn:active {
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+}
+
+.win-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.win-btn-close {
+  color: #8b1010;
+}
+
+.win-btn-close:hover {
+  background: #d04040;
+  color: #fff;
+}
+
+.win-btn-minimize {
+  color: #2e6068;
+}
+
+/* Window content area */
+.window-body {
+  flex: 1;
+  overflow: auto;
+  background: #e8e0d0;
+  border: 1px solid var(--chrome-dark);
+  border-top: none;
+  margin: 2px 2px 2px 2px;
+  position: relative;
+}
+
+/* Scrollbar styling */
+.window-body::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.window-body::-webkit-scrollbar-track {
+  background: var(--chrome-face);
+  border-left: 1px solid var(--chrome-dark);
+}
+
+.window-body::-webkit-scrollbar-thumb {
+  background: var(--chrome-face);
+  border: 2px solid;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+}
+
+.window-body::-webkit-scrollbar-button {
+  background: var(--chrome-face);
+  border: 2px solid;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+  height: 14px;
+  width: 14px;
+}
+
+/* ── Window Content Styles ──────────────────────────────────── */
+.app-content {
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-primary);
+  height: 100%;
+}
+
+/* Section headers inside windows */
+.app-content h2 {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--titlebar-bg);
+  border-bottom: 2px solid var(--amber);
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.app-content h3 {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.app-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* ── About App ──────────────────────────────────────────────── */
+#app-about .about-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+#app-about .portrait-box {
+  width: 90px;
+  height: 110px;
+  flex-shrink: 0;
+  background: var(--chrome-face);
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  text-align: center;
+}
+
+#app-about .portrait-box svg {
+  opacity: 0.4;
+}
+
+#app-about .bio-text {
+  flex: 1;
+}
+
+.about-meta {
+  margin-top: 14px;
+  padding: 8px;
+  background: var(--chrome-face);
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.about-meta dt {
+  font-weight: bold;
+  color: var(--titlebar-bg);
+  display: inline;
+}
+
+.about-meta dd {
+  display: inline;
+  margin-left: 4px;
+}
+
+.about-meta .meta-row {
+  margin-bottom: 3px;
+}
+
+/* ── Projects App ───────────────────────────────────────────── */
+#app-projects .project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-card {
+  background: var(--chrome-face);
+  padding: 10px 12px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+}
+
+.project-card:hover {
+  background: var(--chrome-light);
+}
+
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.project-card h3 {
+  margin-bottom: 0;
+  color: var(--titlebar-bg);
+  font-size: 13px;
+}
+
+.project-tag {
+  font-size: 10px;
+  background: var(--titlebar-bg);
+  color: var(--titlebar-text);
+  padding: 1px 6px;
+  border: 1px solid var(--titlebar-bg);
+}
+
+.project-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.btn-link {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 10px;
+  background: var(--chrome-face);
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+  letter-spacing: 0.5px;
+}
+
+.btn-link:hover {
+  background: var(--amber);
+  color: var(--text-primary);
+}
+
+.btn-link:active {
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+}
+
+.btn-link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* ── Contact App ────────────────────────────────────────────── */
+#app-contact .contact-layout {
+  display: flex;
+  gap: 16px;
+}
+
+#app-contact .contact-form-col {
+  flex: 1;
+}
+
+#app-contact .contact-info-col {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.contact-info-box {
+  background: var(--chrome-face);
+  padding: 10px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  margin-bottom: 8px;
+}
+
+.contact-info-box h3 {
+  font-size: 11px;
+  color: var(--titlebar-bg);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--amber);
+  padding-bottom: 3px;
+}
+
+.contact-link {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 2px 0;
+}
+
+.contact-link:hover {
+  color: var(--titlebar-bg);
+  text-decoration: underline;
+}
+
+.contact-link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--text-secondary);
+  margin-bottom: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: #f0ece4;
+  border: none;
+  outline: none;
+  padding: 5px 7px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  background: #fff;
+  border-color: var(--focus-ring) var(--chrome-light) var(--chrome-light) var(--focus-ring);
+  outline: 1px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.form-status {
+  font-size: 11px;
+  color: var(--phosphor-dim);
+  margin-top: 6px;
+  min-height: 16px;
+}
+
+/* ── Resume App ─────────────────────────────────────────────── */
+#app-resume .resume-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.resume-section {
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--chrome-mid);
+}
+
+.resume-section:last-child {
+  border-bottom: none;
+}
+
+.resume-entry {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.resume-entry-main {
+  flex: 1;
+}
+
+.resume-entry-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.resume-bullet {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding-left: 12px;
+  margin-bottom: 2px;
+  line-height: 1.4;
+}
+
+.resume-bullet::before {
+  content: '> ';
+  color: var(--amber);
+}
+
+/* ── Taskbar ────────────────────────────────────────────────── */
+#taskbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--taskbar-height);
+  background: var(--taskbar-bg);
+  border-top: 2px solid var(--chrome-mid);
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  gap: 4px;
+  z-index: var(--z-taskbar);
+  box-shadow: 0 -2px 0 var(--chrome-shadow);
+}
+
+/* Start button */
+#start-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  background: var(--chrome-face);
+  color: var(--text-primary);
+  border: none;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+  flex-shrink: 0;
+}
+
+#start-btn:hover {
+  background: var(--amber);
+}
+
+#start-btn:active {
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  background: var(--amber-dark);
+}
+
+#start-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* Taskbar divider */
+.taskbar-divider {
+  width: 2px;
+  height: 22px;
+  background: var(--chrome-shadow);
+  border-left: 1px solid var(--chrome-mid);
+  flex-shrink: 0;
+}
+
+/* Taskbar window buttons */
+#taskbar-windows {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.taskbar-win-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  max-width: 160px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text-on-dark);
+  background: var(--chrome-dark);
+  border: none;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--chrome-mid) var(--chrome-shadow) var(--chrome-shadow) var(--chrome-mid);
+}
+
+.taskbar-win-btn:hover {
+  background: var(--chrome-mid);
+  color: var(--text-primary);
+}
+
+.taskbar-win-btn.active {
+  background: var(--chrome-face);
+  color: var(--text-primary);
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  font-weight: bold;
+}
+
+.taskbar-win-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* Clock */
+#taskbar-clock {
+  flex-shrink: 0;
+  height: 28px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--phosphor);
+  background: #0a0e0c;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-dark) var(--chrome-light) var(--chrome-light) var(--chrome-dark);
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px var(--phosphor);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* ── Start Menu ─────────────────────────────────────────────── */
+#start-menu {
+  position: absolute;
+  bottom: calc(var(--taskbar-height) + 2px);
+  left: 4px;
+  width: 200px;
+  background: var(--chrome-face);
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--chrome-light) var(--chrome-dark) var(--chrome-dark) var(--chrome-light);
+  box-shadow: 4px 4px 0 var(--chrome-shadow);
+  z-index: var(--z-menu);
+  display: none;
+}
+
+#start-menu.open {
+  display: block;
+}
+
+.start-menu-header {
+  background: var(--titlebar-bg);
+  padding: 8px 10px;
+  color: var(--titlebar-text);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--amber);
+  font-family: var(--font-mono);
+}
+
+.start-menu-header span {
+  color: var(--amber);
+}
+
+.start-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.start-menu-item:hover,
+.start-menu-item:focus {
+  background: var(--titlebar-bg);
+  color: var(--titlebar-text);
+  outline: none;
+}
+
+.start-menu-item:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.start-menu-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.start-menu-divider {
+  height: 1px;
+  background: var(--chrome-dark);
+  margin: 2px 8px;
+}
+
+/* ── Utility ────────────────────────────────────────────────── */
+.phosphor-badge {
+  display: inline-block;
+  background: var(--phosphor-dim);
+  color: var(--phosphor);
+  font-size: 10px;
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+  border: 1px solid var(--phosphor-dim);
+}
+
+/* Amber primary button */
+.btn-primary {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 16px;
+  background: var(--amber);
+  color: var(--text-primary);
+  cursor: pointer;
+  border: none;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--amber-light) var(--amber-dark) var(--amber-dark) var(--amber-light);
+  letter-spacing: 0.5px;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--amber-light);
+}
+
+.btn-primary:active {
+  border-color: var(--amber-dark) var(--amber-light) var(--amber-light) var(--amber-dark);
+  background: var(--amber-dark);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+/* TODO placeholder style */
+.todo-placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 11px;
+}
+
+/* Horizontal rule */
+hr.app-rule {
+  border: none;
+  border-top: 1px solid var(--chrome-mid);
+  margin: 12px 0;
+}
