@@ -12,8 +12,8 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  /* Match the 3D canvas backdrop — no dark flash before canvas mounts */
-  background-color: #c7ccd1;
+  /* Black like the henry-clone start screen — no flash before the box appears */
+  background-color: #000;
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-base);
@@ -99,6 +99,17 @@ main {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ── Start button hover — invert to white (henry-clone) ── */
+.start-btn {
+  transition:
+    background var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo) !important;
+}
+.start-btn:hover {
+  background: #fff !important;
+  color: #000 !important;
 }
 
 /* ── Taskbar button hover ── */

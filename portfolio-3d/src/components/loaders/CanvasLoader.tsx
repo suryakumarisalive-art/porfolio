@@ -5,15 +5,15 @@ import { useEffect, useRef, useState } from 'react'
 import { useLifecycle, useWebglHealthy, usePortfolioStore } from '@/store/usePortfolioStore'
 import { fadeIn, fadeOut } from '@/lib/gsap'
 
-// Exact same colour as the 3D canvas background — zero discontinuity on load
-const SCENE_BG = '#c7ccd1'
+const OWNER = 'Surya Kumar'
+const YEAR  = '2025'
 
 /**
- * Loading overlay — clean, henry-clone style.
- * Shows name + thin progress bar while assets load,
- * then a minimal "Enter" button before the camera intro fires.
+ * Start screen — a faithful replica of the henry-clone entry popup:
+ * pure black full-screen with a centred white-bordered terminal box,
+ * monospace text, and a START button. No BIOS dots, no gradients.
  *
- * Lifecycle: booting → loading → loaded (show Enter) → ready (camera intro)
+ * Lifecycle: booting → loading → loaded (show START) → ready (camera intro)
  */
 export function CanvasLoader() {
   const { progress, active } = useProgress()
@@ -23,15 +23,13 @@ export function CanvasLoader() {
   const rootRef      = useRef<HTMLDivElement>(null)
   const [exiting, setExiting] = useState(false)
 
-  // Lifecycle transitions
   useEffect(() => {
     if (active && lifecycle === 'booting') setLifecycle('loading')
     if (!active && lifecycle === 'loading') setLifecycle('loaded')
   }, [active, lifecycle, setLifecycle])
 
-  // Fade in on mount
   useEffect(() => {
-    fadeIn(rootRef.current, { duration: 0.5 })
+    fadeIn(rootRef.current, { duration: 0.4 })
   }, [])
 
   const isContextLost = !webglHealthy || lifecycle === 'context-lost'
@@ -39,7 +37,7 @@ export function CanvasLoader() {
 
   if (lifecycle === 'ready') return null
 
-  const handleEnter = () => {
+  const handleStart = () => {
     if (exiting) return
     setExiting(true)
     fadeOut(rootRef.current, {
@@ -60,163 +58,73 @@ export function CanvasLoader() {
         zIndex:         'var(--z-loader)' as never,
         pointerEvents:  'auto',
         display:        'flex',
-        flexDirection:  'column',
         alignItems:     'center',
         justifyContent: 'center',
-        background:     SCENE_BG,
+        background:     '#000',
         opacity:        0,
       }}
     >
-      {isContextLost ? (
-        <ContextLostView />
-      ) : (
-        <MainView
-          progress={progress}
-          lifecycle={lifecycle}
-          isLoaded={isLoaded}
-          onEnter={handleEnter}
-          exiting={exiting}
-        />
-      )}
-    </div>
-  )
-}
-
-// ─── Sub-components ────────────────────────────────────────────────────────────
-
-function MainView({
-  progress,
-  lifecycle,
-  isLoaded,
-  onEnter,
-  exiting,
-}: {
-  progress: number
-  lifecycle: string
-  isLoaded: boolean
-  onEnter: () => void
-  exiting: boolean
-}) {
-  return (
-    <div
-      style={{
-        display:       'flex',
-        flexDirection: 'column',
-        alignItems:    'center',
-        gap:           '44px',
-        width:         300,
-        textAlign:     'center',
-      }}
-    >
-      {/* Identity */}
-      <div>
-        <p
-          style={{
-            fontFamily:    'var(--font-mono)',
-            fontSize:      '10px',
-            color:         'rgba(0,0,0,0.38)',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            marginBottom:  '10px',
-          }}
-        >
-          Interactive Portfolio
-        </p>
-        <h1
-          style={{
-            fontFamily:    'var(--font-sans)',
-            fontSize:      '26px',
-            fontWeight:    700,
-            color:         '#111',
-            letterSpacing: '-0.02em',
-            lineHeight:    1,
-          }}
-        >
-          Surya Kumar
-        </h1>
-      </div>
-
-      {/* Progress bar — only while loading, hidden when loaded */}
-      {!isLoaded && lifecycle !== 'booting' && (
-        <div
-          style={{
-            width:        180,
-            height:       1,
-            background:   'rgba(0,0,0,0.12)',
-            borderRadius: 999,
-            overflow:     'hidden',
-          }}
-        >
-          <div
-            style={{
-              height:       '100%',
-              width:        `${progress}%`,
-              background:   'rgba(0,0,0,0.5)',
-              borderRadius: 999,
-              transition:   'width 200ms ease',
-            }}
-          />
-        </div>
-      )}
-
-      {/* Enter gate — appears when assets finish loading */}
-      {isLoaded && !exiting && (
-        <button
-          onClick={onEnter}
-          style={{
-            background:    'transparent',
-            border:        '1px solid rgba(0,0,0,0.22)',
-            borderRadius:  '3px',
-            color:         'rgba(0,0,0,0.65)',
-            fontFamily:    'var(--font-mono)',
-            fontSize:      '10px',
-            fontWeight:    600,
-            padding:       '11px 26px',
-            cursor:        'pointer',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            animation:     'enter-pulse 1.6s ease-in-out infinite',
-          }}
-        >
-          Enter
-        </button>
-      )}
-    </div>
-  )
-}
-
-function ContextLostView() {
-  return (
-    <div
-      style={{
-        display:       'flex',
-        flexDirection: 'column',
-        alignItems:    'center',
-        gap:           '14px',
-      }}
-    >
+      {/* Centred terminal box */}
       <div
-        aria-hidden="true"
         style={{
-          width:        22,
-          height:       22,
-          border:       '1.5px solid rgba(0,0,0,0.12)',
-          borderTop:    '1.5px solid rgba(0,0,0,0.5)',
-          borderRadius: '50%',
-          animation:    'spin 1s linear infinite',
-        }}
-      />
-      <p
-        style={{
-          fontFamily:    'var(--font-mono)',
-          fontSize:      '10px',
-          color:         'rgba(0,0,0,0.4)',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
+          border:     '2px solid #fff',
+          background: '#000',
+          padding:    '28px 32px',
+          minWidth:   440,
+          maxWidth:   '90vw',
         }}
       >
-        Reconnecting…
-      </p>
+        {isContextLost ? (
+          <p style={LINE_STYLE}>Reconnecting render engine…</p>
+        ) : (
+          <>
+            <p style={LINE_STYLE}>{OWNER} Portfolio Showcase {YEAR}</p>
+
+            {isLoaded ? (
+              <>
+                <p style={LINE_STYLE}>Click start to begin</p>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 18 }}>
+                  <button
+                    onClick={handleStart}
+                    disabled={exiting}
+                    style={BUTTON_STYLE}
+                    className="start-btn"
+                  >
+                    START
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p style={LINE_STYLE}>
+                Loading assets… {Math.round(progress)}%
+              </p>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
+}
+
+// ─── Styles — monospace white on black, henry-clone exact ──────────────────────
+
+const LINE_STYLE: React.CSSProperties = {
+  fontFamily:    'var(--font-mono)',
+  fontSize:      '16px',
+  lineHeight:    1.55,
+  color:         '#fff',
+  letterSpacing: '0.02em',
+  whiteSpace:    'nowrap',
+}
+
+const BUTTON_STYLE: React.CSSProperties = {
+  border:       '2px solid #fff',
+  background:   '#000',
+  color:        '#fff',
+  fontFamily:   'var(--font-mono)',
+  fontSize:     '16px',
+  fontWeight:   400,
+  padding:      '8px 18px',
+  cursor:       'pointer',
+  letterSpacing: '0.04em',
 }
