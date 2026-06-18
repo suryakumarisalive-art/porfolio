@@ -219,30 +219,30 @@
     <div class="app-content" id="app-about">
       <h2>About Me</h2>
       <div class="about-layout">
-        <div class="portrait-box" aria-label="Portrait placeholder">
-          <!-- Portrait silhouette -->
+        <div class="portrait-box" aria-label="Portrait">
           <svg width="40" height="48" viewBox="0 0 40 48" fill="none" aria-hidden="true" focusable="false">
             <circle cx="20" cy="14" r="10" fill="#2e6068" opacity="0.5"/>
             <path d="M4 42 Q4 28 20 28 Q36 28 36 42" fill="#2e6068" opacity="0.5"/>
           </svg>
-          <!-- TODO: replace with owner photo -->
-          <span class="todo-placeholder">Photo</span>
+          <span style="font-size:10px; color:var(--text-muted); display:block; margin-top:4px;">SKV</span>
         </div>
 
         <div class="bio-text">
-          <!-- TODO: replace with owner bio -->
           <p>
-            Hello! I'm <strong>Your Name</strong><!-- TODO: replace with owner name -->,
-            a developer and designer passionate about building thoughtful,
-            well-crafted digital experiences.
+            Hello! I'm <strong>Surya Kumar Kamalapati Vaishya</strong>,
+            an AI Developer &amp; Indie Builder based in Kuala Lumpur, Malaysia.
           </p>
           <p>
-            I specialize in <!-- TODO: fill in specialities -->
-            front-end engineering, creative coding, and interactive 3D on the web.
+            CS (AI) student at APU Malaysia with 4+ years of independent product development
+            across web apps, Android applications, and AI-integrated SaaS platforms.
+            Comfortable working the full stack — from database architecture and UI design
+            through to deployment and monetisation.
           </p>
-          <p class="todo-placeholder">
-            <!-- TODO: expand bio with 2–3 sentences about background and interests -->
-            [Add your personal background here]
+          <p>
+            Currently co-developing <strong>GETINDEXED</strong>, a serverless SEO SaaS platform
+            with 50+ tools and Stripe-integrated billing. Shipped 5 independent projects with
+            1,000+ Google Play downloads before starting university.
+            Actively studying Deep Learning, NLP, and RLHF.
           </p>
         </div>
       </div>
@@ -252,15 +252,23 @@
       <dl class="about-meta">
         <div class="meta-row">
           <dt>Location:</dt>
-          <dd><!-- TODO: your city --> City, Country</dd>
+          <dd>Kuala Lumpur, Malaysia</dd>
         </div>
         <div class="meta-row">
           <dt>Availability:</dt>
-          <dd><!-- TODO: open to work? --> Open to opportunities</dd>
+          <dd>Available immediately for AI and technical roles</dd>
         </div>
         <div class="meta-row">
           <dt>Stack:</dt>
-          <dd><!-- TODO: your tech stack --> TypeScript · Three.js · React · Node</dd>
+          <dd>Next.js 14 &nbsp;·&nbsp; TypeScript &nbsp;·&nbsp; Python &nbsp;·&nbsp; Supabase &nbsp;·&nbsp; React &nbsp;·&nbsp; Android</dd>
+        </div>
+        <div class="meta-row">
+          <dt>AI / ML:</dt>
+          <dd>Prompt Engineering &nbsp;·&nbsp; LLM Integration &nbsp;·&nbsp; Deep Learning &nbsp;·&nbsp; NLP &nbsp;·&nbsp; RLHF</dd>
+        </div>
+        <div class="meta-row">
+          <dt>Languages:</dt>
+          <dd>English &nbsp;·&nbsp; Hindi &nbsp;·&nbsp; Marathi</dd>
         </div>
       </dl>
     </div>
@@ -272,49 +280,61 @@
       <h2>Projects</h2>
       <div class="project-list">
 
-        <!-- Project 1 -->
-        <!-- TODO: replace with real project 1 -->
+        <!-- GETINDEXED -->
         <article class="project-card">
           <div class="project-card-header">
-            <h3>Project Alpha</h3><!-- TODO: real project name -->
-            <span class="project-tag">Web</span><!-- TODO: real tag -->
+            <h3>GETINDEXED</h3>
+            <span class="project-tag">SaaS · AI</span>
           </div>
           <p class="project-desc">
-            <!-- TODO: one-line project description -->
-            A real-time data visualization platform built with WebGL and TypeScript.
+            AI-integrated SEO SaaS platform with 50+ tools, an 8-table Supabase schema,
+            and Stripe-integrated subscription billing. Targeting under $15/month serverless
+            operating cost. Built with Next.js 14, TypeScript, Tailwind CSS, shadcn/ui, and Vercel.
           </p>
-          <a href="#" class="btn-link" aria-label="View Project Alpha">[ VIEW ]</a>
-          <!-- TODO: replace href with real project URL -->
+          <a href="https://getindexed.vercel.app" class="btn-link" target="_blank" rel="noopener" aria-label="View GETINDEXED">[ VIEW ]</a>
         </article>
 
-        <!-- Project 2 -->
-        <!-- TODO: replace with real project 2 -->
+        <!-- Screen Recorder -->
         <article class="project-card">
           <div class="project-card-header">
-            <h3>Project Beta</h3><!-- TODO: real project name -->
-            <span class="project-tag">Tool</span><!-- TODO: real tag -->
+            <h3>Screen Recorder</h3>
+            <span class="project-tag">Android</span>
           </div>
           <p class="project-desc">
-            <!-- TODO: one-line project description -->
-            An open-source CLI tool for scaffolding component libraries with zero config.
+            Independently built and published a screen recording utility for Android using Java
+            and Android Studio. Integrated AdMob monetisation and Firebase analytics.
+            Achieved 1,000+ organic Google Play downloads with zero paid promotion.
           </p>
-          <a href="#" class="btn-link" aria-label="View Project Beta">[ VIEW ]</a>
-          <!-- TODO: replace href with real project URL -->
+          <a href="https://play.google.com/store/search?q=screen+recorder+surya" class="btn-link" target="_blank" rel="noopener" aria-label="View Screen Recorder on Google Play">[ VIEW ]</a>
         </article>
 
-        <!-- Project 3 -->
-        <!-- TODO: replace with real project 3 -->
+        <!-- Garuda Apps -->
         <article class="project-card">
           <div class="project-card-header">
-            <h3>Project Gamma</h3><!-- TODO: real project name -->
-            <span class="project-tag">3D</span><!-- TODO: real tag -->
+            <h3>Garuda Apps</h3>
+            <span class="project-tag">Android</span>
           </div>
           <p class="project-desc">
-            <!-- TODO: one-line project description -->
-            An immersive browser-based 3D environment showcasing procedural terrain generation.
+            Co-developed a suite of Android mini-games and fitness utilities in Java and XML,
+            integrating Firebase for data handling and AdMob/AdSense for monetisation.
+            Reached 200–500+ organic downloads on Google Play.
           </p>
-          <a href="#" class="btn-link" aria-label="View Project Gamma">[ VIEW ]</a>
-          <!-- TODO: replace href with real project URL -->
+          <a href="https://play.google.com" class="btn-link" target="_blank" rel="noopener" aria-label="View Garuda Apps">[ VIEW ]</a>
+        </article>
+
+        <!-- Hackers Network -->
+        <article class="project-card">
+          <div class="project-card-header">
+            <h3>Hackers Network</h3>
+            <span class="project-tag">Web · SEO</span>
+          </div>
+          <p class="project-desc">
+            Designed and launched a content website using WordPress and Elementor with
+            structured on-page SEO and a consistent content publishing workflow.
+            Applied keyword strategy, metadata optimisation, and site architecture
+            to build organic visibility from zero.
+          </p>
+          <a href="https://notion.site/Hackers-Network" class="btn-link" target="_blank" rel="noopener" aria-label="View Hackers Network">[ VIEW ]</a>
         </article>
 
       </div>
@@ -351,7 +371,6 @@
                         required></textarea>
             </div>
             <button type="submit" class="btn-primary">[ SEND MESSAGE ]</button>
-            <!-- TODO: wire form to real backend or Formspree/Netlify -->
             <p class="form-status" role="status" id="form-status" aria-live="polite"></p>
           </form>
         </div>
@@ -359,15 +378,13 @@
         <div class="contact-info-col">
           <div class="contact-info-box">
             <h3>Direct</h3>
-            <!-- TODO: replace with real email -->
-            <a href="mailto:hello@example.com" class="contact-link">hello@example.com</a>
+            <a href="mailto:vaishyasuryakumar@gmail.com" class="contact-link">vaishyasuryakumar@gmail.com</a>
+            <a href="tel:+601123950051" class="contact-link">+60 11-2395 0051</a>
           </div>
           <div class="contact-info-box">
             <h3>Online</h3>
-            <!-- TODO: replace with real profile URLs -->
-            <a href="#" class="contact-link" target="_blank" rel="noopener">GitHub</a>
-            <a href="#" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="#" class="contact-link" target="_blank" rel="noopener">Twitter / X</a>
+            <a href="https://github.com/suryakumarisalive-art" class="contact-link" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://www.linkedin.com/in/surya-kumar-vaishya" class="contact-link" target="_blank" rel="noopener">LinkedIn</a>
           </div>
         </div>
 
@@ -381,53 +398,87 @@
       <div class="resume-header">
         <div>
           <h2>Resume</h2>
-          <!-- TODO: replace with owner name -->
-          <p style="margin-bottom:0; font-size:12px; color: var(--text-muted);">Your Name<!-- TODO: replace with owner name --></p>
+          <p style="margin-bottom:0; font-size:12px; color: var(--text-muted);">Surya Kumar Kamalapati Vaishya</p>
         </div>
-        <!-- TODO: replace href with real resume PDF URL -->
-        <a href="#" class="btn-primary" download aria-label="Download resume as PDF">[ DOWNLOAD PDF ]</a>
-      </div>
-
-      <div class="resume-section">
-        <h3>Experience</h3>
-        <!-- TODO: replace with real experience entries -->
-        <div class="resume-entry">
-          <div class="resume-entry-main">
-            <strong>Senior Developer</strong> — Company Name<!-- TODO: real company -->
-          </div>
-          <span class="resume-entry-date">2022 – Present</span><!-- TODO: real date -->
-        </div>
-        <p class="resume-bullet"><!-- TODO: bullet --> Led development of core product features.</p>
-        <p class="resume-bullet"><!-- TODO: bullet --> Mentored junior engineers and led code reviews.</p>
-
-        <div class="resume-entry" style="margin-top: 8px;">
-          <div class="resume-entry-main">
-            <strong>Developer</strong> — Previous Company<!-- TODO: real company -->
-          </div>
-          <span class="resume-entry-date">2019 – 2022</span><!-- TODO: real date -->
-        </div>
-        <p class="resume-bullet"><!-- TODO: bullet --> Built scalable front-end architecture.</p>
+        <a href="mailto:vaishyasuryakumar@gmail.com" class="btn-primary" aria-label="Contact for resume PDF">[ REQUEST PDF ]</a>
       </div>
 
       <div class="resume-section">
         <h3>Education</h3>
-        <!-- TODO: replace with real education -->
         <div class="resume-entry">
           <div class="resume-entry-main">
-            <strong>BSc Computer Science</strong> — University Name<!-- TODO: real school -->
+            <strong>B.Sc. Computer Science (Hons) — Artificial Intelligence</strong> — Asia Pacific University (APU), Kuala Lumpur
           </div>
-          <span class="resume-entry-date">2015 – 2019</span><!-- TODO: real date -->
+          <span class="resume-entry-date">Nov 2025 – Present</span>
         </div>
+        <p class="resume-bullet">Coursework: Databases (SQL, Normalization, ERD), Networking, OS, Digital Innovation, AI Fundamentals.</p>
+
+        <div class="resume-entry" style="margin-top:8px;">
+          <div class="resume-entry-main">
+            <strong>Higher Secondary Certificate (Science)</strong> — Shirvane Vidyalaya Junior College, Navi Mumbai
+          </div>
+          <span class="resume-entry-date">2023 – 2025</span>
+        </div>
+        <p class="resume-bullet">JEE Main 2025: 96th percentile out of 1.2 million candidates nationwide.</p>
+
+        <div class="resume-entry" style="margin-top:8px;">
+          <div class="resume-entry-main">
+            <strong>Secondary School Certificate</strong> — St. Mary's Multipurpose High School, Navi Mumbai
+          </div>
+          <span class="resume-entry-date">2022 – 2023</span>
+        </div>
+        <p class="resume-bullet">Score: 82%</p>
+      </div>
+
+      <div class="resume-section">
+        <h3>Projects</h3>
+        <div class="resume-entry">
+          <div class="resume-entry-main">
+            <strong>GETINDEXED</strong> — AI-Integrated SEO SaaS Platform
+          </div>
+          <span class="resume-entry-date">2024 – Present</span>
+        </div>
+        <p class="resume-bullet">Architected 8-table Supabase schema, 50+ SEO tools, and Stripe subscription billing at &lt;$15/month serverless cost.</p>
+        <p class="resume-bullet">Stack: Next.js 14, TypeScript, Supabase, Tailwind CSS, shadcn/ui, Vercel, Stripe, Resend, Sentry.</p>
+
+        <div class="resume-entry" style="margin-top:8px;">
+          <div class="resume-entry-main">
+            <strong>Screen Recorder</strong> — Android Application
+          </div>
+          <span class="resume-entry-date">2022</span>
+        </div>
+        <p class="resume-bullet">Java/XML · Android Studio · AdMob · Firebase. 1,000+ organic Google Play downloads, zero paid promotion.</p>
+
+        <div class="resume-entry" style="margin-top:8px;">
+          <div class="resume-entry-main">
+            <strong>Garuda Apps</strong> — Android App Suite
+          </div>
+          <span class="resume-entry-date">2021 – 2022</span>
+        </div>
+        <p class="resume-bullet">Co-developed mini-games and fitness utilities; 200–500+ organic downloads.</p>
+      </div>
+
+      <div class="resume-section">
+        <h3>Achievements</h3>
+        <p class="resume-bullet">JEE Main 2025 — 96th percentile out of 1.2 million candidates.</p>
+        <p class="resume-bullet">Shipped 5 independent projects before starting university.</p>
+        <p class="resume-bullet">The Complete Full-Stack Web Dev Bootcamp — Udemy (Dr. Angela Yu), Dec 2025.</p>
       </div>
 
       <div class="resume-section">
         <h3>Skills</h3>
-        <!-- TODO: replace with real skills -->
-        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.7;">
-          TypeScript &nbsp;·&nbsp; JavaScript &nbsp;·&nbsp; Three.js &nbsp;·&nbsp;
-          React &nbsp;·&nbsp; Node.js &nbsp;·&nbsp; WebGL &nbsp;·&nbsp;
-          CSS &nbsp;·&nbsp; Git &nbsp;·&nbsp; Figma
-          <!-- TODO: expand with real skill set -->
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.9;">
+          <strong style="color:var(--text-muted)">Languages:</strong>&nbsp;
+          JavaScript &nbsp;·&nbsp; TypeScript &nbsp;·&nbsp; Python &nbsp;·&nbsp; Java &nbsp;·&nbsp; HTML5 &nbsp;·&nbsp; CSS3 &nbsp;·&nbsp; SQL
+          <br>
+          <strong style="color:var(--text-muted)">Frameworks:</strong>&nbsp;
+          Next.js 14 &nbsp;·&nbsp; React &nbsp;·&nbsp; Tailwind CSS &nbsp;·&nbsp; shadcn/ui &nbsp;·&nbsp; Bootstrap
+          <br>
+          <strong style="color:var(--text-muted)">AI / ML:</strong>&nbsp;
+          Prompt Engineering &nbsp;·&nbsp; LLM Integration &nbsp;·&nbsp; Deep Learning &nbsp;·&nbsp; NLP &nbsp;·&nbsp; RLHF
+          <br>
+          <strong style="color:var(--text-muted)">Tools:</strong>&nbsp;
+          Supabase &nbsp;·&nbsp; Firebase &nbsp;·&nbsp; Git &nbsp;·&nbsp; GitHub &nbsp;·&nbsp; Vercel &nbsp;·&nbsp; Stripe &nbsp;·&nbsp; Android Studio &nbsp;·&nbsp; VS Code
         </p>
       </div>
 
