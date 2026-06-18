@@ -128,7 +128,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
         <div
             style={Object.assign({}, styles.overlay, {
                 opacity: overlayOpacity,
-                transform: `scale(${overlayOpacity === 0 ? 1.1 : 1})`,
+                transform: `scale(${overlayOpacity === 0 ? 1.04 : 1})`,
             })}
         >
             {startPopupOpacity === 0 && loadingTextOpacity === 0 && (
@@ -149,16 +149,16 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                         <div style={styles.logoContainer}>
                             <div>
                                 <p style={styles.green}>
-                                    <b>Kumari,</b>{' '}
+                                    <b>Surya,</b>{' '}
                                 </p>
                                 <p style={styles.green}>
-                                    <b>Surya Inc.</b>
+                                    <b>Vaishya Inc.</b>
                                 </p>
                             </div>
                         </div>
                         <div style={styles.headerInfo}>
                             <p>Released: 01/13/2000</p>
-                            <p>SKBIOS (C)2000 Kumari Surya Inc.,</p>
+                            <p>SKBIOS (C)2000 Surya Vaishya Inc.,</p>
                         </div>
                     </div>
                     <div style={styles.body} className="loading-screen-body">
@@ -195,7 +195,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                             <p>
                                 All Content Loaded, launching{' '}
                                 <b style={styles.green}>
-                                    'Surya Kumari Portfolio Showcase'
+                                    'Surya Kumar Vaishya Portfolio'
                                 </b>{' '}
                                 V1.0
                             </p>
@@ -292,17 +292,11 @@ const styles: StyleSheetCSS = {
         width: '100%',
         height: '100%',
         display: 'flex',
-        transition: 'opacity 0.2s, transform 0.2s',
-        MozTransition: 'opacity 0.2s, transform 0.2s',
-        WebkitTransition: 'opacity 0.2s, transform 0.2s',
-        OTransition: 'opacity 0.2s, transform 0.2s',
-        msTransition: 'opacity 0.2s, transform 0.2s',
-
-        transitionTimingFunction: 'ease-in-out',
-        MozTransitionTimingFunction: 'ease-in-out',
-        WebkitTransitionTimingFunction: 'ease-in-out',
-        OTransitionTimingFunction: 'ease-in-out',
-        msTransitionTimingFunction: 'ease-in-out',
+        transition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+        MozTransition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+        WebkitTransition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+        OTransition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
+        msTransition: 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)',
 
         boxSizing: 'border-box',
         fontSize: 16,

@@ -102,9 +102,9 @@ function openApp(appId) {
 
   // Animate in
   win.style.opacity = '0';
-  win.style.transform = 'scale(0.96) translateY(4px)';
+  win.style.transform = 'scale(0.94) translateY(8px)';
   requestAnimationFrame(() => {
-    win.style.transition = 'opacity 120ms ease, transform 120ms ease';
+    win.style.transition = 'opacity 220ms cubic-bezier(0.16,1,0.3,1), transform 220ms cubic-bezier(0.16,1,0.3,1)';
     win.style.opacity = '1';
     win.style.transform = 'scale(1) translateY(0)';
   });
@@ -121,9 +121,9 @@ function closeWindow(appId) {
   const win = entry.el;
 
   // Animate out then remove
-  win.style.transition = 'opacity 100ms ease, transform 100ms ease';
+  win.style.transition = 'opacity 180ms cubic-bezier(0.16,1,0.3,1), transform 180ms cubic-bezier(0.16,1,0.3,1)';
   win.style.opacity = '0';
-  win.style.transform = 'scale(0.95)';
+  win.style.transform = 'scale(0.96) translateY(4px)';
 
   setTimeout(() => {
     if (win.parentNode) win.parentNode.removeChild(win);

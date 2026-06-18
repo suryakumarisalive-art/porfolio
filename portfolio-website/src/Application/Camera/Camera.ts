@@ -70,17 +70,16 @@ export default class Camera extends EventEmitter {
             event.preventDefault();
             // @ts-ignore
             if (event.target.id === 'prevent-click') return;
-            // print target and current keyframe
             if (
                 this.currentKeyframe === CameraKey.IDLE ||
                 this.targetKeyframe === CameraKey.IDLE
             ) {
-                this.transition(CameraKey.DESK);
+                this.transition(CameraKey.DESK, 900, TWEEN.Easing.Exponential.Out);
             } else if (
                 this.currentKeyframe === CameraKey.DESK ||
                 this.targetKeyframe === CameraKey.DESK
             ) {
-                this.transition(CameraKey.IDLE);
+                this.transition(CameraKey.IDLE, 1200, TWEEN.Easing.Exponential.Out);
             }
         });
 

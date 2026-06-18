@@ -119,11 +119,22 @@ br {
     background-color: #000;
     border: 4px solid #fff;
     border-width: 4px 3px 4px 3px;
+    cursor: pointer;
+    transition: transform 120ms cubic-bezier(0.16,1,0.3,1);
+}
+
+.bios-start-button:hover {
+    transform: scale(1.03);
+}
+
+.bios-start-button:active {
+    transform: scale(0.97);
 }
 
 .bios-start-button p {
     box-sizing: border-box;
     padding: 8px;
+    transition: background-color 120ms ease, color 120ms ease;
 }
 
 .bios-start-button:hover p {

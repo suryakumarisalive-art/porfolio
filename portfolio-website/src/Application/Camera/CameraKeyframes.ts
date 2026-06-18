@@ -77,6 +77,7 @@ export class DeskKeyframe extends CameraKeyframeInstance {
     application: Application;
     mouse: Mouse;
     sizes: Sizes;
+    time: Time;
     targetFoc: THREE.Vector3;
     targetPos: THREE.Vector3;
 
@@ -86,22 +87,27 @@ export class DeskKeyframe extends CameraKeyframeInstance {
         this.application = new Application();
         this.mouse = this.application.mouse;
         this.sizes = this.application.sizes;
+        this.time = this.application.time;
         this.origin = new THREE.Vector3().copy(keyframe.position);
         this.targetFoc = new THREE.Vector3().copy(keyframe.focalPoint);
         this.targetPos = new THREE.Vector3().copy(keyframe.position);
     }
 
     update() {
+        // Frame-rate independent lerp: same feel at 30, 60, or 144fps
+        const dt = this.time.delta;
+        const focAlpha = 1 - Math.pow(1 - 0.05, dt / 16.67);
+        const posAlpha = 1 - Math.pow(1 - 0.025, dt / 16.67);
+
         this.targetFoc.x +=
-            (this.mouse.x - this.sizes.width / 2 - this.targetFoc.x) * 0.05;
+            (this.mouse.x - this.sizes.width / 2 - this.targetFoc.x) * focAlpha;
         this.targetFoc.y +=
-            (-(this.mouse.y - this.sizes.height) - this.targetFoc.y) * 0.05;
+            (-(this.mouse.y - this.sizes.height) - this.targetFoc.y) * focAlpha;
 
         this.targetPos.x +=
-            (this.mouse.x - this.sizes.width / 2 - this.targetPos.x) * 0.025;
+            (this.mouse.x - this.sizes.width / 2 - this.targetPos.x) * posAlpha;
         this.targetPos.y +=
-            (-(this.mouse.y - this.sizes.height * 2) - this.targetPos.y) *
-            0.025;
+            (-(this.mouse.y - this.sizes.height * 2) - this.targetPos.y) * posAlpha;
 
         const aspect = this.sizes.height / this.sizes.width;
         this.targetPos.z = this.origin.z + aspect * 3000 - 1800;
