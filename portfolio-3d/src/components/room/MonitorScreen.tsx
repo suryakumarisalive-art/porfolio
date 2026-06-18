@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useThree } from '@react-three/fiber'
 import { CanvasTexture } from 'three'
 import { PROJECTS } from '@/content/projects'
 
@@ -13,6 +14,10 @@ const TEX_H   = 400
 
 export function MonitorScreen() {
   const [texture, setTexture] = useState<CanvasTexture | null>(null)
+  const { invalidate } = useThree()
+  // Stable ref so the interval callback doesn't capture a stale value
+  const invalidateRef = useRef(invalidate)
+  invalidateRef.current = invalidate
 
   useEffect(() => {
     const canvas = document.createElement('canvas')
@@ -26,6 +31,7 @@ export function MonitorScreen() {
       const draw = () => {
         drawScreen(canvas, cursorOn)
         tex.needsUpdate = true
+        invalidateRef.current()
       }
       draw()
       setTexture(tex)

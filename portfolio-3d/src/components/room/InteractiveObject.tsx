@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, type ReactNode, type RefObject } from 'react'
+import { memo, useRef, type ReactNode, type RefObject } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import {
@@ -39,7 +39,7 @@ interface InteractiveObjectProps {
  * - Hover emission intensity animation on the supplied materialRef
  * - Calling invalidate() during animation to keep frameloop="demand" alive
  */
-export function InteractiveObject({
+export const InteractiveObject = memo(function InteractiveObject({
   id,
   overlayId,
   position = [0, 0, 0],
@@ -119,4 +119,4 @@ export function InteractiveObject({
       {children}
     </group>
   )
-}
+})

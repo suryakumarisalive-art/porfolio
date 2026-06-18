@@ -7,16 +7,16 @@ import { SceneRoot } from './SceneRoot'
 
 /**
  * The WebGL Canvas — client-only, never SSR.
- * `frameloop="always"` renders every frame so OrbitControls damping, the camera
- * intro sweep, and hover lerps all stay buttery-smooth — matching the henry-clone
- * feel. Lingering invalidate() calls elsewhere are harmless no-ops in this mode.
+ * `frameloop="demand"` keeps the GPU idle when nothing moves. Every interactive
+ * component calls `invalidate()` to request frames, so animations and OrbitControls
+ * damping stay smooth without burning GPU cycles at rest.
  */
 export function CanvasScene() {
   const { onCreated } = useWebGLContext()
 
   return (
     <Canvas
-      frameloop="always"
+      frameloop="demand"
       dpr={[1, 2]}
       gl={{
         antialias: true,

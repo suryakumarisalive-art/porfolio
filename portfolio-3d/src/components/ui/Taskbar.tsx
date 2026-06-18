@@ -55,6 +55,7 @@ export function Taskbar() {
             aria-pressed={isActive}
             aria-label={`${label} (keyboard shortcut: Alt+${key})`}
             title={`${label} — Alt+${key}`}
+            className="taskbar-btn"
             style={{
               position:     'relative',
               background:   isActive ? 'var(--color-accent)' : 'transparent',

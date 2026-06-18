@@ -78,3 +78,112 @@ main {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Modal animations ── */
+@keyframes modal-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
+
+/* ── BIOS loader animations ── */
+@keyframes bios-line-in {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes enter-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Taskbar button hover ── */
+.taskbar-btn {
+  transition:
+    background var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo) !important;
+}
+.taskbar-btn:hover {
+  transform: scale(1.05) !important;
+}
+.taskbar-btn:not([aria-pressed='true']):hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--color-text) !important;
+}
+
+/* ── Modal close button hover ── */
+.modal-close {
+  transition:
+    background var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo) !important;
+}
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--color-text) !important;
+  transform: rotate(90deg) !important;
+}
+
+/* ── Project links hover ── */
+.project-link {
+  transition:
+    background var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo) !important;
+}
+.project-link:hover {
+  background: var(--color-accent-dim) !important;
+  color: var(--color-text) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+/* ── Tech / skill badge hover ── */
+.tech-badge {
+  transition:
+    border-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo) !important;
+}
+.tech-badge:hover {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 8px oklch(68% 0.2 240 / 0.3) !important;
+}
+
+/* ── Skill badge hover ── */
+.skill-badge {
+  transition:
+    background var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo) !important;
+}
+.skill-badge:hover {
+  background: var(--color-surface) !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 12px oklch(68% 0.2 240 / 0.25) !important;
+}
+
+/* ── Contact form inputs — focus ring ── */
+.contact-input:focus {
+  outline: 2px solid var(--color-accent) !important;
+  outline-offset: 2px !important;
+  border-color: var(--color-accent) !important;
+}
+.contact-input {
+  transition: border-color var(--duration-fast) var(--ease-out-expo) !important;
+}
+
+/* ── Submit button hover ── */
+.contact-submit {
+  transition:
+    opacity var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo) !important;
+}
+.contact-submit:hover {
+  opacity: 0.88 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-glow) !important;
+}

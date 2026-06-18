@@ -32,6 +32,7 @@ export function SkillsOverlay() {
               {group.items.map((skill, i) => (
                 <span
                   key={skill}
+                  className="skill-badge"
                   style={{
                     fontFamily:    'var(--font-mono)',
                     fontSize:      'var(--text-sm)',

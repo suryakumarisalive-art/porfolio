@@ -10,7 +10,7 @@ export type OverlayId = 'projects' | 'resume' | 'about' | 'skills' | 'contact'
 
 export type CameraMode = 'idle' | 'focus' | 'pan' | 'reset'
 
-export type LifecycleState = 'booting' | 'loading' | 'ready' | 'context-lost'
+export type LifecycleState = 'booting' | 'loading' | 'loaded' | 'ready' | 'context-lost'
 
 // Camera target as plain tuples — no Three.js dep in the store layer
 export interface CameraTarget {

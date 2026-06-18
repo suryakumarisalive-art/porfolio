@@ -62,6 +62,7 @@ export function ProjectsOverlay() {
               {project.tech.map((t) => (
                 <span
                   key={t}
+                  className="tech-badge"
                   style={{
                     fontFamily:   'var(--font-mono)',
                     fontSize:     'var(--text-xs)',
@@ -83,6 +84,7 @@ export function ProjectsOverlay() {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="project-link"
                   style={{
                     fontFamily:   'var(--font-mono)',
                     fontSize:     'var(--text-sm)',
@@ -91,6 +93,7 @@ export function ProjectsOverlay() {
                     border:       '1px solid var(--color-accent-dim)',
                     borderRadius: 'var(--radius-sm)',
                     padding:      'var(--space-1) var(--space-3)',
+                    display:      'inline-block',
                   }}
                 >
                   {link.label} ↗

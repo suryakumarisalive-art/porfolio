@@ -77,6 +77,7 @@ export function ContactOverlay() {
               placeholder="Name"
               required
               autoComplete="name"
+              className="contact-input"
               style={INPUT_STYLE}
             />
           </div>
@@ -89,6 +90,7 @@ export function ContactOverlay() {
               placeholder="Email"
               required
               autoComplete="email"
+              className="contact-input"
               style={INPUT_STYLE}
             />
           </div>
@@ -101,6 +103,7 @@ export function ContactOverlay() {
             name="subject"
             type="text"
             placeholder="Subject (optional)"
+            className="contact-input"
             style={INPUT_STYLE}
           />
         </div>
@@ -113,12 +116,14 @@ export function ContactOverlay() {
             placeholder="Message"
             required
             rows={6}
+            className="contact-input"
             style={{ ...INPUT_STYLE, resize: 'vertical', minHeight: 120 }}
           />
         </div>
 
         <button
           type="submit"
+          className="contact-submit"
           style={{
             background:   'var(--color-accent)',
             border:       'none',

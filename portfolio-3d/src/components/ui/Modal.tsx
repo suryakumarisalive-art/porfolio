@@ -105,7 +105,7 @@ export function Modal({ title, children }: ModalProps) {
         position:  'fixed',
         inset:     0,
         zIndex:    'var(--z-overlay)' as never,
-        background: 'oklch(0% 0 0 / 0.7)',
+        background: 'oklch(0% 0 0 / 0.4)',
         display:   'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -159,6 +159,7 @@ export function Modal({ title, children }: ModalProps) {
           <button
             onClick={closeOverlay}
             aria-label="Close"
+            className="modal-close"
             style={{
               background:   'transparent',
               border:       '1px solid var(--color-border)',
