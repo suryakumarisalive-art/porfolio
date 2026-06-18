@@ -5,18 +5,15 @@ import { useEffect, useRef, useState } from 'react'
 import { useLifecycle, useWebglHealthy, usePortfolioStore } from '@/store/usePortfolioStore'
 import { fadeIn, fadeOut } from '@/lib/gsap'
 
-const BOOT_LINES = [
-  { threshold: 0,   text: 'PHOSPHOR OS  v3.1.4  ................  OK' },
-  { threshold: 20,  text: 'Loading geometry  ........................  OK' },
-  { threshold: 50,  text: 'Loading textures  .......................  OK' },
-  { threshold: 80,  text: 'Initializing scene  .....................  OK' },
-]
+// Exact same colour as the 3D canvas background — zero discontinuity on load
+const SCENE_BG = '#c7ccd1'
 
 /**
- * Loading overlay — BIOS-style boot sequence while assets load,
- * then a gated [ENTER] button before the camera intro fires.
+ * Loading overlay — clean, henry-clone style.
+ * Shows name + thin progress bar while assets load,
+ * then a minimal "Enter" button before the camera intro fires.
  *
- * Lifecycle: booting → loading → loaded (show ENTER) → ready (camera intro)
+ * Lifecycle: booting → loading → loaded (show Enter) → ready (camera intro)
  */
 export function CanvasLoader() {
   const { progress, active } = useProgress()
@@ -28,31 +25,25 @@ export function CanvasLoader() {
 
   // Lifecycle transitions
   useEffect(() => {
-    if (active && lifecycle === 'booting') {
-      setLifecycle('loading')
-    }
-    // Pause at 'loaded' — wait for the user to press ENTER
-    if (!active && lifecycle === 'loading') {
-      setLifecycle('loaded')
-    }
+    if (active && lifecycle === 'booting') setLifecycle('loading')
+    if (!active && lifecycle === 'loading') setLifecycle('loaded')
   }, [active, lifecycle, setLifecycle])
 
   // Fade in on mount
   useEffect(() => {
-    fadeIn(rootRef.current, { duration: 0.4 })
+    fadeIn(rootRef.current, { duration: 0.5 })
   }, [])
 
   const isContextLost = !webglHealthy || lifecycle === 'context-lost'
   const isLoaded      = lifecycle === 'loaded' && !isContextLost
 
-  // Once ready, unmount — the GSAP exit animation has already completed
   if (lifecycle === 'ready') return null
 
   const handleEnter = () => {
     if (exiting) return
     setExiting(true)
     fadeOut(rootRef.current, {
-      duration:   0.5,
+      duration:   0.6,
       onComplete: () => setLifecycle('ready'),
     })
   }
@@ -72,16 +63,14 @@ export function CanvasLoader() {
         flexDirection:  'column',
         alignItems:     'center',
         justifyContent: 'center',
-        background:     'var(--color-bg)',
-        fontFamily:     'var(--font-mono)',
-        color:          'var(--color-text)',
+        background:     SCENE_BG,
         opacity:        0,
       }}
     >
       {isContextLost ? (
         <ContextLostView />
       ) : (
-        <BIOSView
+        <MainView
           progress={progress}
           lifecycle={lifecycle}
           isLoaded={isLoaded}
@@ -95,7 +84,7 @@ export function CanvasLoader() {
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
 
-function BIOSView({
+function MainView({
   progress,
   lifecycle,
   isLoaded,
@@ -108,82 +97,88 @@ function BIOSView({
   onEnter: () => void
   exiting: boolean
 }) {
-  const visibleLines = BOOT_LINES.filter((l) => progress >= l.threshold)
-
   return (
-    <div style={{ width: 340, textAlign: 'left' }}>
-      {/* Header */}
-      <p
-        style={{
-          fontSize:      'var(--text-xs)',
-          color:         'var(--color-accent)',
-          marginBottom:  'var(--space-6)',
-          letterSpacing: '0.08em',
-          opacity:       0.6,
-        }}
-      >
-        SURYA.DEV / PORTFOLIO.EXE
-      </p>
-
-      {/* Boot lines */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-        {visibleLines.map((line) => (
-          <p
-            key={line.threshold}
-            style={{
-              fontSize:  'var(--text-xs)',
-              color:     'var(--color-text-muted)',
-              animation: 'bios-line-in 0.3s var(--ease-out-expo) both',
-            }}
-          >
-            {line.text}
-          </p>
-        ))}
+    <div
+      style={{
+        display:       'flex',
+        flexDirection: 'column',
+        alignItems:    'center',
+        gap:           '44px',
+        width:         300,
+        textAlign:     'center',
+      }}
+    >
+      {/* Identity */}
+      <div>
+        <p
+          style={{
+            fontFamily:    'var(--font-mono)',
+            fontSize:      '10px',
+            color:         'rgba(0,0,0,0.38)',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            marginBottom:  '10px',
+          }}
+        >
+          Interactive Portfolio
+        </p>
+        <h1
+          style={{
+            fontFamily:    'var(--font-sans)',
+            fontSize:      '26px',
+            fontWeight:    700,
+            color:         '#111',
+            letterSpacing: '-0.02em',
+            lineHeight:    1,
+          }}
+        >
+          Surya Kumar
+        </h1>
       </div>
 
-      {/* Progress bar — visible while loading */}
+      {/* Progress bar — only while loading, hidden when loaded */}
       {!isLoaded && lifecycle !== 'booting' && (
         <div
           style={{
-            marginTop:    'var(--space-6)',
-            width:        '100%',
+            width:        180,
             height:       1,
-            background:   'var(--color-border)',
-            borderRadius: 'var(--radius-full)',
+            background:   'rgba(0,0,0,0.12)',
+            borderRadius: 999,
             overflow:     'hidden',
           }}
         >
           <div
             style={{
-              height:     '100%',
-              width:      `${progress}%`,
-              background: 'var(--color-accent)',
-              transition: 'width 200ms ease',
+              height:       '100%',
+              width:        `${progress}%`,
+              background:   'rgba(0,0,0,0.5)',
+              borderRadius: 999,
+              transition:   'width 200ms ease',
             }}
           />
         </div>
       )}
 
-      {/* ENTER gate — appears when all assets loaded */}
+      {/* Enter gate — appears when assets finish loading */}
       {isLoaded && !exiting && (
         <button
           onClick={onEnter}
           style={{
-            marginTop:     'var(--space-8)',
             background:    'transparent',
-            border:        '1px solid var(--color-accent)',
-            borderRadius:  'var(--radius-sm)',
-            color:         'var(--color-accent)',
+            border:        '1px solid rgba(0,0,0,0.22)',
+            borderRadius:  '3px',
+            color:         'rgba(0,0,0,0.65)',
             fontFamily:    'var(--font-mono)',
-            fontSize:      'var(--text-sm)',
+            fontSize:      '10px',
             fontWeight:    600,
-            padding:       'var(--space-3) var(--space-6)',
+            padding:       '11px 26px',
             cursor:        'pointer',
-            letterSpacing: '0.1em',
-            animation:     'enter-pulse 1.4s ease-in-out infinite',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            animation:     'enter-pulse 1.6s ease-in-out infinite',
           }}
         >
-          [ ENTER ]
+          Enter
         </button>
       )}
     </div>
@@ -192,20 +187,35 @@ function BIOSView({
 
 function ContextLostView() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-4)' }}>
+    <div
+      style={{
+        display:       'flex',
+        flexDirection: 'column',
+        alignItems:    'center',
+        gap:           '14px',
+      }}
+    >
       <div
         aria-hidden="true"
         style={{
-          width:        32,
-          height:       32,
-          border:       '2px solid var(--color-border)',
-          borderTop:    '2px solid var(--color-accent)',
+          width:        22,
+          height:       22,
+          border:       '1.5px solid rgba(0,0,0,0.12)',
+          borderTop:    '1.5px solid rgba(0,0,0,0.5)',
           borderRadius: '50%',
           animation:    'spin 1s linear infinite',
         }}
       />
-      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)' }}>
-        Reconnecting Render Engine
+      <p
+        style={{
+          fontFamily:    'var(--font-mono)',
+          fontSize:      '10px',
+          color:         'rgba(0,0,0,0.4)',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+        }}
+      >
+        Reconnecting…
       </p>
     </div>
   )

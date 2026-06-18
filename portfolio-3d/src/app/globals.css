@@ -12,7 +12,8 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  background-color: var(--color-bg);
+  /* Match the 3D canvas backdrop — no dark flash before canvas mounts */
+  background-color: #c7ccd1;
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-base);
