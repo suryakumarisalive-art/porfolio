@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 import { CanvasLoader } from '@/components/loaders/CanvasLoader'
 import { UILayer } from '@/components/ui/UILayer'
-import { FilmGrain } from '@/components/atmosphere/FilmGrain'
 import { AccessibilityShadow } from '@/components/a11y/AccessibilityShadow'
 import { usePortfolioActions } from '@/store/usePortfolioStore'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
@@ -45,9 +44,6 @@ export function PortfolioExperience() {
 
       {/* 3D canvas — aria-hidden, a11y shadow handles AT interaction */}
       <CanvasScene />
-
-      {/* Film-grain atmosphere — soft-light over the canvas, below the UI */}
-      <FilmGrain />
 
       {/* 2D UI layer — taskbar, modals, loader overlay */}
       <UILayer />
