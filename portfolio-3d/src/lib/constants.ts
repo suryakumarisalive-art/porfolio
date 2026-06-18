@@ -17,11 +17,16 @@ export const CAMERA_LOOK_AT          = [0, 500, 0] as const
 export const CAMERA_INTRO_DURATION   = 2500
 
 // ─── OrbitControls ───────────────────────────────────────────────────────────
-export const ORBIT_DAMPING    = 0.05
-export const ORBIT_MIN_DIST   = 2600           // stay outside the desk surface
-export const ORBIT_MAX_DIST   = 12000          // keep the desk framed
-export const ORBIT_MIN_POLAR  = 0              // allow looking up
-export const ORBIT_MAX_POLAR  = Math.PI / 2   // no below-floor orbit
+// Henry-clone constrains the orbit to a tight front-facing cone so EVERY angle
+// looks intentional — you can glide left/right/up/down but never swing behind
+// the desk where the bare model backs and the void edges would show.
+export const ORBIT_DAMPING    = 0.08            // slightly heavier = smoother glide
+export const ORBIT_MIN_DIST   = 4000            // can't push inside the desk
+export const ORBIT_MAX_DIST   = 7200            // can't pull back into the void
+export const ORBIT_MIN_POLAR  = 0.92            // ~53° — look down at the desk
+export const ORBIT_MAX_POLAR  = 1.52            // ~87° — near eye level, never under the floor
+export const ORBIT_MIN_AZIMUTH = -0.78          // ~-45° — left limit
+export const ORBIT_MAX_AZIMUTH = 0.78           // ~+45° — right limit
 
 // ─── Exponential-decay lerp factors (per second; delta is in seconds) ─────────
 // Formula: factor = 1 - e^(-decay * delta)

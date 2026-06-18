@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useThree } from '@react-three/fiber'
 import { CanvasTexture } from 'three'
+import * as THREE from 'three'
 import { PROJECTS } from '@/content/projects'
 
 const SCREEN_POS: [number, number, number] = [0, 950, 255]
@@ -49,10 +50,20 @@ export function MonitorScreen() {
 
   if (!texture) return null
 
+  // depthTest stays ON so the CRT housing occludes the screen from behind/side
+  // (no bleed-through when orbiting). polygonOffset pulls it slightly toward the
+  // camera in the depth buffer to avoid z-fighting with the baked screen surface.
+  // FrontSide means it's invisible from the back, never mirrored.
   return (
-    <mesh position={SCREEN_POS} rotation={SCREEN_ROT} renderOrder={1}>
+    <mesh position={SCREEN_POS} rotation={SCREEN_ROT}>
       <planeGeometry args={[PLANE_W, PLANE_H]} />
-      <meshBasicMaterial map={texture} depthTest={false} />
+      <meshBasicMaterial
+        map={texture}
+        side={THREE.FrontSide}
+        polygonOffset
+        polygonOffsetFactor={-4}
+        polygonOffsetUnits={-4}
+      />
     </mesh>
   )
 }

@@ -11,6 +11,8 @@ import {
   ORBIT_MAX_DIST,
   ORBIT_MIN_POLAR,
   ORBIT_MAX_POLAR,
+  ORBIT_MIN_AZIMUTH,
+  ORBIT_MAX_AZIMUTH,
   CAMERA_LOOK_AT,
   CAMERA_INTRO_LOOKAT,
 } from '@/lib/constants'
@@ -154,10 +156,15 @@ export function CameraRig() {
       makeDefault
       enableDamping
       dampingFactor={ORBIT_DAMPING}
+      enablePan={false}
+      rotateSpeed={0.6}
+      zoomSpeed={0.6}
       minDistance={ORBIT_MIN_DIST}
       maxDistance={ORBIT_MAX_DIST}
       minPolarAngle={ORBIT_MIN_POLAR}
       maxPolarAngle={ORBIT_MAX_POLAR}
+      minAzimuthAngle={ORBIT_MIN_AZIMUTH}
+      maxAzimuthAngle={ORBIT_MAX_AZIMUTH}
       target={new THREE.Vector3(CAMERA_LOOK_AT[0], CAMERA_LOOK_AT[1], CAMERA_LOOK_AT[2])}
     />
   )
