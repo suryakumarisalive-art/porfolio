@@ -50,6 +50,13 @@ const APPS = {
     defaultPos: { x: 440, y: 80  },
     defaultSize:{ w: 480, h: 400 },
   },
+  achievements: {
+    id:       'achievements',
+    title:    'Achievements',
+    templateId: 'tpl-achievements',
+    defaultPos: { x: 360, y: 120 },
+    defaultSize:{ w: 460, h: 400 },
+  },
 };
 
 /* ============================================================
