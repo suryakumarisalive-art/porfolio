@@ -1,28 +1,33 @@
 import { RoomShell } from './RoomShell'
+import { DeskFurniture } from './DeskFurniture'
+import { Decor } from './Decor'
 import { Monitor } from './Monitor'
-import { MonitorScreen } from './MonitorScreen'
 import { Laptop } from './Laptop'
 import { Desk } from './Desk'
 import { BookShelf } from './BookShelf'
 import { Phone } from './Phone'
 
 /**
- * Composes the entire room scene graph.
- * Object transforms here must match OBJECT_POSITIONS + CAMERA_PRESETS
- * so zoom-to-focus aims correctly.
+ * The entire room scene graph — all real-time PBR, zero baked textures.
  *
- * This is the single place to adjust world layout; the interactive objects
- * read their position from OBJECT_POSITIONS (constants.ts) which this
- * component passes through InteractiveObject → position prop.
+ * Static layer:   RoomShell (floor/walls), DeskFurniture, Decor (lamp/plant/…)
+ * Interactive:    Monitor, Laptop, Desk(notebook), BookShelf(books), Phone
+ *
+ * Interactive object positions come from OBJECT_POSITIONS (constants.ts) and
+ * their camera focus targets from CAMERA_PRESETS (store) — keep them in sync.
  */
 export function RoomGroup() {
   return (
     <group>
+      {/* Static set */}
       <RoomShell />
-      <Desk />
+      <DeskFurniture />
+      <Decor />
+
+      {/* Interactive props */}
       <Monitor />
-      <MonitorScreen />
       <Laptop />
+      <Desk />
       <BookShelf />
       <Phone />
     </group>

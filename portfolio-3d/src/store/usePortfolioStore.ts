@@ -20,34 +20,36 @@ export interface CameraTarget {
 
 // ─── Camera presets (single source of truth) ──────────────────────────────────
 
-// All positions are in the henry-clone 900-unit world coordinate space.
+// All positions are in REAL-WORLD METRES (see lib/constants.ts).
 export const CAMERA_PRESETS = {
   default: {
-    // Home framing — monitor centred, keyboard foreground (henry orbitControlsStart)
-    position: [0, 1800, 5500] as const,
-    lookAt:   [0, 500,  0]    as const,
+    // Home framing — three-quarter view of the desk, monitor as focal point.
+    // Pulled back + slightly lower so the whole desk breathes in frame and the
+    // laptop on the right is never clipped.
+    position: [0, 1.40, 2.45] as const,
+    lookAt:   [0, 1.02, -1.15] as const,
   },
   monitor: {
-    // Fly in to screen — exact from henry-clone Camera.js
-    position: [0, 950, 2000] as const,
-    lookAt:   [0, 950, 0]    as const,
+    // Fly close to the screen to read it
+    position: [0, 1.18, -0.30] as const,
+    lookAt:   [0, 1.18, -1.40] as const,
   },
   laptop: {
-    position: [-500, 800, 2500] as const,
-    lookAt:   [-200, 500, 0]    as const,
+    position: [0.72, 1.12, -0.05] as const,
+    lookAt:   [0.72, 0.82, -0.82] as const,
   },
   desk: {
-    // Desk framing — exact from henry-clone Camera.js orbitControlsStart
-    position: [0, 1800, 5500] as const,
-    lookAt:   [0, 500,  0]    as const,
+    // Pull back slightly, look down at the whole desk surface
+    position: [0, 1.62, 1.35] as const,
+    lookAt:   [0, 0.82, -1.00] as const,
   },
   bookshelf: {
-    position: [-3000, 2000, 4000] as const,
-    lookAt:   [-1500, 1000, 0]    as const,
+    position: [-0.62, 1.18, -0.10] as const,
+    lookAt:   [-0.62, 0.86, -1.02] as const,
   },
   phone: {
-    position: [1500, 1000, 2800] as const,
-    lookAt:   [600,  600,  0]    as const,
+    position: [0.42, 1.05, -0.05] as const,
+    lookAt:   [0.42, 0.78, -0.80] as const,
   },
 } satisfies Record<string, CameraTarget>
 

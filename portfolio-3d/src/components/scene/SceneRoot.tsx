@@ -1,17 +1,17 @@
 import { Suspense, useEffect } from 'react'
 import { useThree } from '@react-three/fiber'
+import { ContactShadows } from '@react-three/drei'
 import { Lighting } from './Lighting'
 import { CameraRig } from './CameraRig'
+import { SceneEnvironment } from './SceneEnvironment'
 import { PostProcessing } from './PostProcessing'
 import { ShaderWarmup } from './ShaderWarmup'
 import { RoomGroup } from '@/components/room/RoomGroup'
 
-// Neutral studio grey — calm backdrop the dark desk and CRT read against.
-// Fog dissolves the far edges of the baked environment so there is no hard
-// floating-plane horizon when the camera follows the mouse.
-const BACKDROP_COLOR = '#c7ccd1'
-const FOG_NEAR       = 8500
-const FOG_FAR        = 19000
+// Warm neutral studio backdrop, just darker than the plaster walls so the room
+// reads as a lit volume rather than a cut-out. Fog is intentionally absent —
+// the room is enclosed, so there is no far horizon to dissolve.
+const BACKDROP_COLOR = '#0e0d12'
 
 /**
  * Calls `invalidate()` on every pointermove so the mouse-follow camera stays
@@ -34,20 +34,31 @@ export function SceneRoot() {
   return (
     <>
       <color attach="background" args={[BACKDROP_COLOR]} />
-      <fog attach="fog" args={[BACKDROP_COLOR, FOG_NEAR, FOG_FAR]} />
 
       <MouseTracker />
       <Lighting />
       <CameraRig />
 
-      {/* null fallback — CanvasLoader lives in UILayer as an HTML overlay */}
       <Suspense fallback={null}>
+        <SceneEnvironment />
         <RoomGroup />
-        {/* Warmup sits inside Suspense so it runs only after all assets resolve */}
+
+        {/* Soft contact shadow pool under the desk — baked once (frames=1) */}
+        <ContactShadows
+          position={[0, 0.001, -0.9]}
+          scale={4}
+          resolution={1024}
+          blur={2.4}
+          opacity={0.42}
+          far={2}
+          frames={1}
+          color="#1a1410"
+        />
+
         <ShaderWarmup />
       </Suspense>
 
-      {/* Post-processing — SMAA anti-aliasing + CRT bloom */}
+      {/* Post-processing — SMAA + bloom */}
       <PostProcessing />
     </>
   )

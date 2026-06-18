@@ -26,6 +26,9 @@ importers:
       next:
         specifier: 15.5.19
         version: 15.5.19(@playwright/test@1.61.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      postprocessing:
+        specifier: ^6.39.1
+        version: 6.39.1(three@0.184.0)
       react:
         specifier: ^19.2.7
         version: 19.2.7

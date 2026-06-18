@@ -4,19 +4,25 @@ import { useEffect, useRef, useState } from 'react'
 import { useThree } from '@react-three/fiber'
 import { CanvasTexture } from 'three'
 import * as THREE from 'three'
-import { PROJECTS } from '@/content/projects'
 
-const SCREEN_POS: [number, number, number] = [0, 950, 255]
-const SCREEN_ROT: [number, number, number] = [-3 * (Math.PI / 180), 0, 0]
-const PLANE_W = 1280
-const PLANE_H = 1024
-const TEX_W   = 512
-const TEX_H   = 400
+// Local coords — placed by the parent Monitor group. Screen sits just in front
+// of the bezel, facing +Z (toward the camera).
+const SCREEN_POS: [number, number, number] = [0, 0, 0.013]
+const PLANE_W = 0.60
+const PLANE_H = 0.345
+const TEX_W   = 1024
+const TEX_H   = 590
 
+/**
+ * The monitor's glowing display. A clean, modern portfolio home screen drawn to
+ * a CanvasTexture and shown on an unlit (MeshBasicMaterial) plane so it emits
+ * its own light and the bloom pass picks up the bright accent pixels.
+ *
+ * No CRT scanlines, no grain — a crisp dark UI with a single accent colour.
+ */
 export function MonitorScreen() {
   const [texture, setTexture] = useState<CanvasTexture | null>(null)
   const { invalidate } = useThree()
-  // Stable ref so the interval callback doesn't capture a stale value
   const invalidateRef = useRef(invalidate)
   invalidateRef.current = invalidate
 
@@ -25,21 +31,23 @@ export function MonitorScreen() {
     canvas.width  = TEX_W
     canvas.height = TEX_H
     const tex = new CanvasTexture(canvas)
+    tex.colorSpace = THREE.SRGBColorSpace
+    tex.anisotropy = 8
     let intervalId = 0
 
     document.fonts.ready.then(() => {
-      let cursorOn = true
+      let caretOn = true
       const draw = () => {
-        drawScreen(canvas, cursorOn)
+        drawScreen(canvas, caretOn)
         tex.needsUpdate = true
         invalidateRef.current()
       }
       draw()
       setTexture(tex)
       intervalId = window.setInterval(() => {
-        cursorOn = !cursorOn
+        caretOn = !caretOn
         draw()
-      }, 550)
+      }, 600)
     })
 
     return () => {
@@ -50,130 +58,98 @@ export function MonitorScreen() {
 
   if (!texture) return null
 
-  // depthTest stays ON so the CRT housing occludes the screen from behind/side
-  // (no bleed-through when orbiting). polygonOffset pulls it slightly toward the
-  // camera in the depth buffer to avoid z-fighting with the baked screen surface.
-  // FrontSide means it's invisible from the back, never mirrored.
   return (
-    <mesh position={SCREEN_POS} rotation={SCREEN_ROT}>
+    <mesh position={SCREEN_POS}>
       <planeGeometry args={[PLANE_W, PLANE_H]} />
-      <meshBasicMaterial
-        map={texture}
-        side={THREE.FrontSide}
-        polygonOffset
-        polygonOffsetFactor={-4}
-        polygonOffsetUnits={-4}
-      />
+      {/* Unlit + toneMapped=false → screen glows and triggers bloom */}
+      <meshBasicMaterial map={texture} toneMapped={false} />
     </mesh>
   )
 }
 
-// ─── Canvas renderer ──────────────────────────────────────────────────────────
+// ─── Clean modern screen UI ─────────────────────────────────────────────────────
 
-function drawScreen(canvas: HTMLCanvasElement, cursorOn: boolean) {
+const ACCENT = '#5b8cff'
+
+function drawScreen(canvas: HTMLCanvasElement, caretOn: boolean) {
   const ctx = canvas.getContext('2d')
   if (!ctx) return
   const W = canvas.width
   const H = canvas.height
 
-  // Background
-  ctx.fillStyle = 'rgb(4,10,4)'
+  // Background — deep slate with a subtle top-down gradient
+  const bg = ctx.createLinearGradient(0, 0, 0, H)
+  bg.addColorStop(0, '#141821')
+  bg.addColorStop(1, '#0d1018')
+  ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
 
-  // Title bar
-  ctx.fillStyle = 'rgb(8,14,8)'
-  ctx.fillRect(0, 0, W, 38)
-  ctx.strokeStyle = 'rgba(0,255,65,0.18)'
-  ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(0, 38); ctx.lineTo(W, 38); ctx.stroke()
-
-  // Traffic light dots
-  const dots = [{ x: 18, c: '#ff3b30' }, { x: 34, c: '#ffbb00' }, { x: 50, c: '#00ff41' }]
-  dots.forEach(({ x, c }) => {
+  // Top menu bar
+  ctx.fillStyle = '#1b212e'
+  ctx.fillRect(0, 0, W, 64)
+  // window dots
+  ;['#ff5f57', '#febc2e', '#28c840'].forEach((c, i) => {
     ctx.fillStyle = c
-    ctx.shadowColor = c
-    ctx.shadowBlur = 6
-    ctx.beginPath(); ctx.arc(x, 19, 5.5, 0, Math.PI * 2); ctx.fill()
+    ctx.beginPath(); ctx.arc(36 + i * 30, 32, 8, 0, Math.PI * 2); ctx.fill()
   })
-  ctx.shadowBlur = 0
+  ctx.fillStyle = 'rgba(255,255,255,0.5)'
+  ctx.font = '500 22px system-ui, sans-serif'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('portfolio — home', 150, 33)
 
-  ctx.fillStyle = '#00ff41'
-  ctx.shadowColor = '#00ff41'
-  ctx.shadowBlur = 8
-  ctx.font = 'bold 13px monospace'
-  ctx.fillText('PORTFOLIO.EXE', 66, 25)
-  ctx.shadowBlur = 0
-  ctx.fillStyle = 'rgba(0,255,65,0.45)'
-  ctx.font = '10px monospace'
-  ctx.fillText('[2025]', W - 58, 25)
+  // Hero heading
+  ctx.fillStyle = '#f4f6fb'
+  ctx.font = '700 64px system-ui, sans-serif'
+  ctx.textBaseline = 'alphabetic'
+  ctx.fillText('Surya Kumar', 56, 190)
 
-  // Body — start below title bar
-  let y = 60
-  const line = (text: string, color = '#00ff41', glow = false, size = 11) => {
-    ctx.font = `${size}px monospace`
-    ctx.fillStyle = color
-    ctx.shadowColor = '#00ff41'
-    ctx.shadowBlur = glow ? 8 : 0
-    ctx.fillText(text, 20, y)
-    ctx.shadowBlur = 0
-    y += size + 5
+  ctx.fillStyle = ACCENT
+  ctx.font = '500 30px system-ui, sans-serif'
+  ctx.fillText('Creative Developer', 58, 234)
+
+  // caret
+  if (caretOn) {
+    ctx.fillStyle = ACCENT
+    ctx.fillRect(58 + ctx.measureText('Creative Developer').width + 10, 210, 4, 28)
   }
 
-  line('PHOSPHOR OS  v3.1.4  —  ready', 'rgba(0,255,65,0.45)')
-  line('MEM: 640K OK   CPU: 4.77 MHz', 'rgba(0,255,65,0.45)')
-  line('─────────────────────────────')
-  line('WELCOME,  DEVELOPER.', '#afffbf', true, 12)
-  line('─────────────────────────────')
-
-  y += 6
-  line('RECENT WORK:', 'rgba(0,255,65,0.45)', false, 10)
-  y += 2
-
-  PROJECTS.slice(0, 3).forEach((project, i) => {
-    const rowY = y
-    ctx.font = '10px monospace'
-    ctx.fillStyle = 'rgba(0,255,65,0.45)'
-    ctx.fillText(String(i + 1).padStart(2, '0'), 20, rowY)
-    ctx.font = '11px monospace'
-    ctx.fillStyle = '#00ff41'
-    ctx.shadowColor = '#00ff41'; ctx.shadowBlur = 5
-    ctx.fillText(project.title.toUpperCase().slice(0, 26), 44, rowY)
-    ctx.shadowBlur = 0
-    ctx.fillStyle = 'rgba(0,255,65,0.45)'
-    ctx.font = '10px monospace'
-    ctx.fillText(String(project.year), W - 50, rowY)
-    y += 26
-    // row separator
-    ctx.strokeStyle = 'rgba(0,255,65,0.08)'
-    ctx.lineWidth = 1
-    ctx.beginPath(); ctx.moveTo(20, y - 6); ctx.lineTo(W - 20, y - 6); ctx.stroke()
+  // Project cards row
+  const cards = ['Projects', 'About', 'Contact']
+  const cardW = 270, cardH = 150, gap = 36, startX = 56, startY = 300
+  cards.forEach((label, i) => {
+    const x = startX + i * (cardW + gap)
+    // card surface
+    roundRect(ctx, x, startY, cardW, cardH, 16)
+    ctx.fillStyle = '#1d2433'
+    ctx.fill()
+    // accent top edge
+    roundRect(ctx, x, startY, cardW, 6, 3)
+    ctx.fillStyle = ACCENT
+    ctx.fill()
+    // label
+    ctx.fillStyle = '#dfe5f0'
+    ctx.font = '600 28px system-ui, sans-serif'
+    ctx.fillText(label, x + 24, startY + 56)
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'
+    ctx.font = '400 18px system-ui, sans-serif'
+    ctx.fillText('Open  →', x + 24, startY + 100)
   })
 
-  y += 8
-  line('─────────────────────────────')
-  // Prompt
-  ctx.font = '12px monospace'
-  ctx.fillStyle = '#00ff41'
-  ctx.shadowColor = '#00ff41'; ctx.shadowBlur = 6
-  ctx.fillText('C:\\> ', 20, y)
-  ctx.shadowBlur = 0
-  if (cursorOn) {
-    ctx.fillStyle = '#00ff41'
-    ctx.shadowColor = '#00ff41'; ctx.shadowBlur = 8
-    ctx.fillText('█', 20 + 42, y)
-    ctx.shadowBlur = 0
-  }
+  // Footer status line
+  ctx.fillStyle = 'rgba(255,255,255,0.3)'
+  ctx.font = '400 18px system-ui, sans-serif'
+  ctx.fillText('● online   ·   double-click any object to explore', 56, H - 36)
+}
 
-  // Scanlines
-  ctx.fillStyle = 'rgba(0,0,0,0.25)'
-  for (let sy = 0; sy < H; sy += 4) {
-    ctx.fillRect(0, sy + 3, W, 1)
-  }
-
-  // Vignette
-  const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.72)
-  vg.addColorStop(0, 'transparent')
-  vg.addColorStop(1, 'rgba(0,0,0,0.68)')
-  ctx.fillStyle = vg
-  ctx.fillRect(0, 0, W, H)
+function roundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number, r: number,
+) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.arcTo(x + w, y, x + w, y + h, r)
+  ctx.arcTo(x + w, y + h, x, y + h, r)
+  ctx.arcTo(x, y + h, x, y, r)
+  ctx.arcTo(x, y, x + w, y, r)
+  ctx.closePath()
 }

@@ -1,6 +1,5 @@
 'use client'
 
-import { useProgress } from '@react-three/drei'
 import { useEffect, useRef, useState } from 'react'
 import { useLifecycle, useWebglHealthy, usePortfolioStore } from '@/store/usePortfolioStore'
 import { fadeIn, fadeOut } from '@/lib/gsap'
@@ -8,50 +7,51 @@ import { fadeIn, fadeOut } from '@/lib/gsap'
 const OWNER = 'Surya Kumar'
 const YEAR  = '2025'
 
-// ─── Boot sequence lines ──────────────────────────────────────────────────────
-// Each line appears when `progress` crosses its threshold. The last line
-// ("Scene ready") only appears once `active === false` (all assets resolved).
+// Boot lines revealed in sequence. The scene compiles shaders (ShaderWarmup)
+// during this window, so by the time START is clickable the first real frame
+// is already warm — no compile hitch, no pop-in.
 const BOOT_LINES = [
-  { threshold: 0,  label: 'Initialising render engine' },
-  { threshold: 20, label: 'Loading scene geometry' },
-  { threshold: 55, label: 'Loading surface textures' },
-  { threshold: 82, label: 'Compiling shaders' },
+  'Initialising render engine',
+  'Building scene geometry',
+  'Calibrating lighting',
+  'Compiling shaders',
 ] as const
 
+const LINE_INTERVAL_MS = 260   // gap between each boot line
+const SETTLE_MS        = 320   // pause after last line before START appears
+
 /**
- * Full-screen loading overlay that matches the henry-clone aesthetic exactly:
- * pure-black background, white-bordered terminal box, monospace font.
+ * Premium boot overlay: pure-black, white-bordered terminal box, monospace.
+ * Reveals BIOS-style status lines one by one, then a START button. Fades out
+ * smoothly into the scene (the camera intro fly-in begins on START).
  *
- * The loading sequence shows BIOS-style lines one by one as assets load,
- * then reveals a pulsing START button once everything is ready.
- *
- * Lifecycle: booting → loading → loaded (START button) → ready (camera intro)
+ * Lifecycle: booting → (timed reveal) → loaded (START) → ready (camera intro)
  */
 export function CanvasLoader() {
-  const { progress, active } = useProgress()
   const lifecycle    = useLifecycle()
   const webglHealthy = useWebglHealthy()
   const setLifecycle = usePortfolioStore((s) => s.setLifecycle)
   const rootRef      = useRef<HTMLDivElement>(null)
-  const [exiting, setExiting] = useState(false)
+  const [exiting, setExiting]   = useState(false)
+  const [shownCount, setShownCount] = useState(1)
 
-  // Boot lines that are visible so far — append-only, never shrinks
-  const [shownLines, setShownLines] = useState<number[]>([0])
-
+  // Timed boot sequence — reveal each line, then mark loaded
   useEffect(() => {
-    if (active && lifecycle === 'booting') setLifecycle('loading')
-    if (!active && lifecycle === 'loading') setLifecycle('loaded')
-  }, [active, lifecycle, setLifecycle])
+    if (lifecycle !== 'booting') return
+    const timers: ReturnType<typeof setTimeout>[] = []
 
-  // Reveal boot lines as progress crosses each threshold
-  useEffect(() => {
-    const toShow = BOOT_LINES
-      .map((_, i) => i)
-      .filter(i => progress >= (BOOT_LINES[i]?.threshold ?? 0) && !shownLines.includes(i))
-    if (toShow.length > 0) setShownLines(prev => [...prev, ...toShow])
-  // intentionally excludes shownLines to avoid re-triggering on its own update
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [progress])
+    for (let i = 1; i < BOOT_LINES.length; i++) {
+      timers.push(setTimeout(() => setShownCount(i + 1), LINE_INTERVAL_MS * i))
+    }
+    timers.push(
+      setTimeout(
+        () => setLifecycle('loaded'),
+        LINE_INTERVAL_MS * BOOT_LINES.length + SETTLE_MS,
+      ),
+    )
+
+    return () => timers.forEach(clearTimeout)
+  }, [lifecycle, setLifecycle])
 
   useEffect(() => {
     fadeIn(rootRef.current, { duration: 0.4 })
@@ -89,39 +89,23 @@ export function CanvasLoader() {
         opacity:        0,
       }}
     >
-      {/* ── Terminal box ──────────────────────────────────────────────────── */}
       <div style={BOX_STYLE}>
-
         {isContextLost ? (
           <p style={LINE_STYLE}>Reconnecting render engine…</p>
         ) : (
           <>
-            {/* Header */}
             <p style={{ ...LINE_STYLE, opacity: 0.5, marginBottom: 2 }}>
-              {OWNER.toUpperCase()}  PORTFOLIO OS  {YEAR}
+              {OWNER.toUpperCase()}  ·  PORTFOLIO  {YEAR}
             </p>
             <div style={DIVIDER_STYLE} />
 
-            {/* Boot lines */}
             <div style={{ marginTop: 6 }}>
-              {BOOT_LINES.map((line, i) =>
-                shownLines.includes(i) ? (
-                  <BootLine key={i} label={line.label} />
-                ) : null
-              )}
-
-              {/* "Scene ready" appears once loading is done */}
+              {BOOT_LINES.slice(0, shownCount).map((label, i) => (
+                <BootLine key={i} label={label} />
+              ))}
               {isLoaded && <BootLine label="Scene ready" final />}
             </div>
 
-            {/* Progress indicator while still loading */}
-            {!isLoaded && (
-              <p style={{ ...LINE_STYLE, opacity: 0.35, marginTop: 10, fontSize: '11px' }}>
-                {Math.round(progress)}%
-              </p>
-            )}
-
-            {/* START button — only when fully loaded */}
             {isLoaded && (
               <>
                 <div style={DIVIDER_STYLE} />
@@ -148,21 +132,21 @@ export function CanvasLoader() {
 // ─── BootLine ─────────────────────────────────────────────────────────────────
 
 function BootLine({ label, final = false }: { label: string; final?: boolean }) {
-  const dots = '.'.repeat(Math.max(2, 38 - label.length))
+  const dots = '.'.repeat(Math.max(2, 36 - label.length))
   return (
     <p
       style={{
         ...LINE_STYLE,
-        fontSize:     '12px',
-        lineHeight:   1.9,
-        animation:    'bios-line-in 0.25s var(--ease-out-expo) both',
-        color:        final ? '#afffbf' : '#fff',
+        fontSize:   '12px',
+        lineHeight: 1.9,
+        animation:  'bios-line-in 0.25s var(--ease-out-expo) both',
+        color:      final ? '#9affc4' : '#fff',
       }}
     >
       <span style={{ opacity: 0.45 }}>{'> '}</span>
       {label}
       <span style={{ opacity: 0.22 }}>{dots}</span>
-      <span style={{ opacity: 0.7, color: final ? '#afffbf' : '#fff' }}> OK</span>
+      <span style={{ opacity: 0.7 }}> OK</span>
     </p>
   )
 }

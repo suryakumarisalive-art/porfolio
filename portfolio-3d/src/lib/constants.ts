@@ -1,67 +1,53 @@
 // All magic numbers — import from here, never inline.
-// Coordinate space: henry-clone scene scaled at 900 world units.
+// Coordinate space: REAL-WORLD METERS. Y up. Camera looks toward -Z.
+// 1 unit = 1 metre. Desk surface sits at y=0.75 (standard desk height).
 
 // ─── Camera ───────────────────────────────────────────────────────────────────
-export const CAMERA_FOV              = 35        // matches henry-clone reference
-export const CAMERA_NEAR             = 10        // min distance before clipping
-export const CAMERA_FAR              = 900_000   // far clip for 900-unit world
+export const CAMERA_FOV  = 38
+export const CAMERA_NEAR = 0.05
+export const CAMERA_FAR  = 100
 
-// Intro vantage — camera spawns here and sweeps in (henry "loading" keyframe)
-export const CAMERA_INITIAL_POSITION = [-35000, 35000, 35000] as const
-export const CAMERA_INTRO_LOOKAT     = [0, -5000, 0]          as const
+// Intro vantage — camera spawns here and sweeps in (cinematic establishing shot)
+export const CAMERA_INITIAL_POSITION = [-3.4, 3.2, 4.8] as const
+export const CAMERA_INTRO_LOOKAT     = [0, 0.85, -1.15] as const
 
-// Home framing — where the intro lands + OrbitControls target (henry "orbitControlsStart")
-export const CAMERA_LOOK_AT          = [0, 500, 0] as const
+// Home framing — where the intro lands; the resting "desk" composition
+export const CAMERA_LOOK_AT          = [0, 1.0, -1.15] as const
 
-// Intro sweep duration (ms) — cinematic ease, matches henry's 2.5s animateIn
-export const CAMERA_INTRO_DURATION   = 2500
-
-// ─── OrbitControls ───────────────────────────────────────────────────────────
-// Henry-clone constrains the orbit to a tight front-facing cone so EVERY angle
-// looks intentional — you can glide left/right/up/down but never swing behind
-// the desk where the bare model backs and the void edges would show.
-export const ORBIT_DAMPING    = 0.08            // slightly heavier = smoother glide
-export const ORBIT_MIN_DIST   = 4000            // can't push inside the desk
-export const ORBIT_MAX_DIST   = 7200            // can't pull back into the void
-export const ORBIT_MIN_POLAR  = 0.92            // ~53° — look down at the desk
-export const ORBIT_MAX_POLAR  = 1.52            // ~87° — near eye level, never under the floor
-export const ORBIT_MIN_AZIMUTH = -0.78          // ~-45° — left limit
-export const ORBIT_MAX_AZIMUTH = 0.78           // ~+45° — right limit
+// Intro sweep duration (ms)
+export const CAMERA_INTRO_DURATION   = 2600
 
 // ─── Exponential-decay lerp factors (per second; delta is in seconds) ─────────
-// Formula: factor = 1 - e^(-decay * delta)
-export const LERP_DECAY_CAMERA = 3   // camera position / lookAt — cinematic ease-out glide
-export const LERP_DECAY_HOVER  = 10  // hover scale snap speed
+export const LERP_DECAY_CAMERA = 3
+export const LERP_DECAY_HOVER  = 12
 
-// ─── Settle epsilon — stop calling invalidate when camera is this close ────────
-// In a ~30 000-unit travel range, 1 unit is imperceptibly small.
-export const CAMERA_SETTLE_EPSILON = 1.0
+// ─── Settle epsilon — stop calling invalidate when camera is this close ───────
+export const CAMERA_SETTLE_EPSILON = 0.0005
 
 // ─── Hover interaction ────────────────────────────────────────────────────────
-export const HOVER_SCALE              = 1.05
+export const HOVER_SCALE              = 1.04
 export const BASE_SCALE               = 1.0
-export const EMISSION_INTENSITY_HOVER = 0.6
+export const EMISSION_INTENSITY_HOVER = 0.5
 export const EMISSION_INTENSITY_BASE  = 0.0
 
 // ─── Performance budget limits ────────────────────────────────────────────────
-export const MAX_DRAW_CALLS = 100
-export const MAX_TRIANGLES  = 500_000
+export const MAX_DRAW_CALLS = 120
+export const MAX_TRIANGLES  = 400_000
 export const MAX_GPU_MB     = 200
 
-// ─── Lighting ─────────────────────────────────────────────────────────────────
-// Baked models use MeshBasicMaterial — no PBR lighting.
-// Ambient is kept in case any standard-material objects are added later.
-export const AMBIENT_INTENSITY     = 0.6
-export const DIRECTIONAL_INTENSITY = 0     // unused for baked scene
-export const SHADOW_MAP_SIZE       = 1024
+// ─── Lighting (real-time PBR) ─────────────────────────────────────────────────
+export const HEMI_INTENSITY   = 0.40   // sky/ground ambient bounce (lower = more contrast)
+export const KEY_INTENSITY    = 2.8    // primary directional key light
+export const FILL_INTENSITY   = 0.55   // cool fill from opposite side
+export const LAMP_INTENSITY   = 6.0    // warm desk-lamp point light
+export const SHADOW_MAP_SIZE  = 2048
 
-// ─── Room object hotspot positions (900-unit world) ───────────────────────────
-// Approximate world-space centres of each interactive area.
-// The visual geometry comes from the baked GLBs; these drive invisible click planes.
+// ─── Interactive hotspot positions (metres) ───────────────────────────────────
+// World-space centres of each interactive object — drive camera focus + labels.
 export const OBJECT_POSITIONS = {
-  monitor:   [0,     950,  255] as const,  // monitor screen centre — exact from henry-clone
-  laptop:    [0,     500,  800] as const,  // keyboard / trackpad area
-  desk:      [0,     300, 1400] as const,  // desk surface midpoint
-  bookshelf: [-2000, 1400,   0] as const,  // left-side shelf unit (estimate)
-  phone:     [700,   600,  700] as const,  // phone on desk right (estimate)
+  monitor:   [0,     1.18, -1.40] as const,  // monitor screen centre
+  laptop:    [0.72,  0.80, -0.82] as const,  // open laptop on desk right
+  desk:      [0,     0.75, -1.00] as const,  // desk surface midpoint
+  bookshelf: [-0.62, 0.86, -1.02] as const,  // stacked books left
+  phone:     [0.42,  0.78, -0.80] as const,  // phone flat on desk
 } satisfies Record<string, readonly [number, number, number]>

@@ -1,78 +1,64 @@
 'use client'
 
-import { useGLTF, useTexture } from '@react-three/drei'
-import { useThree } from '@react-three/fiber'
-import { MeshBasicMaterial, SRGBColorSpace, LinearMipmapLinearFilter, LinearFilter } from 'three'
-import * as THREE from 'three'
-import { useMemo } from 'react'
-
-// ─── Baked model sources ──────────────────────────────────────────────────────
-const SOURCES = [
-  { glb: '/models/World/environment.glb',       tex: '/models/World/baked_environment.jpg' },
-  { glb: '/models/Computer/computer_setup.glb', tex: '/models/Computer/baked_computer.jpg' },
-  { glb: '/models/Decor/decor.glb',             tex: '/models/Decor/baked_decor_modified.jpg' },
-] as const
-
-// Preload GLBs AND textures simultaneously — both start fetching the moment
-// this module is imported, so the Suspense boundary resolves with everything
-// already in cache. Textures that aren't preloaded cause a visible pop-in
-// because useLoader() inside a component only starts fetching on first render.
-SOURCES.forEach(({ glb, tex }) => {
-  useGLTF.preload(glb)
-  useTexture.preload(tex)
-})
-
-// ─── Single baked model ───────────────────────────────────────────────────────
-
-interface BakedModelProps {
-  glb: string
-  tex: string
-}
-
-function BakedModel({ glb, tex }: BakedModelProps) {
-  const { scene }  = useGLTF(glb)
-  const texture    = useTexture(tex)
-  const { gl }     = useThree()
-
-  useMemo(() => {
-    // Texture space
-    texture.flipY      = false
-    texture.colorSpace = SRGBColorSpace
-
-    // Filtering — critical for quality:
-    //   LinearMipmapLinear (trilinear) eliminates shimmer on distant surfaces.
-    //   Anisotropy removes the blurring you'd see on surfaces at oblique angles
-    //   (floor, desk top, side walls). getMaxAnisotropy() returns 16 on most
-    //   modern GPUs; Three.js clamps it safely if the device is weaker.
-    texture.minFilter  = LinearMipmapLinearFilter
-    texture.magFilter  = LinearFilter
-    texture.anisotropy = gl.capabilities.getMaxAnisotropy()
-    texture.needsUpdate = true
-
-    const mat = new MeshBasicMaterial({ map: texture })
-
-    scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        (child as THREE.Mesh).material = mat
-      }
-    })
-  }, [scene, texture, gl])
-
-  return <primitive object={scene} scale={900} />
-}
-
-// ─── Room shell ───────────────────────────────────────────────────────────────
-
 /**
- * Loads and renders the three henry-clone baked GLBs as the static room visual.
- * All interactive behaviour lives in sibling hotspot components.
+ * Procedural room — a warm, minimalist studio built from clean PBR primitives.
+ * NO baked textures: every surface is a real-time MeshStandardMaterial, so
+ * there is zero baked noise and nothing to pop in.
+ *
+ * Composition: a soft plaster back wall + side wall meeting at a corner behind
+ * the desk, a matte oak floor, and a simple skirting board for grounding. The
+ * neutral warm palette lets the monitor's glow and the lamp read as focal
+ * points.
  */
+
+const FLOOR_Y = 0
+const WALL_Z  = -2.0    // back wall
+const WALL_X  = -2.6    // left wall
+const WALL_H  = 3.2
+
 export function RoomShell() {
   return (
     <group>
-      {SOURCES.map(({ glb, tex }) => (
-        <BakedModel key={glb} glb={glb} tex={tex} />
-      ))}
+      {/* ── Floor — warm matte oak ─────────────────────────────────────────── */}
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, FLOOR_Y, 0]}
+        receiveShadow
+      >
+        <planeGeometry args={[14, 14]} />
+        <meshStandardMaterial color="#b9986b" roughness={0.72} metalness={0} />
+      </mesh>
+
+      {/* ── Back wall — soft plaster ───────────────────────────────────────── */}
+      <mesh position={[0, WALL_H / 2, WALL_Z]} receiveShadow>
+        <planeGeometry args={[14, WALL_H]} />
+        <meshStandardMaterial color="#e8e2d8" roughness={0.95} metalness={0} />
+      </mesh>
+
+      {/* ── Left wall ──────────────────────────────────────────────────────── */}
+      <mesh
+        position={[WALL_X, WALL_H / 2, 0]}
+        rotation={[0, Math.PI / 2, 0]}
+        receiveShadow
+      >
+        <planeGeometry args={[14, WALL_H]} />
+        <meshStandardMaterial color="#ded7cb" roughness={0.95} metalness={0} />
+      </mesh>
+
+      {/* ── Skirting boards — ground the walls to the floor ────────────────── */}
+      <mesh position={[0, 0.05, WALL_Z + 0.01]} receiveShadow castShadow>
+        <boxGeometry args={[14, 0.1, 0.03]} />
+        <meshStandardMaterial color="#f2ede4" roughness={0.6} metalness={0} />
+      </mesh>
+      <mesh
+        position={[WALL_X + 0.01, 0.05, 0]}
+        rotation={[0, Math.PI / 2, 0]}
+        receiveShadow
+        castShadow
+      >
+        <boxGeometry args={[14, 0.1, 0.03]} />
+        <meshStandardMaterial color="#f2ede4" roughness={0.6} metalness={0} />
+      </mesh>
     </group>
   )
 }

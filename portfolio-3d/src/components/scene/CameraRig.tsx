@@ -21,10 +21,10 @@ const _homeLookAt         = new THREE.Vector3(
 // Henry-clone mouse-follow ranges (world units from the home position).
 // Kept deliberately SMALL so the monitor stays framed head-on — you never
 // drift far enough to see over the top or around the back of the CRT.
-const MOUSE_RANGE_X    = 160
-const MOUSE_RANGE_Y    = 40
+const MOUSE_RANGE_X    = 0.16
+const MOUSE_RANGE_Y    = 0.09
 // Exponential-decay lerp factor — controls how dreamily the camera follows the mouse
-const MOUSE_LERP_DECAY = 3.5
+const MOUSE_LERP_DECAY = 3.0
 
 /**
  * Camera authority — no OrbitControls.
