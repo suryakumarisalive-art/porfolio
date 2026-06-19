@@ -91,17 +91,6 @@
     content="CS (AI) student at APU Malaysia with 4+ years building web apps, Android apps, and AI-integrated SaaS. 1,000+ Google Play downloads.">
 
   <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
-
-  <script>
-    // Redirect mobile / no-WebGL users to the mobile portfolio page
-    var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
-      || window.innerWidth < 768
-      || ('ontouchstart' in window && window.innerWidth < 1024);
-    if (isMobile) {
-      var base = location.pathname.replace(/[^/]*$/, '');
-      location.replace(base + 'mobile.html');
-    }
-  </script>
 </head>
 
 <body>
