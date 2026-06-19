@@ -6,6 +6,9 @@
         "build": "webpack --config ./bundler/webpack.prod.js",
         "dev": "webpack serve --config ./bundler/webpack.dev.js"
     },
+    "engines": {
+        "node": "18.x"
+    },
     "dependencies": {
         "@babel/core": "^7.16.12",
         "@babel/preset-env": "^7.16.11",
