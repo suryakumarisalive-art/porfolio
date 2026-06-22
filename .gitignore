@@ -5,8 +5,12 @@
 dist/
 node_modules/
 
-# Local screenshots
+# Local screenshots & video exports
 *.png
+*.mp4
+*.webm
+video-raw/
+screenshots/
 !henry-clone/public/**/*.png
 # 3D portfolio static assets are real assets, not screenshots
 !portfolio-website/static/**/*.png
