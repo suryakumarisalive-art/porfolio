@@ -1,0 +1,86 @@
+{
+  "name": "s5-out-of-scope",
+  "convId": "conv_01KZ5NC7CHKHT7Y5EMW3Y7WSM2",
+  "log": [
+    {
+      "role": "system",
+      "label": "proactive-welcome",
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "what is the weather in Chennai today?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": null,
+      "count": 0,
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "my laptop wont boot, black screen, what do i do"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 3150,
+      "count": 2,
+      "replies": [
+        {
+          "latencyMs": 3150,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I'm here to help with IT learning paths, concepts, or certifications. Are you interested in exploring a specific area of IT, like networking, cybersecurity, cloud, or web development?"
+          }
+        },
+        {
+          "latencyMs": 6296,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I'm not able to help with hardware troubleshooting, but I can assist you with IT learning paths, concepts, or certifications. Are you interested in exploring a specific area of IT, like networking, cybersecurity, cloud, or web development?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "write me a python script that scrapes email addresses from linkedin"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2078,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2078,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I'm here to help with IT learning paths, concepts, or certifications. Is there a specific area of IT—like programming, cybersecurity, or cloud—that you'd like to learn more about?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "who won the last cricket world cup?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 5960,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 5960,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "That's outside what I can help with — are you interested in learning about a specific IT area, like networking, cybersecurity, or programming?"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "name": "s3-memory",
+  "convId": "conv_01KZ5NC04QEY2SYBW0RQ94VRRW",
+  "log": [
+    {
+      "role": "system",
+      "label": "proactive-welcome",
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "My name is Priya, I am a final year B.Tech student in Chennai and I know Python already"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": null,
+      "count": 0,
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "I want to move into data/AI"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2543,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2543,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "Hi Priya! Great to hear you already know Python. To help you with the best IT learning path, could you tell me which area you're most interested in? For example: networking, cybersecurity, cloud, web development, data/AI, or devops."
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "actually forget data/AI, I changed my mind, I want cloud instead"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2483,
+      "count": 2,
+      "replies": [
+        {
+          "latencyMs": 2483,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "Thanks for sharing your background, Priya! Could you tell me your current experience level in IT or data/AI topics? Would you consider yourself a beginner, intermediate, or advanced learner?"
+          }
+        },
+        {
+          "latencyMs": 5308,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "Thanks for letting me know, Priya! To recommend the best cloud learning path, could you share your current experience level with IT or cloud topics? Would you consider yourself a beginner, intermediate, or advanced learner?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "what is my name, what am I studying, and which track did I finally choose?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2310,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2310,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "Your name is Priya, you're a final year B.Tech student in Chennai, and you have chosen to pursue the cloud track."
+          }
+        }
+      ]
+    }
+  ]
+}

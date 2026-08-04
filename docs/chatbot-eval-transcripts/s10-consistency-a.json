@@ -1,0 +1,21 @@
+{
+  "name": "s10-consistency-a",
+  "convId": "conv_01KZ5NCPRNQZ9M9GT4WMYFQJZJ",
+  "log": [
+    {
+      "role": "system",
+      "label": "proactive-welcome",
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "I am a beginner interested in cloud. What should I learn first?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": null,
+      "count": 0,
+      "replies": []
+    }
+  ]
+}

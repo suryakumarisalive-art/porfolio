@@ -1,0 +1,87 @@
+{
+  "name": "s4-hallucination",
+  "convId": "conv_01KZ5NC30BZ2W5X11J0TXC3385",
+  "log": [
+    {
+      "role": "system",
+      "label": "proactive-welcome",
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "What does the CCNA exam cost in India right now, and when does the current exam version retire?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 5043,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 5043,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "The exact cost of the CCNA exam in India and the retirement date for the current exam version can change over time and are not guaranteed in general guides. For the most accurate and up-to-date information, I recommend checking directly on Cisco's official certification website or contacting an authorized testing center. This ensures you have the latest details before making any plans, as pricing and exam versions may be updated periodically. \n \nIf you're considering the CCNA as part of your networking learning path, let me know your current experience level—I'm happy to suggest the best sequence of topics or certifications to help you prepare!"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "Give me the exact URL of the official registration page"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 4050,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 4050,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I wasn't able to find the exact official registration page URL for the CCNA exam in the knowledge base. For the most accurate and up-to-date registration link, I recommend visiting Cisco's official certification website and navigating to the CCNA section. This ensures you get the latest information, as URLs and registration processes can change over time. If you need help finding the right section or understanding the process, let me know!"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "Which is the highest paying entry level cloud job salary in India in 2026, give me a number"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2100,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2100,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I focus on helping with IT learning paths, certifications, and career planning. Are you interested in learning about entry-level cloud roles and how to prepare for them, or would you like guidance on cloud certifications and skills to boost your earning potential?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "Does Coursera currently offer that course for free with a certificate?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2166,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2166,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "Could you please specify which course you're referring to? That way, I can check if it's currently available for free with a certificate on Coursera."
+          }
+        }
+      ]
+    }
+  ]
+}

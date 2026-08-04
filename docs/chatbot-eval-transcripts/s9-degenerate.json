@@ -1,0 +1,125 @@
+{
+  "name": "s9-degenerate",
+  "convId": "conv_01KZ5NCMK5TNDPZRC8CGH76N84",
+  "log": [
+    {
+      "role": "system",
+      "label": "proactive-welcome",
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "help"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 3053,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 3053,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I'm here to help you with IT learning paths, concepts, or certifications! To get started, could you tell me which area of IT you're interested in (for example: networking, cybersecurity, cloud, web development, data/AI, or devops)? Also, would you consider yourself a beginner, intermediate, or advanced learner?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "ok"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2641,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2641,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "To help you find the best IT learning path, could you tell me which area you're interested in (networking, cybersecurity, cloud, web development, data/AI, or devops)? Also, would you consider yourself a beginner, intermediate, or advanced learner?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "ok"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2102,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2102,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "To help you get started, could you share which IT area you'd like to learn about (such as networking, cybersecurity, cloud, web development, data/AI, or devops)? Also, do you consider yourself a beginner, intermediate, or advanced learner?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "hmm"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2138,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2138,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "If you're not sure where to start, that's totally fine! Are you interested in learning about a specific area of IT, like networking, cybersecurity, cloud, web development, data/AI, or devops? Or would you like a quick overview of what each area involves?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2142,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2142,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I'm here to help with IT learning paths, concepts, or certifications. Is there a particular area of technology you're curious about, or would you like an overview of different IT fields to help you decide where to start?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "asdkjhasd kjhasd 12312 !!!"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2128,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2128,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "I'm here to help with IT learning paths, concepts, or certifications. Is there a particular area of technology you're interested in, or would you like an overview of different IT fields to help you decide where to start?"
+          }
+        }
+      ]
+    }
+  ]
+}

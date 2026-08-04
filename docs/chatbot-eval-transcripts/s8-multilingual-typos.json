@@ -1,0 +1,68 @@
+{
+  "name": "s8-multilingual-typos",
+  "convId": "conv_01KZ5NCJ9668YVTDWCEYNPSDHF",
+  "log": [
+    {
+      "role": "system",
+      "label": "proactive-welcome",
+      "replies": []
+    },
+    {
+      "role": "user",
+      "text": "mujhe cloud sikhna hai, kaha se start karu?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 3110,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 3110,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "Cloud computing is a great field! To guide you better, can you tell me about your current IT knowledge level? Are you a **beginner**, **intermediate**, or **advanced** learner?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "wat is besct way 2 lern devps wen i hav no coding bg"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2112,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2112,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "To recommend the best DevOps learning path, could you tell me your current IT knowledge level? Are you a **beginner**, **intermediate**, or **advanced** learner?"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "text": "¿Puedes responder en español?"
+    },
+    {
+      "role": "bot",
+      "firstReplyMs": 2200,
+      "count": 1,
+      "replies": [
+        {
+          "latencyMs": 2200,
+          "type": "text",
+          "payload": {
+            "type": "text",
+            "text": "¡Claro! Puedo ayudarte con temas de aprendizaje en IT, como rutas de estudio, conceptos o certificaciones. ¿Te gustaría continuar en español y contarme qué área de IT te interesa aprender?"
+          }
+        }
+      ]
+    }
+  ]
+}
