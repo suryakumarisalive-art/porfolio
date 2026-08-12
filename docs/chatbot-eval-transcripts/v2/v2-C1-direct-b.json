@@ -1,0 +1,15 @@
+{
+  "name": "v2-C1-direct-b",
+  "cid": "conv_01KZTP6QVZA82BTK1MC05HVYNK",
+  "out": [
+    {
+      "text": "Should I learn Linux for devops?",
+      "rep": [
+        {
+          "ms": 7695,
+          "text": "Yes, learning Linux is highly recommended if you're interested in DevOps. Most server environments and automation tools in DevOps are built around Linux, so understanding how to use the Linux command line, basic scripting, and operating system fundamentals is considered a natural starting point. This knowledge will make it much easier to work with servers, containers, and automation tools later on. \n \nIf you're just starting out, focus first on Linux basics and command-line skills before moving on to more advanced DevOps topics like automation, containerization, and CI/CD pipelines. Many people also pursue a Linux-focused certification early in their DevOps journey, as it helps validate your foundational skills."
+        }
+      ]
+    }
+  ]
+}

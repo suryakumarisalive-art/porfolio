@@ -1,0 +1,15 @@
+{
+  "name": "v2-C1-direct-c",
+  "cid": "conv_01KZTP8C6AV13Q82E80XMN6QVQ",
+  "out": [
+    {
+      "text": "Is Python needed for cybersecurity?",
+      "rep": [
+        {
+          "ms": 8903,
+          "text": "Python is not strictly required to get started in cybersecurity, but it is a highly valuable skill as you advance. Many entry-level cybersecurity roles focus first on foundational security concepts, networking fundamentals, and understanding threats like phishing or malware. However, as you move into more hands-on areas—such as penetration testing, automation of security tasks, or analyzing large sets of data—Python becomes increasingly useful. It is widely used for scripting, automating repetitive tasks, and developing custom security tools. So, while you can begin learning cybersecurity without Python, picking it up along the way will open up more advanced opportunities and make you more effective in many security roles."
+        }
+      ]
+    }
+  ]
+}

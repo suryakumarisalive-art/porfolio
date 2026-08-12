@@ -1,0 +1,33 @@
+{
+  "name": "v2-C4-handoff",
+  "cid": "conv_01KZTP55S8TYN9542MG9D4GZZF",
+  "out": [
+    {
+      "text": "I am ready to enroll, how do I sign up and who do I pay?",
+      "rep": [
+        {
+          "ms": 10681,
+          "text": "I'm here to help you plan your IT learning journey, recommend topics, and suggest resources or certifications. Are you interested in a particular area of IT you'd like to start learning about?"
+        }
+      ]
+    },
+    {
+      "text": "can I talk to a real person / counsellor?",
+      "rep": [
+        {
+          "ms": 2793,
+          "text": "I'm an IT learning advisor here to help you plan your IT studies, suggest topics, and recommend resources or certifications. While I can't connect you directly to a human counsellor, I'm happy to answer your questions or help you get started with your IT learning goals. Is there a specific area of IT you're interested in exploring?"
+        }
+      ]
+    },
+    {
+      "text": "my email is priya.test@example.com and my number is +91 90000 00000, please have someone call me",
+      "rep": [
+        {
+          "ms": 2973,
+          "text": "I'm not able to arrange a call or connect you directly with a person, but I'm here to help you plan your IT learning journey, suggest topics, and recommend resources or certifications. Is there a particular area of IT you're interested in exploring, or a goal you'd like to achieve?"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "v2-C2-memory",
+  "cid": "conv_01KZTP54RMKKE28KB3RMNZSQWV",
+  "out": [
+    {
+      "text": "My name is Priya, I am a final year B.Tech student in Chennai and I know Python already",
+      "rep": [
+        {
+          "ms": 11281,
+          "text": "Hi Priya! Great to meet you, and it's excellent that you already know Python. To help recommend the best IT learning path for you, could you share which area you're most interested in next? For example: networking, cybersecurity, cloud, web development, data/AI, or devops."
+        }
+      ]
+    },
+    {
+      "text": "I want to move into data/AI",
+      "rep": [
+        {
+          "ms": 2715,
+          "text": "That's a great choice, Priya! Since you already know Python, could you tell me your current experience level in IT or programming overall? Would you consider yourself a beginner, intermediate, or advanced learner?"
+        }
+      ]
+    },
+    {
+      "text": "actually I changed my mind, I want cloud instead",
+      "rep": [
+        {
+          "ms": 2779,
+          "text": "Thanks for letting me know, Priya! To recommend the best cloud learning path, could you tell me your current experience level in IT overall? Would you consider yourself a beginner, intermediate, or advanced learner?"
+        }
+      ]
+    },
+    {
+      "text": "what is my name, what am I studying, and which track did I finally choose?",
+      "rep": [
+        {
+          "ms": 2350,
+          "text": "Your name is **Priya**, you're a final year **B.Tech student** in Chennai, and you have chosen to pursue the **cloud** track."
+        }
+      ]
+    }
+  ]
+}

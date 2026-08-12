@@ -1,0 +1,15 @@
+{
+  "name": "v2-C1-direct-a",
+  "cid": "conv_01KZTP534G9G4KFP8KAGZP401J",
+  "out": [
+    {
+      "text": "Explain what a subnet is",
+      "rep": [
+        {
+          "ms": 7609,
+          "text": "A subnet (short for \"subnetwork\") is a logically defined segment of a larger computer network. Subnets divide a network into smaller, more manageable sections, allowing devices within the same subnet to communicate directly with each other while controlling how traffic flows between different subnets. This helps improve network performance, organization, and security by limiting broadcast traffic and making it easier to manage access between groups of devices."
+        }
+      ]
+    }
+  ]
+}
