@@ -1,0 +1,505 @@
+<title>CT017 Report Fixes</title>
+<style>
+  :root {
+    --paper:      #F5F6F8;
+    --surface:    #FFFFFF;
+    --ink:        #1A1D23;
+    --ink-soft:   #454B55;
+    --muted:      #6B7280;
+    --rule:       #DCE0E6;
+    --rule-soft:  #E9ECF0;
+    --accent:     #A62B36;
+    --sev-1:      #A62B36;
+    --sev-2:      #A6701C;
+    --sev-3:      #3F6396;
+    --sev-4:      #5C6470;
+    --chip-bg:    #ECEFF3;
+
+    --serif: Georgia, "Times New Roman", Times, serif;
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:     #131519;
+      --surface:   #1A1D22;
+      --ink:       #E7E9EC;
+      --ink-soft:  #C2C7CE;
+      --muted:     #939AA5;
+      --rule:      #2C3138;
+      --rule-soft: #23272D;
+      --accent:    #E2727C;
+      --sev-1:     #E2727C;
+      --sev-2:     #D9A253;
+      --sev-3:     #7CA3DA;
+      --sev-4:     #8F97A3;
+      --chip-bg:   #24282F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:     #131519;
+    --surface:   #1A1D22;
+    --ink:       #E7E9EC;
+    --ink-soft:  #C2C7CE;
+    --muted:     #939AA5;
+    --rule:      #2C3138;
+    --rule-soft: #23272D;
+    --accent:    #E2727C;
+    --sev-1:     #E2727C;
+    --sev-2:     #D9A253;
+    --sev-3:     #7CA3DA;
+    --sev-4:     #8F97A3;
+    --chip-bg:   #24282F;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 5vw, 2rem) 5rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 47rem; margin: 0 auto; }
+
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 .75rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 5vw, 2.7rem);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    text-wrap: balance;
+    margin: 0 0 .6rem;
+  }
+  .standfirst { color: var(--ink-soft); font-size: 1.02rem; margin: 0; max-width: 38rem; }
+
+  .tally {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 2rem 0 2.75rem;
+  }
+  .tally div { background: var(--surface); padding: .85rem 1rem; }
+  .tally .n {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    display: block;
+  }
+  .tally .l {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: .4rem;
+    display: block;
+  }
+  .t1 .n { color: var(--sev-1); } .t2 .n { color: var(--sev-2); }
+  .t3 .n { color: var(--sev-3); } .t4 .n { color: var(--sev-4); }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin: 3rem 0 .3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ink);
+  }
+  h2:first-of-type { margin-top: 0; }
+  .grp-note { color: var(--muted); font-size: .9rem; margin: 0 0 1.5rem; }
+
+  ol { list-style: none; margin: 0; padding: 0; counter-reset: fix; }
+  li {
+    counter-increment: fix;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0 1rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  li::before {
+    content: counter(fix);
+    font-family: var(--mono);
+    font-size: .82rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+    padding-top: .18rem;
+  }
+  .what { font-weight: 600; color: var(--ink); margin: 0 0 .35rem; }
+  .why { color: var(--ink-soft); margin: 0; font-size: .95rem; }
+  .why + .why { margin-top: .5rem; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-bottom: .45rem; }
+  .loc {
+    font-family: var(--mono);
+    font-size: .73rem;
+    background: var(--chip-bg);
+    color: var(--ink-soft);
+    padding: .12rem .45rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .sev {
+    font-family: var(--mono);
+    font-size: .66rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+  }
+  .sev::before { content: ""; width: .5rem; height: .5rem; flex: none; }
+  .s1 { color: var(--sev-1); } .s1::before { background: var(--sev-1); }
+  .s2 { color: var(--sev-2); } .s2::before { background: var(--sev-2); }
+  .s3 { color: var(--sev-3); } .s3::before { background: var(--sev-3); }
+  .s4 { color: var(--sev-4); } .s4::before { background: var(--sev-4); }
+
+  q, .quote {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink);
+  }
+  code {
+    font-family: var(--mono);
+    font-size: .86em;
+    background: var(--chip-bg);
+    padding: .08rem .3rem;
+    border-radius: 2px;
+  }
+  .fix {
+    margin-top: .5rem;
+    padding-left: .85rem;
+    border-left: 2px solid var(--accent);
+    font-size: .93rem;
+    color: var(--ink-soft);
+  }
+  .fix b { color: var(--ink); font-weight: 600; }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ink);
+    color: var(--muted);
+    font-size: .88rem;
+  }
+  footer p { margin: 0 0 .6rem; }
+  a { color: var(--accent); }
+  a:focus-visible, li:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  @media (max-width: 30rem) {
+    li { grid-template-columns: 1.6rem 1fr; gap: 0 .6rem; }
+  }
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">CT017-3-1 · Introduction to AI · Group Assignment</p>
+  <h1>Fixes needed in the compiled report</h1>
+  <p class="standfirst">Everything below was found in the compiled Word file. Locations and evidence are given so each one can be checked and fixed directly. Numbers are stable — refer to them by number.</p>
+</header>
+
+<div class="tally">
+  <div class="t1"><span class="n">8</span><span class="l">Breaks the brief</span></div>
+  <div class="t2"><span class="n">12</span><span class="l">Compile errors</span></div>
+  <div class="t3"><span class="n">8</span><span class="l">Contradictions</span></div>
+  <div class="t4"><span class="n">5</span><span class="l">Still missing</span></div>
+</div>
+
+<h2>Breaks an explicit rule in the brief</h2>
+<p class="grp-note">These are stated requirements in the assignment brief. Each one is a guaranteed mark deduction.</p>
+<ol>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">References</span></div>
+      <p class="what">The reference list has one entry, but six sources are cited in the text.</p>
+      <p class="why">Only Minsky (1968) is listed. Cited in text but missing from the list: <b>Dawood (2024)</b>, <b>Thottoli et al. (2024)</b>, <b>Lewis et al. (2020)</b>, <b>Akkiraju et al. (n.d.)</b> and <b>EduChat</b>.</p>
+      <p class="why">The brief states: <q>Each reference cited in text must appear in the reference list, and each entry in the reference list must be cited in text.</q></p>
+      <div class="fix"><b>Two are ready to paste</b> — verified against the publishers:<br>
+        Dawood, M. (2024). Assessing the effectiveness of chatbots in providing personalized academic advising and support to higher education students: A narrative literature review. <i>Studies in Technology Enhanced Learning, 4</i>(1). https://doi.org/10.21428/8c225f6e.7140f8f4<br><br>
+        Thottoli, M. M., Alruqaishi, B. H., &amp; Soosaimanickam, A. (2024). Robo academic advisor: Can chatbots and artificial intelligence replace human interaction? <i>Contemporary Educational Technology, 16</i>(1), ep485. https://doi.org/10.30935/cedtech/13498<br><br>
+        Note the Thottoli DOI ends <code>13498</code>. Several web sources list <code>13948</code> — that is wrong.
+      </div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">whole document</span></div>
+      <p class="what">There are no page numbers anywhere in the document.</p>
+      <p class="why">The document contains no page-number field at all. The brief states: <q>All pages should be numbered.</q></p>
+      <div class="fix">Insert → Page Number, then check it appears on every page including the first.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">end of report</span></div>
+      <p class="what">The word count is not stated.</p>
+      <p class="why">The brief states: <q>the number of words must be clearly stated at the end of the report before the references.</q> The compiled body is roughly <b>4,150 words</b>; with Section 5 added it comes to about <b>5,180</b>. Confirm the final figure in Word.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">whole document</span></div>
+      <p class="what">Three different fonts are in use.</p>
+      <p class="why">Times New Roman on 142 text runs, <b>Aptos on 19</b>, and <b>Play on 1</b>. Aptos is Word's default, so at least one member's text was pasted without formatting.</p>
+      <div class="fix">Select all → set Times New Roman. Then search for any remaining stray font before submitting.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">whole document</span></div>
+      <p class="what">Font size is split between 11pt and 12pt.</p>
+      <p class="why">Twenty runs at 11pt and twenty at 12pt — roughly half the document each way. The brief specifies <b>11 point</b>. Section 5 was supplied at 12pt, so it needs changing too once you decide.</p>
+      <div class="fix">Pick one size for the entire document. The brief says 11pt, so use that unless the lecturer has said otherwise.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">whole document</span></div>
+      <p class="what">Line spacing is inconsistent.</p>
+      <p class="why">87 paragraphs at 1.5 spacing and 15 paragraphs at 1.15. The brief specifies <b>1.15</b> throughout.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">between §3.6 and §4.0</span></div>
+      <p class="what">The References section is in the middle of the report.</p>
+      <p class="why">It currently sits after Tools and Technologies and before Implementation. It must be the final section, after the Conclusion.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">cover sheet</span></div>
+      <p class="what">Every cover sheet field is blank.</p>
+      <p class="why">Module Code, Intake Code, Lecturer Name, Hand-in Date, Tutorial No, Group No and Group Leader are all empty, as are the student declaration rows — names, student IDs and signatures for the leader and all members. The Table of Contents is also empty.</p>
+    </div>
+  </li>
+</ol>
+
+<h2>Compile and proofreading errors</h2>
+<p class="grp-note">Signs of a document assembled from separate files without a final read-through. All verified in the text.</p>
+<ol start="9" style="counter-reset: fix 8;">
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§3.6</span></div>
+      <p class="what">A sentence is duplicated back to back.</p>
+      <p class="why"><q>GPT-4.1 was used for natural-language classification in the AI Task process.</q> appears twice in a row.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§2.2</span></div>
+      <p class="what">An unfinished sentence pointing at a section that does not exist.</p>
+      <p class="why"><q>For example, a rule can be represented as the classification later feeds into the production rules described in Section 2.2.1</q> — the sentence breaks off mid-thought, and there is no Section 2.2.1 in the report.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§3.3, §3.4</span></div>
+      <p class="what">Figure and table placeholders were never replaced.</p>
+      <p class="why"><code>Figure x</code> (lowercase) and <code>Figure X</code> both appear, and <code>Table X</code> is referenced in the text while the caption underneath reads <q>Table 1</q>. Two screenshots are embedded, so the figures exist — they just need numbering.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§1.2</span></div>
+      <p class="what">An entire paragraph is in Title Case.</p>
+      <p class="why"><q>Rapidly Evolving Landscape Of It Industry – Given The Rapid Nature Of The Information Technology Industry There Is A Tremendous Variety In Learning Pathways…</q> This should be sentence case like the rest of the report.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§1.2</span></div>
+      <p class="what">"IT" is written as "It" twice.</p>
+      <p class="why">A side effect of the Title Case above: <q>Of It Industry</q> and <q>For It Professionals</q>.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§2.1, §2.2</span></div>
+      <p class="what">Seven places have a space before a comma.</p>
+      <p class="why">For example <q>two extremes , flexible and conversational</q>, <q>reliable but rigid ,a gap</q>, and <q>Machine Learning , Deep Learning , and Natural Language Processing</q>.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§2.1</span></div>
+      <p class="what">Missing punctuation and a double space.</p>
+      <p class="why"><q>research in this area remains fragmented&nbsp;&nbsp;their review of 67 papers found…</q> — two sentences run together with nothing between them.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§2.2</span></div>
+      <p class="what">A stray closing quotation mark with no opening quote.</p>
+      <p class="why">The AI paragraph ends <q>…once this sequencing decision has been made."</q></p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">§2.3</span></div>
+      <p class="what">Missing possessive apostrophe.</p>
+      <p class="why"><q>Thottoli et al. (2024) study proves…</q> should be <q>Thottoli et al.'s (2024) study</q>.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">all headings</span></div>
+      <p class="what">Heading numbering uses two different styles.</p>
+      <p class="why">Sections 1 and 2 are numbered <code>1.</code> and <code>2.</code>, while sections 3 and 4 are <code>3.0</code> and <code>4.0</code>. Pick one style and apply it to all five sections.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">§2.3, §4.0</span></div>
+      <p class="what">Two headings end with a colon, and one is not in Title Case.</p>
+      <p class="why"><q>2.3 Gaps in current technology:</q> and <q>4.0 Implementation:</q> — remove the colons, and capitalise <q>Current Technology</q> to match the other headings.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">§4</span></div>
+      <p class="what">Section 4 has no numbered subheadings.</p>
+      <p class="why">Sections 1, 2 and 3 all use numbered subsections. Section 4 runs as plain bold labels — Challenges Faced, Solutions, Key Functions Implemented. Number them 4.1, 4.2, 4.3 for consistency.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">whole document</span></div>
+      <p class="what">British and American spelling are mixed.</p>
+      <p class="why"><q>personalization</q> and <q>organized</q> appear in §1.1 and §2.1, while §1.2 uses <q>Personalisation</q>. Section 5 is written in British English throughout, so British is the easier target.</p>
+    </div>
+  </li>
+</ol>
+
+<h2>Claims that contradict each other or the actual chatbot</h2>
+<p class="grp-note">These matter most if the lecturer opens the bot during marking. Each was checked against the live chatbot.</p>
+<ol start="22" style="counter-reset: fix 21;">
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§1.1 vs §3.3</span></div>
+      <p class="what">The report gives two different lists of IT domains.</p>
+      <p class="why">§1.1 says <q>Software Engineering, Data Science, Cybersecurity, Systems &amp; Networking</q>. §3.3 says <q>networking, cybersecurity, cloud, web development, data/AI, devops</q>. The second list is what the chatbot actually uses.</p>
+      <div class="fix">Change §1.1 to match §3.3.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§1.4</span></div>
+      <p class="what">The report overview describes sections that do not exist.</p>
+      <p class="why">§1.4 promises <q>System Architecture &amp; Design</q>, <q>Implementation &amp; Technology Stack</q>, <q>Evaluation &amp; Results</q> and <q>Conclusion &amp; Future Work</q>. The report actually contains Literature Review, Methodology, Implementation and Conclusion.</p>
+      <div class="fix">Rewrite the §1.4 paragraph to list the real sections.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§1.3</span></div>
+      <p class="what">The report claims the chatbot is embedded in a website. It is not.</p>
+      <p class="why">§1.3 claims <q>Seamless Web Integration with embedded deployment via standard web chat standards</q>. The chatbot exists only as a Botpress shareable link and is not embedded anywhere.</p>
+      <div class="fix">Either embed it and keep the claim, or reword to describe it honestly as a hosted web chat widget accessed by link.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">§1.1, §1.3</span></div>
+      <p class="what">"Curated educational resources" is claimed, but the bot gives no links.</p>
+      <p class="why">§1.1 promises <q>curated educational resources</q> and §1.3 lists <q>Resource Curation</q> as a key feature. In testing the chatbot returned <b>zero URLs</b> — it now says things like "search for a CompTIA Network+ free course" instead of linking anywhere.</p>
+      <div class="fix">Best fix is to add a verified link list to the Knowledge Base. Otherwise soften the claim. Section 5 already raises this under Future Work, so it will not look like an oversight.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">§4</span></div>
+      <p class="what">"Clarification Before Answering" is no longer accurate.</p>
+      <p class="why">§4 states the bot <q>consistently prompted for a domain before providing detailed information</q>. Since the recent update it answers general questions directly — "Explain what a subnet is" now gets a straight answer with no clarifying question.</p>
+      <div class="fix">Reword to say it asks which area the learner wants <b>before generating a personalised roadmap</b>, which is still true.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">§4 vs §3.3</span></div>
+      <p class="what">Two different mechanisms are described for the same thing.</p>
+      <p class="why">§4 says the team expanded <q>NLU training data</q> and added utterances to <q>Botpress's Intent library</q>. But §3.3 and §3.6 say classification is done by <b>GPT-4.1 in AI Task nodes</b>. These are different approaches, and a marker who knows Botpress will notice.</p>
+      <div class="fix">Describe whichever was actually built, and remove the other.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s3">Medium</span><span class="loc">Table 1</span></div>
+      <p class="what">The rule table has two gaps worth acknowledging.</p>
+      <p class="why">R5 (web development) has no <code>userLevel</code> condition, so it fires for advanced learners too. And R1–R4 are all <code>userLevel = beginner</code>, meaning no rule in the table handles intermediate or advanced users at all.</p>
+      <div class="fix">No change needed to the table — Section 5 already raises both as Future Work, which reads as awareness rather than an error. Just do not claim elsewhere that the rules adapt to skill level.</div>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s4">Low</span><span class="loc">§2.1, §2.3</span></div>
+      <p class="what">The Thottoli finding is slightly overstated.</p>
+      <p class="why">Thottoli et al. found the <b>research literature</b> fragmented across disciplines. §2.3 turns this into a claim about systems lacking <q>a consistent architecture to build that behavior on</q>. If the marker reads the source, that is arguably a misreading.</p>
+      <div class="fix">Keep the point but attribute it accurately — the literature is fragmented, and the project responds by adopting an explicit rule structure.</div>
+    </div>
+  </li>
+</ol>
+
+<h2>Still missing entirely</h2>
+<p class="grp-note">Deliverables required by the brief that are not in the document.</p>
+<ol start="30" style="counter-reset: fix 29;">
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">§5</span></div>
+      <p class="what">Section 5 Conclusion.</p>
+      <p class="why">Written and supplied — Times New Roman, justified, with Summary of Achievements, Impact, Future Work and Final Thoughts. Font size and line spacing need aligning to whatever the group settles on in items 5 and 6.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">separate deliverable</span></div>
+      <p class="what">The demonstration video.</p>
+      <p class="why">The brief requires <q>a short video demonstrating the chatbot in action and discussing its features and functionalities.</q></p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">separate deliverable</span></div>
+      <p class="what">The presentation.</p>
+      <p class="why">The brief requires <q>a final demonstration showcasing the chatbot's capabilities and interaction with real or simulated users.</q></p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s1">Critical</span><span class="loc">submission</span></div>
+      <p class="what">The Turnitin report.</p>
+      <p class="why">Similarity must be under <b>15%</b> and AI detection under <b>10%</b>. Run it with enough time left to rewrite anything that comes back high.</p>
+    </div>
+  </li>
+  <li>
+    <div>
+      <div class="meta"><span class="sev s2">High</span><span class="loc">front matter</span></div>
+      <p class="what">The Table of Contents is empty.</p>
+      <p class="why">The heading exists with nothing under it. Generate it in Word after the heading styles are made consistent, so page numbers are correct.</p>
+    </div>
+  </li>
+</ol>
+
+<footer>
+  <p><b>Suggested order:</b> fix the formatting items (4, 5, 6) first, because doing them last will undo other work. Then the cover sheet and references. Then proofreading. Generate the Table of Contents last, once headings and page numbers are final.</p>
+  <p>All findings were checked against the compiled Word file and, where they concern behaviour, against the live chatbot.</p>
+</footer>
+</div>
